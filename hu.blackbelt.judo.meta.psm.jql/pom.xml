@@ -12,6 +12,35 @@
 	<build>
 		<plugins>
 			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>model/generated/JqlDsl.ecore</file>
+                                    <type>ecore</type>
+                                    <classifier>jql</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>model/generated/JqlDsl.genmodel</file>
+                                    <type>genmodel</type>
+                                    <classifier>jql</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+		
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.4.0</version>
