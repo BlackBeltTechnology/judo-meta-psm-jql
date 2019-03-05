@@ -20,9 +20,6 @@ Require-Bundle:  org.eclipse.emf.ecore;bundle-version="[2.5.0,3.0.0)";visibility
  org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
  org.eclipse.emf.ecore
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: org.apache.commons.logging,
- org.apache.log4j;version="[1.2.15,2.0.0)",
- hu.blackbelt.emfbuildergenerator;version="[0.0.1,1.0.0)"
 Export-Package: hu.blackbelt.judo.meta.psm.jql.serializer,
  hu.blackbelt.judo.meta.psm.jql.services,
  hu.blackbelt.judo.meta.psm.jql.scoping,
@@ -34,3 +31,4 @@ Export-Package: hu.blackbelt.judo.meta.psm.jql.serializer,
  hu.blackbelt.judo.meta.psm.jql.generator,
  hu.blackbelt.judo.meta.psm.jql.parser.antlr,
  hu.blackbelt.judo.meta.psm.jql.validation
+Import-Package: org.apache.log4j
