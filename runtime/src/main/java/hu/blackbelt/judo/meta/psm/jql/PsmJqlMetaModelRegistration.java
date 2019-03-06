@@ -1,6 +1,6 @@
 package hu.blackbelt.judo.meta.psm.jql;
 
-import hu.blackbelt.judo.meta.psm.jql.jqlDsl.JqlDslPackage;
+import hu.blackbelt.judo.meta.psm.jql.jqldsl.JqldslPackage;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -44,7 +44,7 @@ public class PsmJqlMetaModelRegistration implements PsmJqlMetaModel {
     @Override
     public void registerPsmJqlMetamodel(ResourceSet resourceSet) {
 
-        resourceSet.getPackageRegistry().put(JqlDslPackage.eINSTANCE.getNsURI(), JqlDslPackage.eINSTANCE);
+        resourceSet.getPackageRegistry().put(JqldslPackage.eINSTANCE.getNsURI(), JqldslPackage.eINSTANCE);
 
     }
 }
