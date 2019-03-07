@@ -1,0 +1,1 @@
+self.quantity * self.unitPrice * (1 - self.discount)
