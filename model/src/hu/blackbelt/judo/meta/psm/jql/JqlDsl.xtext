@@ -8,25 +8,25 @@ Expression returns Expression:
 	ConcatenateExpression;
 
 ConcatenateExpression returns Expression:
-	OrExpression (=>({BinaryOperation.leftOperand=current} feature=OpConcat) rightOperand=OrExpression)*;
+	OrExpression (=>({BinaryOperation.leftOperand=current} operator=OpConcat) rightOperand=OrExpression)*;
 
 OpConcat:
 	'||';
 
 OrExpression returns Expression:
-	AndExpression (=>({BinaryOperation.leftOperand=current} feature=OpOr) rightOperand=AndExpression)*;
+	AndExpression (=>({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
 
 OpOr:
 	'or' | 'OR';
 
 AndExpression returns Expression:
-	EqualityExpression (=>({BinaryOperation.leftOperand=current} feature=OpAnd) rightOperand=EqualityExpression)*;
+	EqualityExpression (=>({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
 
 OpAnd:
 	'and' | 'AND';
 
 EqualityExpression returns Expression:
-	RelationalExpression (=>({BinaryOperation.leftOperand=current} feature=OpEquality)
+	RelationalExpression (=>({BinaryOperation.leftOperand=current} operator=OpEquality)
 	rightOperand=RelationalExpression)*;
 
 OpEquality:
@@ -34,26 +34,26 @@ OpEquality:
 
 RelationalExpression returns Expression:
 	AdditiveExpression
-	(=>({BinaryOperation.leftOperand=current} feature=OpCompare) rightOperand=AdditiveExpression)*;
+	(=>({BinaryOperation.leftOperand=current} operator=OpCompare) rightOperand=AdditiveExpression)*;
 
 OpCompare:
 	'>=' | '<' '=' | '>' | '<' ;
 
 AdditiveExpression returns Expression:
-	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} feature=OpAdd)
+	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} operator=OpAdd)
 	rightOperand=MultiplicativeExpression)*;
 
 OpAdd:
 	'+' | '-';
 
 MultiplicativeExpression returns Expression:
-	UnaryOperation (=>({BinaryOperation.leftOperand=current} feature=OpMulti) rightOperand=UnaryOperation)*;
+	UnaryOperation (=>({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
 
 OpMulti:
 	'*' | '/' | '%';
 
 UnaryOperation returns Expression:
-	{UnaryOperation} feature=OpUnary operand=UnaryOperation
+	{UnaryOperation} operator=OpUnary operand=UnaryOperation
 	| PrimaryExpression;
 
 OpUnary:
@@ -63,7 +63,7 @@ ParenthesizedExpression returns Expression:
 	'(' Expression ')';
 
 PrimaryExpression returns Expression:
-	QualifiedName |
+	NavigationExpression |
 	Literal |
 	ParenthesizedExpression;
 
@@ -82,8 +82,17 @@ NumberLiteral returns Expression :
 StringLiteral returns Expression:
 	{StringLiteral} value=STRING;
 
+NavigationExpression:
+	base=NavigationBase (=>'.' features+=Feature)*;
+
+Feature:
+	name=ID;
+
+NavigationBase:
+	ValidID | QualifiedName;
+
 QualifiedName:
-	base=ValidID (=>'.' navigations+=ValidID)*;
+	ID (=>'::' ID)+;
 
 ValidID:
 	ID;
