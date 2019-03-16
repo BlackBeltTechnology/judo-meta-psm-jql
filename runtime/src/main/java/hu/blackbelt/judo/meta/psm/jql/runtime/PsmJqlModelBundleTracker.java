@@ -1,6 +1,5 @@
-package hu.blackbelt.judo.meta.psm.jql.tracker;
+package hu.blackbelt.judo.meta.psm.jql.runtime;
 
-import hu.blackbelt.judo.meta.psm.jql.PsmJqlModel;
 import hu.blackbelt.osgi.utils.osgi.api.BundleCallback;
 import hu.blackbelt.osgi.utils.osgi.api.BundleTrackerManager;
 import hu.blackbelt.osgi.utils.osgi.api.BundleUtil;
@@ -22,13 +21,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-import static hu.blackbelt.judo.meta.psm.jql.PsmJqlModelLoader.loadPsmJqlModel;
+import static hu.blackbelt.judo.meta.psm.jql.runtime.PsmJqlModelLoader.loadPsmJqlModel;
 
 @Component(immediate = true)
 @Slf4j
 public class PsmJqlModelBundleTracker {
 
-    public static final String PSM_MODELS = "PsmJql-Models";
+    public static final String PSM_JQL_MODELS = "PsmJql-Models";
 
     @Reference
     BundleTrackerManager bundleTrackerManager;
@@ -53,7 +52,7 @@ public class PsmJqlModelBundleTracker {
     private static class PsmJqlBundlePredicate implements Predicate<Bundle> {
         @Override
         public boolean test(Bundle trackedBundle) {
-            return BundleUtil.hasHeader(trackedBundle, PSM_MODELS);
+            return BundleUtil.hasHeader(trackedBundle, PSM_JQL_MODELS);
         }
     }
 
@@ -67,7 +66,7 @@ public class PsmJqlModelBundleTracker {
 
         @Override
         public void accept(Bundle trackedBundle) {
-            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_MODELS);
+            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_JQL_MODELS);
 
 
             for (Map<String, String> params : entries) {
@@ -123,7 +122,7 @@ public class PsmJqlModelBundleTracker {
 
         @Override
         public void accept(Bundle trackedBundle) {
-            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_MODELS);
+            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_JQL_MODELS);
             for (Map<String, String> params : entries) {
                 String key = params.get(PsmJqlModel.NAME);
 

@@ -1,5 +1,7 @@
 package hu.blackbelt.judo.meta.psm.jql;
 
+import hu.blackbelt.judo.meta.psm.jql.runtime.PsmJqlModel;
+import hu.blackbelt.judo.meta.psm.jql.runtime.PsmJqlModelLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
