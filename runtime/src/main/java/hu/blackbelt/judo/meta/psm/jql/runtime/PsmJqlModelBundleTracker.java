@@ -79,12 +79,12 @@ public class PsmJqlModelBundleTracker {
                         if (versionRange.includes(bundleContext.getBundle().getVersion())) {
                             // Unpack model
                             try {
-                                File file = BundleUtil.copyBundleFileToPersistentStorage(trackedBundle, key + ".judo-meta-measure", params.get("file"));
+                                File file = BundleUtil.copyBundleFileToPersistentStorage(trackedBundle, key + ".judo-meta-psmjql", params.get("file"));
                                 Version version = bundleContext.getBundle().getVersion();
 
                                 // TODO: JNG-55 Copy mapping XLSX
 
-                                PsmJqlModel measureModel = loadPsmJqlModel(
+                                PsmJqlModel psmJqlModel = loadPsmJqlModel(
                                         new ResourceSetImpl(),
                                         URI.createURI(file.getAbsolutePath()),
                                         params.get(PsmJqlModel.NAME),
@@ -92,10 +92,10 @@ public class PsmJqlModelBundleTracker {
                                         params.get(PsmJqlModel.CHECKSUM),
                                         versionRange.toString());
 
-                                log.info("Registering model: " + measureModel);
+                                log.info("Registering model: " + psmJqlModel);
 
-                                ServiceRegistration<PsmJqlModel> modelServiceRegistration = bundleContext.registerService(PsmJqlModel.class, measureModel, measureModel.toDictionary());
-                                measureModels.put(key, measureModel);
+                                ServiceRegistration<PsmJqlModel> modelServiceRegistration = bundleContext.registerService(PsmJqlModel.class, psmJqlModel, psmJqlModel.toDictionary());
+                                measureModels.put(key, psmJqlModel);
                                 measureModelRegistrations.put(key, modelServiceRegistration);
 
                             } catch (IOException e) {
