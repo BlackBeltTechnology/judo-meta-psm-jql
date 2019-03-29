@@ -17,12 +17,12 @@ public class PsmJqlModelLoaderTest {
 
     @Test
     public void loadPsmJqlModelTest() throws IOException {
-        PsmJqlModel psmModel = PsmJqlModelLoader.loadPsmJqlModel(
+        PsmJqlModel psmJqlModel = PsmJqlModelLoader.loadPsmJqlModel(
                 URI.createURI(new File(srcDir(), "sample.psmjql").getAbsolutePath()),
                 "test",
                 "1.0.0");
 
-        for (Iterator<EObject> i = psmModel.getResource().getAllContents(); i.hasNext(); ) {
+        for (Iterator<EObject> i = psmJqlModel.getResourceSet().getResource(psmJqlModel.getUri(), false).getAllContents(); i.hasNext(); ) {
             log.info(i.next().toString());
         }
     }
