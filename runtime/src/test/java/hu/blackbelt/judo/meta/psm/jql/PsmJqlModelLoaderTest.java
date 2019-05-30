@@ -23,7 +23,7 @@ public class PsmJqlModelLoaderTest {
                 "1.0.0");
 
         for (Iterator<EObject> i = psmJqlModel.getResourceSet().getResource(psmJqlModel.getUri(), false).getAllContents(); i.hasNext(); ) {
-            log.info(i.next().toString());
+            log.debug(i.next().toString());
         }
     }
 

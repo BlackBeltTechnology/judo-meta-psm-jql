@@ -82,8 +82,6 @@ public class PsmJqlModelBundleTracker {
                                 File file = BundleUtil.copyBundleFileToPersistentStorage(trackedBundle, key + ".judo-meta-psmjql", params.get("file"));
                                 Version version = bundleContext.getBundle().getVersion();
 
-                                // TODO: JNG-55 Copy mapping XLSX
-
                                 PsmJqlModel psmJqlModel = loadPsmJqlModel(
                                         new ResourceSetImpl(),
                                         URI.createURI(file.getAbsolutePath()),
