@@ -41,7 +41,6 @@
       <import plugin="hu.blackbelt.judo.eclipse.emf.genmodel.generator.runtimemodel"/>
       <import plugin="hu.blackbelt.eclipse.emf.genmodel.generator.builder"/>
       <import plugin="hu.blackbelt.eclipse.emf.genmodel.generator.helper"/>
-      <import plugin="hu.blackbelt.epsilon.runtime.execution"/>
    </requires>
 
    <plugin
