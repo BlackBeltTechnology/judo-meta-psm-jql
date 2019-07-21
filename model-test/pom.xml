@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>hu.blackbelt.judo.meta</groupId>
+		<artifactId>hu.blackbelt.judo.meta.jql</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../</relativePath>
+	</parent>
+	<artifactId>hu.blackbelt.judo.meta.jql.model.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<name>Judo :: Jql :: Model :: Eclipse test plugin</name>
+	<description>Judo Jql Model eclipse test plugin</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.jcabi</groupId>
+			<artifactId>jcabi-log</artifactId>
+			<version>0.18</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>judo-meta-psm-jql-model</name>
+	<name>hu.blackbelt.judo.meta.jql.model</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -37,4 +37,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
 	</natures>
-</projectDescription>
+s</projectDescription>
