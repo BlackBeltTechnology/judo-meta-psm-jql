@@ -66,7 +66,7 @@
 
 	<properties>
         <project-shortname>judo-meta-jql</project-shortname>
-        <project-repositoryId>BlackBeltTechnology/judo-meta-jql</project-repositoryId>
+        <project-repositoryId>BlackBeltTechnology/judo-meta-psm-jql</project-repositoryId>
         <osgi-default-import>
 			org.osgi.framework;version="[1.8,2.0)",
 			!lombok,
