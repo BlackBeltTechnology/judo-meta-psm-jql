@@ -18,10 +18,39 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.jcabi</groupId>
-			<artifactId>jcabi-log</artifactId>
-			<version>0.18</version>
+			<groupId>hu.blackbelt.judo.meta</groupId>
+			<artifactId>hu.blackbelt.judo.meta.jql.model</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.epsilon</groupId>
+			<artifactId>epsilon-core</artifactId>
+			<version>${epsilon-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.epsilon</groupId>
+			<artifactId>epsilon-emf</artifactId>
+			<version>${epsilon-version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.3.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.3.2</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 </project>

@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
+import static hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel.LoadArguments.jqlDslLoadArgumentsBuilder;
+
 @Component(immediate = true)
 @Slf4j
 public class JqlModelBundleTracker {
@@ -83,15 +85,13 @@ public class JqlModelBundleTracker {
                             // Unpack model
                             try {
                                 JqlDslModel jqlModel = JqlDslModel.loadJqlDslModel(
-                                        JqlDslModel.LoadArguments.loadArgumentsBuilder()
-                                                .uriHandler(Optional.of(new BundleURIHandler("urn", "", trackedBundle)))
-                                                .uri(URI.createURI(params.get("file")))
+                                        jqlDslLoadArgumentsBuilder()
+                                                .uriHandler(new BundleURIHandler(trackedBundle.getSymbolicName(), "", trackedBundle))
+                                                .uri(URI.createURI(trackedBundle.getSymbolicName() + ":" + params.get("file")))
                                                 .name(params.get(JqlDslModel.NAME))
-                                                .version(Optional.of(trackedBundle.getVersion().toString()))
-                                                .checksum(Optional.ofNullable(params.get(JqlDslModel.CHECKSUM)))
-                                                .acceptedMetaVersionRange(Optional.of(versionRange.toString()))
-                                                .build()
-                                );
+                                                .version(trackedBundle.getVersion().toString())
+                                                .checksum(Optional.ofNullable(params.get(JqlDslModel.CHECKSUM)).orElse("notset"))
+                                                .acceptedMetaVersionRange(Optional.of(versionRange.toString()).orElse("[0,99)")));
 
                                 log.info("Registering Jql model: " + jqlModel);
 

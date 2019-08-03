@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Optional;
 
+import static hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel.LoadArguments.jqlDslLoadArgumentsBuilder;
+import static hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel.loadJqlDslModel;
+
 
 public class JqlDslModelLoaderTest {
 
@@ -25,11 +28,10 @@ public class JqlDslModelLoaderTest {
     void loadJqlModel() throws IOException {
         ResourceSet jqlResourceSet = JqlDslModelResourceSupport.createJqlDslResourceSet();
 
-        JqlDslModel jqlModel = JqlDslModel.loadJqlDslModel(JqlDslModel.LoadArguments.loadArgumentsBuilder()
-                .resourceSet(Optional.of(jqlResourceSet))
+        JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
+                .resourceSet(jqlResourceSet)
                 .uri(URI.createFileURI(new File("src/test/model/test.jql").getAbsolutePath()))
-                .name("test")
-                .build());
+                .name("test"));
 
         for (Iterator<EObject> i = jqlModel.getResourceSet().getResource(jqlModel.getUri(), false).getAllContents(); i.hasNext(); ) {
             log.info(i.next().toString());
