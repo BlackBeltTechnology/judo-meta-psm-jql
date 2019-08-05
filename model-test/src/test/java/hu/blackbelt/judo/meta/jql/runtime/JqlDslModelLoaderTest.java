@@ -25,11 +25,8 @@ public class JqlDslModelLoaderTest {
 	
     @Test
     @DisplayName("Load Jql Model")
-    void loadJqlModel() throws IOException {
-        ResourceSet jqlResourceSet = JqlDslModelResourceSupport.createJqlDslResourceSet();
-
+    void loadJqlModel() throws IOException, JqlDslModel.JqlDslValidationException {
         JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
-                .resourceSet(jqlResourceSet)
                 .uri(URI.createFileURI(new File("src/test/model/test.jql").getAbsolutePath()))
                 .name("test"));
 
