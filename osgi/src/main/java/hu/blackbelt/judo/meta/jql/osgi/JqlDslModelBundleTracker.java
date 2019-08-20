@@ -1,12 +1,10 @@
 package hu.blackbelt.judo.meta.jql.osgi;
 
-import hu.blackbelt.epsilon.runtime.osgi.BundleURIHandler;
 import hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel;
 import hu.blackbelt.osgi.utils.osgi.api.BundleCallback;
 import hu.blackbelt.osgi.utils.osgi.api.BundleTrackerManager;
 import hu.blackbelt.osgi.utils.osgi.api.BundleUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.emf.common.util.URI;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -16,6 +14,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,15 +25,28 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel.LoadArguments.jqlDslLoadArgumentsBuilder;
 import static hu.blackbelt.judo.meta.jql.jqldsl.runtime.JqlDslModel.loadJqlDslModel;
+import static java.util.Optional.ofNullable;
 
 @Component(immediate = true)
 @Slf4j
+@Designate(ocd = JqlDslModelBundleTracker.TrackerConfig.class)
 public class JqlDslModelBundleTracker {
 
-    public static final String PSM_MODELS = "JqlDsl-Models";
+    public static final String JQLDSL_MODELS = "JqlDsl-Models";
+
+    @ObjectClassDefinition(name="JqlDsl Model Bundle TTracker")
+    public @interface TrackerConfig {
+        @AttributeDefinition(
+                name = "Tags",
+                description = "Which tags are on the loaded model when there is no one defined in bundle"
+        )
+        String tags() default "";
+    }
 
     @Reference
     BundleTrackerManager bundleTrackerManager;
@@ -41,8 +55,11 @@ public class JqlDslModelBundleTracker {
 
     Map<String, JqlDslModel> jqlModels = new HashMap<>();
 
+    TrackerConfig config;
+
     @Activate
-    public void activate(final ComponentContext componentContext) {
+    public void activate(final ComponentContext componentContext, final TrackerConfig trackerConfig) {
+        this.config = trackerConfig;
         bundleTrackerManager.registerBundleCallback(this.getClass().getName(),
                 new JqlDslRegisterCallback(componentContext.getBundleContext()),
                 new JqlDslUnregisterCallback(),
@@ -57,7 +74,7 @@ public class JqlDslModelBundleTracker {
     private static class JqlDslBundlePredicate implements Predicate<Bundle> {
         @Override
         public boolean test(Bundle trackedBundle) {
-            return BundleUtil.hasHeader(trackedBundle, PSM_MODELS);
+            return BundleUtil.hasHeader(trackedBundle, JQLDSL_MODELS);
         }
     }
 
@@ -72,7 +89,7 @@ public class JqlDslModelBundleTracker {
 
         @Override
         public void accept(Bundle trackedBundle) {
-            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_MODELS);
+            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, JQLDSL_MODELS);
 
 
             for (Map<String, String> params : entries) {
@@ -86,11 +103,11 @@ public class JqlDslModelBundleTracker {
                             // Unpack model
                             try {
                                 JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
-                                        .uriHandler(new BundleURIHandler(trackedBundle.getSymbolicName(), "", trackedBundle))
-                                        .uri(URI.createURI(trackedBundle.getSymbolicName() + ":" + params.get("file")))
+                                        .inputStream(trackedBundle.getEntry(params.get("file")).openStream())
                                         .name(params.get(JqlDslModel.NAME))
                                         .version(trackedBundle.getVersion().toString())
                                         .checksum(Optional.ofNullable(params.get(JqlDslModel.CHECKSUM)).orElse("notset"))
+                                        .tags(Stream.of(ofNullable(params.get(JqlDslModel.TAGS)).orElse(config.tags()).split(",")).collect(Collectors.toSet()))
                                         .acceptedMetaVersionRange(Optional.of(versionRange.toString()).orElse("[0,99)")));
 
                                 log.info("Registering JqlDsl model: " + jqlModel);
@@ -99,10 +116,8 @@ public class JqlDslModelBundleTracker {
                                 jqlModels.put(key, jqlModel);
                                 jqlModelRegistrations.put(key, modelServiceRegistration);
 
-                            } catch (IOException e) {
-                                log.error("Could not load JqlDsl model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId());
-                            } catch (JqlDslModel.JqlDslValidationException e) {
-                                log.error("Could not load JqlDsl model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
+                            } catch (IOException | JqlDslModel.JqlDslValidationException e) {
+                                log.error("Could not load Psm model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
                             }
                         }
                     }
@@ -120,7 +135,7 @@ public class JqlDslModelBundleTracker {
 
         @Override
         public void accept(Bundle trackedBundle) {
-            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, PSM_MODELS);
+            List<Map<String, String>> entries = BundleUtil.getHeaderEntries(trackedBundle, JQLDSL_MODELS);
             for (Map<String, String> params : entries) {
                 String key = params.get(JqlDslModel.NAME);
 
