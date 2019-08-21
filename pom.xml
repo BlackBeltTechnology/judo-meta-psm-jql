@@ -200,6 +200,24 @@
                         <outputDirectory>${basedir}/xtend-gen</outputDirectory>
                         <testOutputDirectory>${basedir}/xtend-gen</testOutputDirectory>
                     </configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.eclipse.jdt</groupId>
+							<artifactId>org.eclipse.jdt.core</artifactId>
+							<version>3.13.102</version>
+						</dependency>
+
+						<dependency>
+							<groupId>org.eclipse.jdt</groupId>
+							<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
+							<version>1.3.110</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.jdt</groupId>
+							<artifactId>org.eclipse.jdt.compiler.tool</artifactId>
+							<version>1.2.101</version>
+						</dependency>
+					</dependencies>
                 </plugin>
 
 				<plugin>
@@ -478,47 +496,12 @@
 			<version>20.0</version>
 		</dependency>
 
-        <!--
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.common</artifactId>
-			<version>${emf-common-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.ecore</artifactId>
-			<version>${emf-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-			<version>${emf-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<version>6.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>osgi.cmpn</artifactId>
-			<version>6.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.annotation</artifactId>
-			<version>6.0.0</version>
-			<scope>provided</scope>
-		</dependency>
 		<dependency>
 			<groupId>hu.blackbelt.osgi.utils</groupId>
 			<artifactId>osgi-api</artifactId>
 			<version>1.0.6</version>
 			<scope>provided</scope>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
