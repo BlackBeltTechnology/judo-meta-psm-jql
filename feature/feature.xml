@@ -232,7 +232,6 @@
       <import plugin="org.eclipse.xtend.lib"/>
       <import plugin="org.eclipse.xtend.lib.macro"/>
       <import plugin="org.eclipse.xtend.typesystem.emf"/>
-      <import plugin="org.eclipse.xtend.util.stdlib"/>
       <import plugin="org.junit"/>
       <import plugin="org.eclipse.xtext"/>
       <import plugin="org.eclipse.jdt.core"/>
