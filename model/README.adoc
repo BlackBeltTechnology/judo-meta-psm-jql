@@ -1,0 +1,140 @@
+= Judo Query Language
+
+JQL is a simple expression language, which is generally independent of the queried data model.
+
+== Syntax overview
+
+An expression is evaluated to a single value (which of course can be a collection etc.) Newline characters are ignored in the expressions, so it is possible (and often advisable) to create multiline expression.
+
+
+=== Comments
+Comments can be used to expression documentation. Two kinds of comments exist:
+
+* Single line comments, starting with `//`
+* Multiline comments, between `/\*` and `*/` characters.
+
+=== Types
+JQL has the following built-in types
+
+* Boolean
+* String
+* Integer
+* Decimal
+* Date
+* Timestamp
+
+=== Literals
+
+==== Numeric literals
+
+* An *integer literal* is a sequence of digits, in base 10, eg. `42`.
+* A *decimal literal* represents an arbitrary precision real number: `3.14`, `100.0`
+
+=== Boolean literal
+A boolean literal is either `true` or `false`.
+
+=== String literal
+A string literal is a character sequence inside either single or double quotes, e.g. `'Hello'` or `"world"`.
+
+=== Temporal literals
+* Dates can be represented as literals using the syntax `{2019-09-01}`.
+* Timestsamps can be represented as literals using the syntax `{2019-09-01T14:30Z}`
+
+=== Enum literals
+Use backtick (+`+) character to denote enum literals, eg. `+`MONDAY+` or `+`Days::MONDAY+` 
+
+=== Identifiers
+
+Identifiers represent names such as entities, attributes, relations. They start with letter or underscore consecuted by letters, underscore or digits.
+Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid identifiers include `order`, `_order10`, `^price_rise`.
+
+=== Operators
+
+==== Unary operators
+ 
+* `!`, `not`, `NOT`- logical negation
+* `-` - arithmetical negation
+* `+`
+ 
+==== Logical operators
+
+* `or`, `OR` - logical OR operation
+* `and`, `AND` - logical AND operation
+* `==` - equals
+* `!=` - not equals
+
+==== Comparison operators
+
+* `>`, `<`, `>=`, `\<=`
+
+==== Arithmetical operators
+* `*`, `/`, `%`
+
+==== String operators
+* `||` - string concatenation
+
+=== Parentheses
+Expressions can be parenthesized, `(1 + 2)`, `(true)`.
+
+=== Qualified names
+
+* A qualified name is an identifier followed by two colons and an other identifier `::`. Qualified names can be chained as in `Measurements::Mass::kg`.
+
+=== Selectors
+* A selector is used to access a feature (attribute, relation etc.) of an element. 
+The selector operator is dot (`.`), e.g. `item.price`.
+
+== Measured values
+JQL expressions support measured quantities, e.g. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, e.g.
+`10[kg] + 5[Mass:g]`
+
+== CASE..WHEN
+Multiple cases for the value of an expression can be returned using the following syntax:
+```
+CASE self.orderQuantity AS q WHEN q < 10 THEN true ELSE false
+```
+In case of enumerations and equality checks there is a shorthand syntax:
+```
+CASE self.orderDay WHEN `Monday THEN 0 WHEN `Tuesday THEN 1 ELSE -1
+```
+```
+CASE self.id WHEN 10 THEN true ELSE false
+```
+
+== Transformations
+
+You can use some built-in transformations using the following syntax: `self.description!length`
+
+=== Numeric transformations
+* `round`
+
+=== String transformations
+
+* `concatenate` eg. `self.description!concatenate(self.copyright)`
+* `lowerCase` eg. `self.name!lowerCase`
+* `upperCase`
+* `length`
+* `substring(startIndex, endIndex)`
+* `position(str)`
+* `replace(regex, replacement)`
+* `trim`
+
+=== Collection transformations
+* `join(delimiter)`
+* `count`
+* `limit(count, offset)`
+* `sort(field, descending)`
+
+=== Lambda transformations
+* `filter(lambda)` e.g. `self.orderDetails!filter(od | od.price 10)` 
+
+== Type safety
+JQL expressions do strict type checking.
+
+=== Casting
+To make sure JQL correctly identifies a type you might need to cast using `@`, eg. 
+`self.od@Lib::MyIntegerCollection!filter(elem | elem < 10)`
+
+=== Type-checking transformations
+* `instanceof(type)`, evaluates to `true` if the given object is or a descendant of type e.g. `self.field!instanceof(Lib::MyType)`
+* `typeof(type)` evaluates to `true` if the given object is of type

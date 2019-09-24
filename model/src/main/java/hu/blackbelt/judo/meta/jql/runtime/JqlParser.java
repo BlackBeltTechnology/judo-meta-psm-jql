@@ -10,8 +10,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.Iterator;
 import java.util.UUID;
@@ -27,7 +28,8 @@ public class JqlParser {
         if (injectorInstance == null) {
             final long startTs = System.currentTimeMillis();
             injectorInstance = new JqlDslStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
-            Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put(JQLSCRIPT_CONTENT_TYPE, injectorInstance.getInstance(IResourceFactory.class));
+            Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put(JQLSCRIPT_CONTENT_TYPE,
+                    injectorInstance.getInstance(IResourceFactory.class));
             log.trace("Initialized XText for JQL in {} ms", (System.currentTimeMillis() - startTs));
         }
         return injectorInstance;
@@ -36,8 +38,10 @@ public class JqlParser {
     public XtextResource loadJqlFromFile(final File jqlFile) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(URI.createFileURI(jqlFile.getAbsolutePath()), JQLSCRIPT_CONTENT_TYPE);
-            jqlResource.load(new FileInputStream(jqlFile), injector().getInstance(XtextResourceSet.class).getLoadOptions());
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(URI.createFileURI(jqlFile.getAbsolutePath()), JQLSCRIPT_CONTENT_TYPE);
+            jqlResource.load(new FileInputStream(jqlFile),
+                    injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
             return jqlResource;
         } catch (IOException ex) {
@@ -50,7 +54,8 @@ public class JqlParser {
     public XtextResource loadJqlFromStream(final InputStream stream, final URI resourceUri) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             jqlResource.load(stream, injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
             return jqlResource;
@@ -72,7 +77,8 @@ public class JqlParser {
         }
 
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             final InputStream in = new ByteArrayInputStream(jqlExpression.getBytes("UTF-8"));
             jqlResource.load(in, injector().getInstance(XtextResourceSet.class).getLoadOptions());
 

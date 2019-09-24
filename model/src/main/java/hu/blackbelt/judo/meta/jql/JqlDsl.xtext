@@ -1,113 +1,168 @@
 grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden(WS, ML_COMMENT, SL_COMMENT)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
-
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
 
 Expression returns Expression:
-	ConcatenateExpression;
+    ConcatenateExpression
+    | SwitchExpression;
 
 ConcatenateExpression returns Expression:
-	OrExpression (=>({BinaryOperation.leftOperand=current} operator=OpConcat) rightOperand=OrExpression)*;
+    OrExpression (=> ({BinaryOperation.leftOperand=current} operator=OpConcat) rightOperand=OrExpression)*;
 
 OpConcat:
-	'||';
+    '||';
 
 OrExpression returns Expression:
-	AndExpression (=>({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
+    AndExpression (=> ({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
 
 OpOr:
-	'or' | 'OR';
+    'or' | 'OR';
 
 AndExpression returns Expression:
-	EqualityExpression (=>({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
+    EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
 
 OpAnd:
-	'and' | 'AND';
+    'and' | 'AND';
 
 EqualityExpression returns Expression:
-	RelationalExpression (=>({BinaryOperation.leftOperand=current} operator=OpEquality)
-	rightOperand=RelationalExpression)*;
+    RelationalExpression (=> ({BinaryOperation.leftOperand=current} operator=OpEquality)
+    rightOperand=RelationalExpression)*;
 
 OpEquality:
-	'==' | '!=' ;
+    '==' | '!=';
 
 RelationalExpression returns Expression:
-	AdditiveExpression
-	(=>({BinaryOperation.leftOperand=current} operator=OpCompare) rightOperand=AdditiveExpression)*;
+    AdditiveExpression
+    (=> ({BinaryOperation.leftOperand=current} operator=OpCompare) rightOperand=AdditiveExpression)*;
 
 OpCompare:
-	'>=' | '<' '=' | '>' | '<' ;
+    '>=' | '<' '=' | '>' | '<';
 
 AdditiveExpression returns Expression:
-	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} operator=OpAdd)
-	rightOperand=MultiplicativeExpression)*;
+    MultiplicativeExpression (=> ({BinaryOperation.leftOperand=current} operator=OpAdd)
+    rightOperand=MultiplicativeExpression)*;
 
 OpAdd:
-	'+' | '-';
+    '+' | '-';
 
 MultiplicativeExpression returns Expression:
-	UnaryOperation (=>({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
+    UnaryOperation  (=> '!' transformations += Transformation)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
 
 OpMulti:
-	'*' | '/' | '%';
+    '*' | '/' | '%';
 
 UnaryOperation returns Expression:
-	{UnaryOperation} operator=OpUnary operand=UnaryOperation
-	| PrimaryExpression;
+    {UnaryOperation} operator=OpUnary operand=UnaryOperation 
+        | PrimaryExpression;
 
 OpUnary:
-	"!" | 'not' | 'NOT' | "-" | "+";
+    "!" | 'not' | 'NOT' | "-" | "+";
 
 ParenthesizedExpression returns Expression:
-	'(' Expression ')';
+    '(' Expression ')';
 
 PrimaryExpression returns Expression:
-	NavigationExpression |
-	Literal |
-	ParenthesizedExpression;
+    ParenthesizedExpression |
+    NavigationExpression |
+    Literal;
+
+LambdaExpression returns Expression:
+    {LambdaExpression} argument=Feature '|' statement=Expression;
+
+Transformation:
+    {Transformation} feature=Feature ('('
+    (lambda=LambdaExpression |
+    (parameters+=Expression)? (',' parameters+=Expression)*)
+    ')')?;
+
+SwitchExpression returns Expression:
+    {SwitchExpression} 'CASE' operand=ConcatenateExpression body=(SwitchConditionalExpression |
+    SwitchEqualsExpression);
+
+SwitchConditionalExpression returns Expression:
+    {SwitchConditionalExpression} 'AS' alias=Feature (=> 'WHEN' cases+=SwitchConditionalCase)* (=> 'ELSE'
+    default=Expression)?;
+
+SwitchConditionalCase returns Expression:
+    {SwitchConditionalCase} condition=RelationalExpression 'THEN' result=Expression;
+
+SwitchEqualsExpression returns Expression:
+    {SwitchEqualsExpression} (=> 'WHEN' cases+=SwitchEqualsCase)* (=> 'ELSE' default=Expression)?;
+
+SwitchEqualsCase returns Expression:
+    {SwitchEqualsCase} condition=Literal 'THEN' result=Expression;
 
 Literal returns Expression:
-	BooleanLiteral |
-	NumberLiteral |
-	StringLiteral;
+    BooleanLiteral |
+    NumberLiteral |
+    StringLiteral |
+    TemporalLiteral |
+    EnumLiteral |
+    MeasuredLiteral;
 
-BooleanLiteral returns Expression :
-	{BooleanLiteral} ('false' | isTrue?='true');
+BooleanLiteral returns Expression:
+    {BooleanLiteral} ('false' | isTrue?='true');
 
-NumberLiteral returns Expression :
-	{IntegerLiteral} value=INTEGER |
+NumberLiteral returns Expression:
+    {IntegerLiteral} value=INTEGER |
     {DecimalLiteral} value=DECIMAL;
 
 StringLiteral returns Expression:
-	{StringLiteral} value=STRING;
+    {StringLiteral} value=STRING;
+
+TemporalLiteral returns Expression:
+    {DateLiteral} value=DATE |
+    {TimeStampLiteral} value=TIMESTAMP;
+
+MeasuredLiteral returns Expression:
+    {MeasuredLiteral} value=NumberLiteral '[' measure=QualifiedName ']';
+
+EnumLiteral returns Expression:
+    {EnumLiteral} '`' value=QualifiedName;
 
 NavigationExpression:
-	base=NavigationBase (=>'.' features+=Feature)*;
+    base=NavigationBase (=> '.' features+=Feature)* ('@' cast=NavigationBase)?;
 
 Feature:
-	name=ID;
+    name=ID;
 
 NavigationBase:
-	ValidID | QualifiedName;
+    ValidID | QualifiedName;
 
 QualifiedName:
-	ID (=>'::' ID)+;
+    ID (=> '::' ID)+;
 
 ValidID:
-	ID;
+    ID;
 
-terminal DECIMAL returns ecore::EBigDecimal: INTEGER '.' INTEGER;
-terminal INTEGER returns ecore::EBigInteger: ('0'..'9')+;
+terminal DATE:
+    '{' ('0'..'9' | '-')+ '}';
 
-terminal ID: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
+terminal TIMESTAMP:
+    '{' ('0'..'9' | '-')+ 'T'->'}';
+
+terminal DECIMAL returns ecore::EBigDecimal:
+    INTEGER '.' INTEGER;
+
+terminal INTEGER returns ecore::EBigInteger:
+    ('0'..'9')+;
+
+terminal ID:
+    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+
 terminal STRING:
-			'"' ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|'"') )* '"' |
-			"'" ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|"'") )* "'"
-		;
-terminal ML_COMMENT : '/*' -> '*/';
-terminal SL_COMMENT : '//' !('\n'|'\r')* ('\r'? '\n')?;
+    '"' ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | '"'))* '"' |
+    "'" ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | "'"))* "'";
 
-terminal WS         : (' '|'\t'|'\r'|'\n')+;
+terminal ML_COMMENT:
+    '/*'->'*/';
 
-terminal ANY_OTHER: .;
+terminal SL_COMMENT:
+    '//' !('\n' | '\r')* ('\r'? '\n')?;
+
+terminal WS:
+    (' ' | '\t' | '\r' | '\n')+;
+
+terminal ANY_OTHER:
+    .;
