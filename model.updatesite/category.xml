@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/my.mavenized.herolanguage.jql.sdk_0.0.0.jar" id="hu.blackbelt.judo.meta.jql.sdk" version="0.0.0">
+      <category name="hu.blackbelt.judo.meta.jql"/>
+   </feature>
+   <category-def name="hu.blackbelt.judo.meta.jql" label="JQL"/>
+</site>

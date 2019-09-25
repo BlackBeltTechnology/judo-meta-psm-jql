@@ -101,9 +101,9 @@ CASE self.orderDay WHEN `Monday THEN 0 WHEN `Tuesday THEN 1 ELSE -1
 CASE self.id WHEN 10 THEN true ELSE false
 ```
 
-== Transformations
+== Functions
 
-You can use some built-in transformations using the following syntax: `self.description!length`
+You can use some *built-in* functions using the following syntax: `self.description!length`
 
 === Numeric transformations
 * `round`
