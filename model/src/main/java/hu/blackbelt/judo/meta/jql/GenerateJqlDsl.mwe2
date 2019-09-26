@@ -11,16 +11,17 @@ Workflow {
 	
 	component = XtextGenerator {
 		configuration = {
-			project = StandardProjectConfig {
-                    mavenLayout = true
+			project = JqlXtextProjectConfig {
+			    mavenLayout = true
 				baseName = "model"
 				rootPath = rootPath
 				runtimeTest = {
 					enabled = false
 				}
 				eclipsePlugin = {
-					enabled = false
-								
+					enabled = true
+					name = "hu.blackbelt.judo.meta.jql.ui"		
+					root = "${rootPath}/ui"					
 				}
 				eclipsePluginTest = {
 					enabled = false
@@ -28,7 +29,6 @@ Workflow {
 				web = {
 					enabled = false
 				}
-				createEclipseMetaData = true
 			}
 			code = {
 				encoding = "UTF-8"

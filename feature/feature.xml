@@ -244,4 +244,16 @@
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="hu.blackbelt.judo.meta.jql.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="hu.blackbelt.judo.meta.jql.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>         
+
 </feature>
