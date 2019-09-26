@@ -1,8 +1,7 @@
-module hu.blackbelt.judo.meta.jql.GenerateJqlDsl
+module hu.blackbelt.judo.meta.jqlinternal.GenerateJqlDsl
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
-import hu.blackbelt.judo.meta.jqlinternal.*
 
 var rootPath = ".."
 var modelDir = "model/model"

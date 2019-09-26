@@ -58,7 +58,7 @@
 				<configuration>
 					<mainClass>org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher</mainClass>
 					<arguments>
-						<argument>/${project.basedir}/src/main/java/hu/blackbelt/judo/meta/jql/GenerateJqlDsl.mwe2</argument>
+						<argument>/${project.basedir}/src/main/java/hu/blackbelt/judo/meta/jqlinternal/GenerateJqlDsl.mwe2</argument>
 						<argument>-p</argument>
 						<argument>rootPath=/${project.basedir}/..</argument>
 					</arguments>
