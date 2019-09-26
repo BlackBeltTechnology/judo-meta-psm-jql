@@ -34,7 +34,7 @@ JQL has the following built-in types
 A boolean literal is either `true` or `false`.
 
 === String literal
-A string literal is a character sequence inside either single or double quotes, e.g. `'Hello'` or `"world"`.
+A string literal is a character sequence inside either single or double quotes, eg. `'Hello'` or `"world"`.
 
 === Temporal literals
 * Dates can be represented as literals using the syntax `{2019-09-01}`.
@@ -68,7 +68,10 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 * `>`, `<`, `>=`, `\<=`
 
 ==== Arithmetical operators
-* `*`, `/`, `%`
+* `*` integer or decimal multiplication. If either of the operands is a decimal the result is decimal.
+* `/` division, the result is always a decimal number
+* `%`, `mod` or `MOD`: integer remainder operation, both operands must be integers
+* `div` or `DIV`: integer division operation, both operands must be integers, the result is an integer
 
 ==== String operators
 * `||` - string concatenation
@@ -82,10 +85,10 @@ Expressions can be parenthesized, `(1 + 2)`, `(true)`.
 
 === Selectors
 * A selector is used to access a feature (attribute, relation etc.) of an element. 
-The selector operator is dot (`.`), e.g. `item.price`.
+The selector operator is dot (`.`), eg. `item.price`.
 
 == Measured values
-JQL expressions support measured quantities, e.g. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, e.g.
+JQL expressions support measured quantities, eg. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, eg.
 `10[kg] + 5[Mass:g]`
 
 == CASE..WHEN
@@ -105,12 +108,12 @@ CASE self.id WHEN 10 THEN true ELSE false
 
 You can use some *built-in* functions using the following syntax: `self.description!length`
 
-=== Numeric transformations
+=== Numeric functions
 * `round`
 
-=== String transformations
+=== String functions
 
-* `concatenate` eg. `self.description!concatenate(self.copyright)`
+* `concat` eg. `self.description!concat(self.copyright)`
 * `lowerCase` eg. `self.name!lowerCase`
 * `upperCase`
 * `length`
@@ -119,14 +122,18 @@ You can use some *built-in* functions using the following syntax: `self.descript
 * `replace(regex, replacement)`
 * `trim`
 
-=== Collection transformations
+=== Collection functions
 * `join(delimiter)`
 * `count`
 * `limit(count, offset)`
 * `sort(field, descending)`
 
-=== Lambda transformations
-* `filter(lambda)` e.g. `self.orderDetails!filter(od | od.price 10)` 
+=== Lambda functions
+* `filter(lambda)` eg. `self.orderDetails!filter(od | od.price 10)` 
+
+=== Type-checking functions
+* `kindof(type)`, evaluates to `true` if the given object is or a descendant of type eg. `self.field!instanceof(Lib::MyType)`
+* `typeof(type)` evaluates to `true` if the given object is of type
 
 == Type safety
 JQL expressions do strict type checking.
@@ -135,6 +142,3 @@ JQL expressions do strict type checking.
 To make sure JQL correctly identifies a type you might need to cast using `@`, eg. 
 `self.od@Lib::MyIntegerCollection!filter(elem | elem < 10)`
 
-=== Type-checking transformations
-* `instanceof(type)`, evaluates to `true` if the given object is or a descendant of type e.g. `self.field!instanceof(Lib::MyType)`
-* `typeof(type)` evaluates to `true` if the given object is of type

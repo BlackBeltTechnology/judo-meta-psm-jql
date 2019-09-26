@@ -47,10 +47,10 @@ OpAdd:
     '+' | '-';
 
 MultiplicativeExpression returns Expression:
-    UnaryOperation  (=> '!' transformations += Transformation)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
+    UnaryOperation  (=> '!' functions += Function)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
 
 OpMulti:
-    '*' | '/' | '%';
+    '*' | '/' | '%' | 'div' | 'DIV' | 'mod' | 'MOD';
 
 UnaryOperation returns Expression:
     {UnaryOperation} operator=OpUnary operand=UnaryOperation 
@@ -70,28 +70,28 @@ PrimaryExpression returns Expression:
 LambdaExpression returns Expression:
     {LambdaExpression} argument=Feature '|' statement=Expression;
 
-Transformation:
-    {Transformation} feature=Feature ('('
+Function:
+    {Function} feature=Feature ('('
     (lambda=LambdaExpression |
     (parameters+=Expression)? (',' parameters+=Expression)*)
     ')')?;
 
 SwitchExpression returns Expression:
-    {SwitchExpression} 'CASE' operand=ConcatenateExpression body=(SwitchConditionalExpression |
+    {SwitchExpression} ('CASE' | 'case') operand=ConcatenateExpression body=(SwitchConditionalExpression |
     SwitchEqualsExpression);
 
 SwitchConditionalExpression returns Expression:
-    {SwitchConditionalExpression} 'AS' alias=Feature (=> 'WHEN' cases+=SwitchConditionalCase)* (=> 'ELSE'
+    {SwitchConditionalExpression} ('AS' | 'as') alias=Feature (=> ('WHEN' | 'when') cases+=SwitchConditionalCase)* (=> ('ELSE' | 'else')
     default=Expression)?;
 
 SwitchConditionalCase returns Expression:
-    {SwitchConditionalCase} condition=RelationalExpression 'THEN' result=Expression;
+    {SwitchConditionalCase} condition=RelationalExpression ('THEN' | 'then') result=Expression;
 
 SwitchEqualsExpression returns Expression:
-    {SwitchEqualsExpression} (=> 'WHEN' cases+=SwitchEqualsCase)* (=> 'ELSE' default=Expression)?;
+    {SwitchEqualsExpression} (=> ('WHEN' | 'when') cases+=SwitchEqualsCase)* (=> ('ELSE' | 'else') default=Expression)?;
 
 SwitchEqualsCase returns Expression:
-    {SwitchEqualsCase} condition=Literal 'THEN' result=Expression;
+    {SwitchEqualsCase} condition=Literal ('THEN' | 'then') result=Expression;
 
 Literal returns Expression:
     BooleanLiteral |

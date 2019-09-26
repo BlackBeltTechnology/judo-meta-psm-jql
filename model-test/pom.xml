@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>hu.blackbelt.judo.meta</groupId>
 			<artifactId>hu.blackbelt.judo.meta.jql.model</artifactId>
-			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
