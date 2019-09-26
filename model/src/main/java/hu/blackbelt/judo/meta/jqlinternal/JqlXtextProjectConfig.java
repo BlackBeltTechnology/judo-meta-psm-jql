@@ -1,4 +1,4 @@
-package hu.blackbelt.judo.meta.jql;
+package hu.blackbelt.judo.meta.jqlinternal;
 
 import com.google.common.base.Objects;
 import org.eclipse.xtext.xtext.generator.model.project.StandardProjectConfig;
