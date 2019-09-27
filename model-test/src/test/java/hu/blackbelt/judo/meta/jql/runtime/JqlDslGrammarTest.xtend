@@ -76,11 +76,15 @@ class JqlDslGrammarTest {
 
         operation = "a + b".parse as BinaryOperation
         "+".assertEquals(operation.operator)
+        
+        operation = "'a' + \"b\"".parse as BinaryOperation
+        "+".assertEquals(operation.operator)
+        
 
         operation = "a - b".parse as BinaryOperation
         "-".assertEquals(operation.operator)
     }
-
+    
     @Test
     def void unaryExpressions() {
         var exp = parser.parseString("-100") as UnaryOperation

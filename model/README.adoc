@@ -8,7 +8,6 @@ An expression is evaluated to a single value (which of course can be a collectio
 
 JQL keywords are case insensitive, so you can write the boolean `true` value as `TRUE` or `True` as well. 
 
-
 === Comments
 Comments can be used to expression documentation. Two kinds of comments exist:
 
@@ -24,6 +23,8 @@ JQL has the following built-in types
 * Decimal
 * Date
 * Timestamp
+
+Also some expressions or expression fragments might evaluate as an `undefined` value with no type.
 
 === Literals
 
@@ -76,7 +77,7 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 * `div` or `DIV`: integer division operation, both operands must be integers, the result is an integer
 
 ==== String operators
-* `||` - string concatenation
+* `+` - string concatenation. Note that as JQL does strong type checks, if either of the operands is not a string, the expression will be invalid.
 
 === Parentheses
 Expressions can be parenthesized, `(1 + 2)`, `(true)`.
@@ -128,6 +129,6 @@ You can use some *built-in* functions using the following syntax: `self.descript
 JQL expressions do strict type checking.
 
 === Casting
-To make sure JQL correctly identifies a type you might need to cast using `@`, eg. 
+The cast operator (`@`) will evaluate to the operand if its type is the same as given, otherwise evaluates as `undefined`., eg. 
 `self.od@Lib::MyIntegerCollection!filter(elem | elem < 10)`
 
