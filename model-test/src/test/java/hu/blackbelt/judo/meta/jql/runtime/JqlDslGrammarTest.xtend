@@ -18,6 +18,7 @@ import java.math.BigInteger
 import org.junit.jupiter.api.Test
 
 import static extension org.junit.jupiter.api.Assertions.*
+import hu.blackbelt.judo.meta.jql.jqldsl.TernaryOperation
 
 class JqlDslGrammarTest {
 
@@ -61,47 +62,118 @@ class JqlDslGrammarTest {
 
         operation = "a div b".parse as BinaryOperation
         "div".assertEquals(operation.operator)
-        
+
         operation = "a DIV b".parse as BinaryOperation
         "DIV".assertEquals(operation.operator)
-        
+
         operation = "a mod b".parse as BinaryOperation
         "mod".assertEquals(operation.operator)
-
-        operation = "a % b".parse as BinaryOperation
-        "%".assertEquals(operation.operator)
 
         operation = "a * b".parse as BinaryOperation
         "*".assertEquals(operation.operator)
 
         operation = "a + b".parse as BinaryOperation
         "+".assertEquals(operation.operator)
-        
+
         operation = "'a' + \"b\"".parse as BinaryOperation
         "+".assertEquals(operation.operator)
-        
 
         operation = "a - b".parse as BinaryOperation
         "-".assertEquals(operation.operator)
     }
-    
+
     @Test
     def void unaryExpressions() {
         var exp = parser.parseString("-100") as UnaryOperation
         "-".assertEquals(exp.operator)
         BigInteger.valueOf(100).assertEquals(exp.operand.expressionValue)
 
-        exp = parser.parseString("!false") as UnaryOperation
-        "!".assertEquals(exp.operator)
-        false.assertEquals(exp.operand.expressionValue)
-
         exp = parser.parseString("not true") as UnaryOperation
         "not".assertEquals(exp.operator)
         true.assertEquals(exp.operand.expressionValue)
-        
+
         exp = parser.parseString("Not True") as UnaryOperation
         "Not".assertEquals(exp.operator)
         true.assertEquals(exp.operand.expressionValue)
+    }
+    
+    @Test
+    def void ifElse() {
+        val exp = "a ? b : c".parse as TernaryOperation
+        "a".assertEquals(exp.condition.asString)
+        "b".assertEquals(exp.thenExpression.asString)
+        "c".assertEquals(exp.elseExpression.asString)
+        "(if a b c)".assertEquals(exp.asString)
+        
+        val conditionThen = "a<1 ? b<2 : c>3".parse as TernaryOperation
+        "(< a 1)".assertEquals(conditionThen.condition.asString)
+        "(if (< a 1) (< b 2) (> c 3))".assertEquals(conditionThen.asString)
+        
+        // right-associtivity tests
+        val combinedExp= "a ? b : c ? d : e".parse as TernaryOperation
+        "(if a b (if c d e))".assertEquals(combinedExp.asString)        
+        
+        val parenExp= "a ? b : (c ? d : e)".parse as TernaryOperation
+        "(if a b (if c d e))".assertEquals(parenExp.asString)
+           
+        val hardExpParen = "a ? (b ? c : d) : (e ? (f ? g : h) : (i ? j : (k ? l : m))) ".parse as TernaryOperation
+        "(if a (if b c d) (if e (if f g h) (if i j (if k l m))))".assertEquals(hardExpParen.asString)
+        val hardExp = "a<0 ? b=q ? c : d : e ? f ? g : h : i ? j : k = q xor r ? l and o or p : m implies n ".parse as TernaryOperation
+        "(if (< a 0) (if (= b q) c d) (if e (if f g h) (if i j (if (xor (= k q) r) (or (and l o) p) (implies m n)))))".assertEquals(hardExp.asString)
+    }
+
+    @Test
+    def void logicalPrecedence() {
+        "(or a (not b))".assertEquals("a or not b".parse.asString)
+        "(or a (and b c))".assertEquals("a or b and c".parse.asString)
+        "(or (and a b) c)".assertEquals("a and b or c".parse.asString)
+        "(or (and a (not b)) (not c))".assertEquals("a and not b or not c".parse.asString)
+        "(or (and a (not b)) (not c))".assertEquals("(a and not b) or not c".parse.asString)
+        "(and a (not (or b (not c))))".assertEquals("a and not (b or not c)".parse.asString)
+        "(and a (or (not b) (not c)))".assertEquals("a and (not b or not c)".parse.asString)
+       
+        "(xor a b)".assertEquals("a xor b".parse.asString)
+        "(xor a (and b c))".assertEquals("a xor b and c".parse.asString)
+        "(xor (and a b) c)".assertEquals("a and b xor c".parse.asString)
+        "(or (xor a b) c)".assertEquals("a xor b or c".parse.asString)
+        "(or a (xor b c))".assertEquals("a or b xor c".parse.asString)
+        
+        "(implies a b)".assertEquals("a implies b".parse.asString)
+        "(implies a (xor b c))".assertEquals("a implies b xor c".parse.asString)
+        "(implies (or a b) (xor c d))".assertEquals("a or b implies c xor d".parse.asString)
+        
+        "(implies a (or b (xor c (and d (not e)))))".assertEquals("a implies b or c xor d and not e".parse.asString)
+        "(implies (or (xor (and (not a) b) c) d) e)".assertEquals("not a and b xor c or d implies e".parse.asString)
+        
+        "(or (<> a b) (= b c))".assertEquals("a <> b or b = c".parse.asString)
+        "(implies (and (<> a b) (= b c)) (or (<= c d) (>= d e)))".assertEquals("a <> b and b = c implies c <= d or d >= e".parse.asString)
+        
+        "(= (< a b) (< c d))".assertEquals("a<b=c<d".parse.asString)
+        
+        "(and (= a b) c)".assertEquals("a = b and c".parse.asString)
+        "(or (= a b) c)".assertEquals("a = b or c".parse.asString)
+        "(xor (= a b) c)".assertEquals("a = b xor c".parse.asString)                
+    }
+    
+    def String asString(Expression exp) {
+        val result = new StringBuilder();
+        if (exp instanceof BinaryOperation) {
+            result.append(String.format("(%s ", exp.operator))
+            result.append(exp.leftOperand.asString)
+            result.append(" ")
+            result.append(exp.rightOperand.asString)
+            result.append(")")
+        } else if (exp instanceof NavigationExpression) {
+            result.append(exp.base)
+            exp.features.forEach[result.append("." + it.name)]
+        } else if (exp instanceof UnaryOperation) {
+            result.append(String.format("(%s %s)", exp.operator, exp.operand.asString))
+        } else if (exp instanceof TernaryOperation) {
+            result.append(String.format("(if %s %s %s)", exp.condition.asString, exp.thenExpression.asString, exp.elseExpression.asString))
+        } else {
+            result.append(exp.expressionValue)
+        }
+        return result.toString
     }
 
     @Test
@@ -120,9 +192,10 @@ class JqlDslGrammarTest {
         BigInteger.valueOf(10).assertEquals(exp.expressionValue)
         "kg".assertEquals(exp.measure)
 
-        exp = parser.parseString("0.1[Mass::mg]") as MeasuredLiteral
+        exp = parser.parseString("0.1[model::Mass#mg]") as MeasuredLiteral
         BigDecimal.valueOf(0.1).assertEquals(exp.expressionValue)
-        "Mass::mg".assertEquals(exp.measure)
+        "model::Mass".assertEquals(exp.type)
+        "mg".assertEquals(exp.measure)
     }
 
     @Test
@@ -222,10 +295,11 @@ class JqlDslGrammarTest {
 
     @Test
     def void enumLiteral() {
-        var exp = "`MONDAY".parse as EnumLiteral
+        var exp = "#MONDAY".parse as EnumLiteral
         "MONDAY".assertEquals(exp.value)
-        exp = "`Days::MONDAY".parse as EnumLiteral
-        "Days::MONDAY".assertEquals(exp.value)
+        exp = "model::Days#MONDAY".parse as EnumLiteral
+        "model::Days".assertEquals(exp.type)
+        "MONDAY".assertEquals(exp.value)
     }
 
     def Expression parse(CharSequence expressionText) {
@@ -241,7 +315,7 @@ class JqlDslGrammarTest {
             TimeStampLiteral: exp.value
             BooleanLiteral: exp.isIsTrue
             MeasuredLiteral: exp.value.expressionValue
-            EnumLiteral: exp.value
+            EnumLiteral: (exp.type === null ? "" : exp.type + "#") + exp.value
             default: null
         }
     }

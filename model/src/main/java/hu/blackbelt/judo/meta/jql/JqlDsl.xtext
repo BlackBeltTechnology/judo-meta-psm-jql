@@ -4,26 +4,33 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
 
 Expression returns Expression:
-    OrExpression;
+    SwitchExpression;
+
+// right associative rule
+SwitchExpression returns Expression:
+    ImpliesExpression (=> ({TernaryOperation.condition=current} '?') thenExpression = SwitchExpression ':' elseExpression = SwitchExpression)?
+;  
+    
+ImpliesExpression returns Expression:
+    OrExpression (=> ({BinaryOperation.leftOperand=current} operator='implies') rightOperand=OrExpression)*
+;
 
 OrExpression returns Expression:
-    AndExpression (=> ({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
+    XorExpression (=> ({BinaryOperation.leftOperand=current} operator='or') rightOperand=XorExpression)*;
 
-OpOr:
-    'or';
+XorExpression returns Expression:
+    AndExpression (=> ({BinaryOperation.leftOperand=current} operator='xor') rightOperand=AndExpression)*
+;
 
 AndExpression returns Expression:
-    EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
-
-OpAnd:
-    'and';
+    EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator='and') rightOperand=EqualityExpression)*;
 
 EqualityExpression returns Expression:
     RelationalExpression (=> ({BinaryOperation.leftOperand=current} operator=OpEquality)
     rightOperand=RelationalExpression)*;
 
 OpEquality:
-    '==' | '!=';
+    '<>' | '=';
 
 RelationalExpression returns Expression:
     AdditiveExpression
@@ -46,11 +53,11 @@ OpMulti:
     '*' | '/' | '%' | 'div' | 'mod' ;
 
 UnaryOperation returns Expression:
-    {UnaryOperation} operator=OpUnary operand=UnaryOperation 
+    {UnaryOperation} operator=OpUnary operand=UnaryOperation
         | PrimaryExpression;
 
 OpUnary:
-    "!" | 'not' |"-" | "+";
+    'not' |"-";
 
 ParenthesizedExpression returns Expression:
     '(' Expression ')';
@@ -59,7 +66,7 @@ PrimaryExpression returns Expression:
     ParenthesizedExpression |
     NavigationExpression |
     Literal;
-
+    
 LambdaExpression returns Expression:
     {LambdaExpression} argument=Feature '|' statement=Expression;
 
@@ -92,10 +99,10 @@ TemporalLiteral returns Expression:
     {TimeStampLiteral} value=TIMESTAMP;
 
 MeasuredLiteral returns Expression:
-    {MeasuredLiteral} value=NumberLiteral '[' measure=QualifiedName ']';
+    {MeasuredLiteral} value=NumberLiteral '[' (type=QualifiedName '#')? measure=ValidID ']';
 
 EnumLiteral returns Expression:
-    {EnumLiteral} '`' value=QualifiedName;
+    {EnumLiteral} type=(QualifiedName)? '#' value=ValidID;
 
 NavigationExpression:
     base=NavigationBase (=> '.' features+=Feature)* ('@' cast=NavigationBase)?;

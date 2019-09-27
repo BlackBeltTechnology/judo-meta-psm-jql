@@ -14,8 +14,8 @@ Comments can be used to expression documentation. Two kinds of comments exist:
 * Single line comments, starting with `//`
 * Multiline comments, between `/\*` and `*/` characters.
 
-=== Types
-JQL has the following built-in types
+=== Primitive types
+JQL has the following built-in primitive types
 
 * Boolean
 * String
@@ -24,7 +24,7 @@ JQL has the following built-in types
 * Date
 * Timestamp
 
-Also some expressions or expression fragments might evaluate as an `undefined` value with no type.
+Also some expressions or expression fragments might evaluate to the special `undefined` value. `undefined` cannot be used directly.
 
 === Literals
 
@@ -44,7 +44,7 @@ A string literal is a character sequence inside either single or double quotes, 
 * Timestsamps can be represented as literals using the syntax `{2019-09-01T14:30Z}`
 
 === Enum literals
-Use backtick (+`+) character to denote enum literals, eg. `+`MONDAY+` or `+`Days::MONDAY+` 
+Use hashmark (`#`) character to denote enum literals, eg. `#MONDAY` or `model::Days#MONDAY` 
 
 === Identifiers
 
@@ -55,22 +55,24 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 
 ==== Unary operators
  
-* `!`, `not`, `NOT`- logical negation
+* `not`- logical negation
 * `-` - arithmetical negation
-* `+`
  
 ==== Logical operators
-
-* `or`, `OR` - logical OR operation
-* `and`, `AND` - logical AND operation
-* `==` - equals
-* `!=` - not equals
+* `=` - equals
+* `<>` - not equals
+* `and`- logical AND operation
+* `xor` - logical XOR operation
+* `or` - logical OR operation
+* `implies` - logical implication operation
 
 ==== Comparison operators
 
 * `>`, `<`, `>=`, `\<=`
 
-==== Arithmetical operators
+==== Arithmetic operators
+* `+`- addition
+* `-`- substraction
 * `*` integer or decimal multiplication. If either of the operands is a decimal the result is decimal.
 * `/` division, the result is always a decimal number
 * `%`, `mod` or `MOD`: integer remainder operation, both operands must be integers
@@ -82,6 +84,24 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 === Parentheses
 Expressions can be parenthesized, `(1 + 2)`, `(true)`.
 
+=== Operator precedence
+(Highest precedence is 1)
+
+
+
+. `()` (parentheses), `.` (selectors) 
+. `-` (unary minus), `not` (logical negation), 
+. `*`, `/`, `div`, `mod`
+. `+`, `-`
+. `<`, `>`, `<=`, `>=`
+. `=`, `<>`
+. `and`
+. `xor`
+. `or`
+. `implies`
+. `?:` ternary conditional (right-associative)
+
+
 === Qualified names
 
 * A qualified name is an identifier followed by two colons and an other identifier `::`. Qualified names can be chained as in `Measurements::Mass::kg`.
@@ -92,7 +112,7 @@ The selector operator is dot (`.`), eg. `item.price`.
 
 == Measured values
 JQL expressions support measured quantities, eg. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, eg.
-`10[kg] + 5[Mass:g]`
+`10[km] + 5[model::Length#m]`
 
 == Functions
 
@@ -103,7 +123,6 @@ You can use some *built-in* functions using the following syntax: `self.descript
 
 === String functions
 
-* `concat` eg. `self.description!concat(self.copyright)`
 * `lowerCase` eg. `self.name!lowerCase`
 * `upperCase`
 * `length`
