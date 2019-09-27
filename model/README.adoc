@@ -6,6 +6,8 @@ JQL is a simple expression language, which is generally independent of the queri
 
 An expression is evaluated to a single value (which of course can be a collection etc.) Newline characters are ignored in the expressions, so it is possible (and often advisable) to create multiline expression.
 
+JQL keywords are case insensitive, so you can write the boolean `true` value as `TRUE` or `True` as well. 
+
 
 === Comments
 Comments can be used to expression documentation. Two kinds of comments exist:
@@ -90,19 +92,6 @@ The selector operator is dot (`.`), eg. `item.price`.
 == Measured values
 JQL expressions support measured quantities, eg. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, eg.
 `10[kg] + 5[Mass:g]`
-
-== CASE..WHEN
-Multiple cases for the value of an expression can be returned using the following syntax:
-```
-CASE self.orderQuantity AS q WHEN q < 10 THEN true ELSE false
-```
-In case of enumerations and equality checks there is a shorthand syntax:
-```
-CASE self.orderDay WHEN `Monday THEN 0 WHEN `Tuesday THEN 1 ELSE -1
-```
-```
-CASE self.id WHEN 10 THEN true ELSE false
-```
 
 == Functions
 

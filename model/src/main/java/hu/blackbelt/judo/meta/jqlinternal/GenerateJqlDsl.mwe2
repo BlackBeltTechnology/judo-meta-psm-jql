@@ -40,6 +40,16 @@ Workflow {
 			name = "hu.blackbelt.judo.meta.jql.JqlDsl"
 			fileExtensions = "jql"
 
+            parserGenerator = {
+                options = {
+                    ignoreCase = true
+                }
+            }
+            
+            scopeProvider = {
+                ignoreCase = true
+            }
+
 			serializer = {
 				generateStub = false
 			}

@@ -16,13 +16,13 @@ OrExpression returns Expression:
     AndExpression (=> ({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
 
 OpOr:
-    'or' | 'OR';
+    'or';
 
 AndExpression returns Expression:
     EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
 
 OpAnd:
-    'and' | 'AND';
+    'and';
 
 EqualityExpression returns Expression:
     RelationalExpression (=> ({BinaryOperation.leftOperand=current} operator=OpEquality)
@@ -49,14 +49,14 @@ MultiplicativeExpression returns Expression:
     UnaryOperation  (=> '!' functions += Function)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
 
 OpMulti:
-    '*' | '/' | '%' | 'div' | 'DIV' | 'mod' | 'MOD';
+    '*' | '/' | '%' | 'div' | 'mod' ;
 
 UnaryOperation returns Expression:
     {UnaryOperation} operator=OpUnary operand=UnaryOperation 
         | PrimaryExpression;
 
 OpUnary:
-    "!" | 'not' | 'NOT' | "-" | "+";
+    "!" | 'not' |"-" | "+";
 
 ParenthesizedExpression returns Expression:
     '(' Expression ')';

@@ -61,7 +61,10 @@ class JqlDslGrammarTest {
 
         operation = "a div b".parse as BinaryOperation
         "div".assertEquals(operation.operator)
-
+        
+        operation = "a DIV b".parse as BinaryOperation
+        "DIV".assertEquals(operation.operator)
+        
         operation = "a mod b".parse as BinaryOperation
         "mod".assertEquals(operation.operator)
 
@@ -90,6 +93,10 @@ class JqlDslGrammarTest {
 
         exp = parser.parseString("not true") as UnaryOperation
         "not".assertEquals(exp.operator)
+        true.assertEquals(exp.operand.expressionValue)
+        
+        exp = parser.parseString("Not True") as UnaryOperation
+        "Not".assertEquals(exp.operator)
         true.assertEquals(exp.operand.expressionValue)
     }
 
