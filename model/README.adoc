@@ -40,8 +40,9 @@ A boolean literal is either `true` or `false`.
 A string literal is a character sequence inside either single or double quotes, eg. `'Hello'` or `"world"`.
 
 === Temporal literals
-* Dates can be represented as literals using the syntax `{2019-09-01}`.
-* Timestsamps can be represented as literals using the syntax `{2019-09-01T14:30Z}`
+* Temporal literals use backtick (```) as delimiter.
+* Dates can be represented as literals using the syntax `+`2019-09-01+``.
+* Timestsamps can be represented as literals using the syntax `+`2019-09-01T14:30Z+``
 
 === Enum literals
 Use hashmark (`#`) character to denote enum literals, eg. `#MONDAY` or `model::Days#MONDAY` 
@@ -75,8 +76,8 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 * `-`- substraction
 * `*` integer or decimal multiplication. If either of the operands is a decimal the result is decimal.
 * `/` division, the result is always a decimal number
-* `%`, `mod` or `MOD`: integer remainder operation, both operands must be integers
-* `div` or `DIV`: integer division operation, both operands must be integers, the result is an integer
+* `mod`: integer remainder operation, both operands must be integers
+* `div`: integer division operation, both operands must be integers, the result is an integer
 
 ==== String operators
 * `+` - string concatenation. Note that as JQL does strong type checks, if either of the operands is not a string, the expression will be invalid.
@@ -86,8 +87,6 @@ Expressions can be parenthesized, `(1 + 2)`, `(true)`.
 
 === Operator precedence
 (Highest precedence is 1)
-
-
 
 . `()` (parentheses), `.` (selectors) 
 . `-` (unary minus), `not` (logical negation), 
@@ -116,24 +115,24 @@ JQL expressions support measured quantities, eg. `10[kg]`, where the measure is 
 
 == Functions
 
-You can use some *built-in* functions using the following syntax: `self.description!length`
+You can use some *built-in* functions using the following syntax: `self.description!length()`
 
 === Numeric functions
-* `round`
+* `round()`
 
 === String functions
 
-* `lowerCase` eg. `self.name!lowerCase`
-* `upperCase`
-* `length`
+* `lowerCase()` eg. `self.name!lowerCase()`
+* `upperCase()`
+* `length()`
 * `substring(startIndex, endIndex)`
 * `position(str)`
 * `replace(regex, replacement)`
-* `trim`
+* `trim()`
 
 === Collection functions
 * `join(delimiter)`
-* `count`
+* `count()`
 * `limit(count, offset)`
 * `sort(field, descending)`
 

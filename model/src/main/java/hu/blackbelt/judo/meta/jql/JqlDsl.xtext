@@ -50,7 +50,7 @@ MultiplicativeExpression returns Expression:
     UnaryOperation  (=> '!' functions += Function)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
 
 OpMulti:
-    '*' | '/' | '%' | 'div' | 'mod' ;
+    '*' | '/' | 'div' | 'mod' ;
 
 UnaryOperation returns Expression:
     {UnaryOperation} operator=OpUnary operand=UnaryOperation
@@ -67,14 +67,12 @@ PrimaryExpression returns Expression:
     NavigationExpression |
     Literal;
     
-LambdaExpression returns Expression:
+LambdaExpression:
     {LambdaExpression} argument=Feature '|' statement=Expression;
 
 Function:
-    {Function} feature=Feature ('('
-    (lambda=LambdaExpression |
-    (parameters+=Expression)? (',' parameters+=Expression)*)
-    ')')?;
+    {Function} feature=Feature '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)? ')'
+;
 
 Literal returns Expression:
     BooleanLiteral |
@@ -120,10 +118,10 @@ ValidID:
     ID;
 
 terminal DATE:
-    '{' ('0'..'9' | '-')+ '}';
+    '`' ('0'..'9' | '-')+ '`';
 
 terminal TIMESTAMP:
-    '{' ('0'..'9' | '-')+ 'T'->'}';
+    '`' ('0'..'9' | '-')+ 'T'->'`';
 
 terminal DECIMAL returns ecore::EBigDecimal:
     INTEGER '.' INTEGER;
@@ -132,7 +130,7 @@ terminal INTEGER returns ecore::EBigInteger:
     ('0'..'9')+;
 
 terminal ID:
-    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+    ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
 terminal STRING:
     '"' ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | '"'))* '"' |

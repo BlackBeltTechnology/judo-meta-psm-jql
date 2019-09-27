@@ -6,7 +6,7 @@ package hu.blackbelt.judo.meta.jql.ide;
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
 import hu.blackbelt.judo.meta.jql.ide.contentassist.antlr.JqlDslParser;
-import hu.blackbelt.judo.meta.jql.ide.contentassist.antlr.internal.InternalJqlDslLexer;
+import hu.blackbelt.judo.meta.jql.ide.contentassist.antlr.lexer.InternalJqlDslLexer;
 import org.eclipse.xtext.ide.DefaultIdeModule;
 import org.eclipse.xtext.ide.LexerIdeBindings;
 import org.eclipse.xtext.ide.editor.contentassist.FQNPrefixMatcher;

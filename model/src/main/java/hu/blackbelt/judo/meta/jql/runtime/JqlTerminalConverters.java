@@ -16,7 +16,7 @@ public class JqlTerminalConverters extends DefaultTerminalConverters {
 
             @Override
             public String toString(String value) throws ValueConverterException {
-                return String.format("{%s}", value);
+                return String.format("`%s`", value);
             }
 
             @Override
@@ -33,7 +33,7 @@ public class JqlTerminalConverters extends DefaultTerminalConverters {
 
             @Override
             public String toString(String value) throws ValueConverterException {
-                return String.format("{%s}", value);
+                return String.format("`%s`", value);
             }
 
             @Override
