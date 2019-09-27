@@ -4,8 +4,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
 
 Expression returns Expression:
-    ConcatenateExpression
-    | SwitchExpression;
+    ConcatenateExpression;
 
 ConcatenateExpression returns Expression:
     OrExpression (=> ({BinaryOperation.leftOperand=current} operator=OpConcat) rightOperand=OrExpression)*;
@@ -75,23 +74,6 @@ Function:
     (lambda=LambdaExpression |
     (parameters+=Expression)? (',' parameters+=Expression)*)
     ')')?;
-
-SwitchExpression returns Expression:
-    {SwitchExpression} ('CASE' | 'case') operand=ConcatenateExpression body=(SwitchConditionalExpression |
-    SwitchEqualsExpression);
-
-SwitchConditionalExpression returns Expression:
-    {SwitchConditionalExpression} ('AS' | 'as') alias=Feature (=> ('WHEN' | 'when') cases+=SwitchConditionalCase)* (=> ('ELSE' | 'else')
-    default=Expression)?;
-
-SwitchConditionalCase returns Expression:
-    {SwitchConditionalCase} condition=RelationalExpression ('THEN' | 'then') result=Expression;
-
-SwitchEqualsExpression returns Expression:
-    {SwitchEqualsExpression} (=> ('WHEN' | 'when') cases+=SwitchEqualsCase)* (=> ('ELSE' | 'else') default=Expression)?;
-
-SwitchEqualsCase returns Expression:
-    {SwitchEqualsCase} condition=Literal ('THEN' | 'then') result=Expression;
 
 Literal returns Expression:
     BooleanLiteral |

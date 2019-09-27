@@ -11,11 +11,6 @@ import hu.blackbelt.judo.meta.jql.jqldsl.LambdaExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.MeasuredLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.StringLiteral
-import hu.blackbelt.judo.meta.jql.jqldsl.SwitchConditionalCase
-import hu.blackbelt.judo.meta.jql.jqldsl.SwitchConditionalExpression
-import hu.blackbelt.judo.meta.jql.jqldsl.SwitchEqualsCase
-import hu.blackbelt.judo.meta.jql.jqldsl.SwitchEqualsExpression
-import hu.blackbelt.judo.meta.jql.jqldsl.SwitchExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.TimeStampLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.UnaryOperation
 import java.math.BigDecimal
@@ -153,42 +148,6 @@ class JqlDslGrammarTest {
         "+".assertEquals(exp.operator)
         "*".assertEquals((exp.leftOperand as BinaryOperation).operator)
         "*".assertEquals((exp.rightOperand as BinaryOperation).operator)
-    }
-
-    @Test
-    def void caseCondition() {
-        var switchExp = "CASE self.quantity AS q WHEN q < 10 THEN false WHEN q > 20 THEN self.defaultValue ELSE true".
-            parse as SwitchExpression
-        var exp = switchExp.body as SwitchConditionalExpression
-        "q".assertEquals(exp.alias.name)
-        true.assertEquals(exp.^default.expressionValue)
-        val case1 = exp.cases.get(0) as SwitchConditionalCase
-        false.assertEquals(case1.result.expressionValue)
-        val case1Condition = case1.condition as BinaryOperation
-        "q".assertEquals((case1Condition.leftOperand as NavigationExpression).base)
-        "<".assertEquals(case1Condition.operator)
-        BigInteger.valueOf(10).assertEquals(case1Condition.rightOperand.expressionValue)
-        val case2 = exp.cases.get(1) as SwitchConditionalCase
-        "self".assertEquals((case2.result as NavigationExpression).base)
-    }
-
-    @Test
-    def void caseEquality() {
-        var integerCase = "(CASE self.quantity WHEN 10 THEN false ELSE true)".parse as SwitchExpression
-        BigInteger.valueOf(10).assertEquals(
-            ((integerCase.body as SwitchEqualsExpression).cases.get(0) as SwitchEqualsCase).condition.expressionValue)
-
-        var transformedSwitch = "CASE self.product.name!toUpperCase WHEN 'HAMBURGER' THEN 0 WHEN 'HOTDOG' THEN 1 ELSE -1".
-            parse as SwitchExpression
-        "HOTDOG".assertEquals(
-            ((transformedSwitch.body as SwitchEqualsExpression).cases.get(1) as SwitchEqualsCase).condition.
-                expressionValue)
-
-        val enumCase = "CASE self.orderDay WHEN `MONDAY THEN 0 WHEN `TUESDAY THEN 1 ELSE -1".parse as SwitchExpression
-        var exp = enumCase.body as SwitchEqualsExpression
-        val case1 = exp.cases.get(0) as SwitchEqualsCase
-        "MONDAY".assertEquals(case1.condition.expressionValue)
-
     }
 
     @Test
