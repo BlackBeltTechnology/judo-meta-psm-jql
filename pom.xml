@@ -664,7 +664,6 @@
                 <module>feature</module>
                 <module>site</module>
                 <module>ide</module>
-                <module>ui</module>
             </modules>
         </profile>
 

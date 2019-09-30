@@ -25,22 +25,6 @@
 		<sourceDirectory>${src.dir}</sourceDirectory>
 
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>Generate MWE2 class dependencies</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<includes>hu/blackbelt/judo/meta/jqlinternal/JqlXtextProjectConfig.java</includes>
-				</configuration>
-			</plugin>
 			<!-- Generates the Ecore model via MWE2 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -141,13 +125,6 @@
 								<include>**/*</include>
 							</includes>
 						</fileset>
-						<!--fileset> <directory>${basedir}</directory> <includes> <include>plugin.xml</include> 
-							</includes> </fileset> <fileset> <directory>${basedir}/../hu.blackbelt.judo.meta.psm.jql.tests/src-gen/</directory> 
-							<includes> <include>**/*</include> </includes> </fileset> <fileset> <directory>${basedir}/../hu.blackbelt.judo.meta.psm.jql.ide/src-gen/</directory> 
-							<includes> <include>**/*</include> </includes> </fileset> <fileset> <directory>${basedir}/../hu.blackbelt.judo.meta.psm.jql.ui/src-gen/</directory> 
-							<includes> <include>**/*</include> </includes> </fileset> <fileset> <directory>${basedir}/../hu.blackbelt.judo.meta.psm.jql.ui.tests/src-gen/</directory> 
-							<includes> <include>**/*</include> </includes> </fileset> <fileset> <directory>${basedir}/../hu.blackbelt.judo.meta.psm.jql.web/src-gen/</directory> 
-							<includes> <include>**/*</include> </includes> </fileset -->
 						<fileset>
 							<directory>${basedir}/model/generated/</directory>
 						</fileset>

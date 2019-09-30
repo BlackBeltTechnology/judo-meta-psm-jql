@@ -18,8 +18,8 @@ Require-Bundle: org.eclipse.compare,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
- hu.blackbelt.judo.meta.jql.ide,
- hu.blackbelt.judo.meta.jql.model
+ hu.blackbelt.judo.meta.jql.ide-common,
+ hu.blackbelt.judo.meta.jql.model;visibility:=reexport
 Import-Package: org.apache.log4j
 Bundle-Activator: hu.blackbelt.judo.meta.jql.ui.internal.JqlActivator
 Automatic-Module-Name: hu.blackbelt.judo.meta.jql.ui

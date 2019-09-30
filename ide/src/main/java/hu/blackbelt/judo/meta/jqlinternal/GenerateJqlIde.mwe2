@@ -1,4 +1,4 @@
-module hu.blackbelt.judo.meta.jqlinternal.GenerateJqlDsl
+module hu.blackbelt.judo.meta.jqlinternal.GenerateJqlIde
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
@@ -11,7 +11,7 @@ Workflow {
 	
 	component = XtextGenerator {
 		configuration = {
-			project = StandardProjectConfig {
+			project = JqlXtextProjectConfig {
 			    mavenLayout = true
 				baseName = "model"
 				rootPath = rootPath
@@ -19,7 +19,9 @@ Workflow {
 					enabled = false
 				}
 				eclipsePlugin = {
-					enabled = false
+					enabled = true
+					name = "hu.blackbelt.judo.meta.jql.ui"		
+					root = "${rootPath}/ide/ui"					
 				}
 				eclipsePluginTest = {
 					enabled = false

@@ -13,9 +13,9 @@ public class JqlXtextProjectConfig extends StandardProjectConfig {
     protected String computeName(SubProjectConfig project) {
         String computedName;
         if (Objects.equal(project, getGenericIde())) {
-            computedName = "ide";
+            computedName = "ide/ide-common";
         } else if (Objects.equal(project, getEclipsePlugin())) {
-            computedName = "ui";
+            computedName = "ide/ui";
         } else {
             computedName = super.computeName(project);
         }
