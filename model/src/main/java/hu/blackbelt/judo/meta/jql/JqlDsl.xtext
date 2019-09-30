@@ -116,7 +116,7 @@ QualifiedName:
 
 ValidID:
     ID;
-
+    
 terminal DATE:
     '`' ('0'..'9' | '-')+ '`';
 
@@ -130,7 +130,7 @@ terminal INTEGER returns ecore::EBigInteger:
     ('0'..'9')+;
 
 terminal ID:
-    ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+    '\\'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 
 terminal STRING:
     '"' ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | '"'))* '"' |

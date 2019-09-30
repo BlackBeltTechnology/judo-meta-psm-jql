@@ -50,7 +50,12 @@ Use hashmark (`#`) character to denote enum literals, eg. `#MONDAY` or `model::D
 === Identifiers
 
 Identifiers represent names such as entities, attributes, relations. They start with letter or underscore consecuted by letters, underscore or digits.
-Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid identifiers include `order`, `_order10`, `^price_rise`.
+Valid identifiers include `order`, `_order10`.
+
+TIP: Optionally an identifier name can be escaped with a backslash (`\`) symbol if a navigation element has the same name as a JQL keyword, e.g. `\implies` will refer to the entity, attribute etc. called `implies`.
+
+
+
 
 === Operators
 

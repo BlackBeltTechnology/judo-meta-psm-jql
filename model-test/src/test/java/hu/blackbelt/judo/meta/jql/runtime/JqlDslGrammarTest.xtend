@@ -230,7 +230,11 @@ class JqlDslGrammarTest {
         "self=>items->product".parse
         "self=>items.product".parse
         "self.items->product".parse
-        "self.items.product".parse
+        "self.items.product".parse       
+        
+        var keywordNavigation = "self.items.\\and = self.\\or.\\not".parse() as BinaryOperation
+        "and".assertEquals((keywordNavigation.leftOperand as NavigationExpression).features.get(1).name)
+        "or".assertEquals((keywordNavigation.rightOperand as NavigationExpression).features.get(0).name)
     }
 
     @Test
