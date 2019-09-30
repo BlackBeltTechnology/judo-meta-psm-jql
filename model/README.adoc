@@ -106,8 +106,12 @@ Expressions can be parenthesized, `(1 + 2)`, `(true)`.
 * A qualified name is an identifier followed by two colons and an other identifier `::`. Qualified names can be chained as in `Measurements::Mass::kg`.
 
 === Selectors
-* A selector is used to access a feature (attribute, relation etc.) of an element. 
-The selector operator is dot (`.`), eg. `item.price`.
+
+A selector is used to access a feature (attribute, relation etc.) of an element. One can use `.` for all selections or use different syntax depending on relation kind to allow better readibility.
+ 
+** For one-to-many relations, the selector operator is either `\=>`, or dot (`.`), e.g. `self\=>items`, or `self.items`
+** For one-to-one relations, the selector operator is either `\->` or dot (`.`), eg. `items\->product`, or `items.product`
+** For attributes, the selector operator is dot (`.`), eg. `item.price` 
 
 == Measured values
 JQL expressions support measured quantities, eg. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, eg.

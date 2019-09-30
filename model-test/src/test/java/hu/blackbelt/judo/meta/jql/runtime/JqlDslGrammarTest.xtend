@@ -226,6 +226,11 @@ class JqlDslGrammarTest {
         2.assertEquals(features.size)
         "b".equals(features.get(0).name)
         "c".equals(features.get(1).name)
+        
+        "self=>items->product".parse
+        "self=>items.product".parse
+        "self.items->product".parse
+        "self.items.product".parse
     }
 
     @Test
