@@ -3,9 +3,11 @@ package hu.blackbelt.judo.meta.jql.runtime;
 import com.google.inject.Injector;
 import hu.blackbelt.judo.meta.jql.JqlDslStandaloneSetupGenerated;
 import hu.blackbelt.judo.meta.jql.jqldsl.Expression;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
@@ -119,8 +121,12 @@ public class JqlParser {
     }
 
     public Expression parseString(final String jqlExpression, final URI resourceUri) {
-        // get first entry of jqlResource (root expression)
-        final Iterator<EObject> iterator = loadJqlFromString(jqlExpression, resourceUri).getContents().iterator();
+        XtextResource resource = loadJqlFromString(jqlExpression, resourceUri);
+        EList<Diagnostic> errors = resource.getErrors();
+        if (!errors.isEmpty()) {
+            throw new JqlParseException(errors);
+        }
+        Iterator<EObject> iterator = resource.getContents().iterator();
         if (iterator.hasNext()) {
             return (Expression) EcoreUtil.copy(iterator.next());
         } else {

@@ -16,9 +16,6 @@ import hu.blackbelt.judo.meta.jql.jqldsl.TimeStampLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.UnaryOperation
 import java.math.BigDecimal
 import java.math.BigInteger
-import org.eclipse.xtext.resource.XtextResource
-import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.xtext.validation.CheckMode
 import org.junit.jupiter.api.Test
 
 import static extension org.junit.jupiter.api.Assertions.*
@@ -257,7 +254,7 @@ class JqlDslGrammarTest {
         "toUpperCase".assertEquals(stringExp.functions.get(0).feature.name)
         val navigationExp = "self.description!length()".parse as NavigationExpression
         "length".assertEquals(navigationExp.functions.get(0).feature.name)
-        val sumExp = "('hello'!length + 'world'!length)".parse as BinaryOperation
+        val sumExp = "('hello'!length() + 'world'!length())".parse as BinaryOperation
         "length".assertEquals((sumExp.leftOperand as StringLiteral).functions.get(0).feature.name)
 
         val concatExp = "self.description!concat(self.copyright, a<12)".parse
@@ -275,6 +272,12 @@ class JqlDslGrammarTest {
             parse
         "(if (< self.text!length() 10) self.text!fun(param1,param2) (if (> model::Text.item 0) true false))".
             assertEquals(conditionalFunction.asString)
+
+        try {
+            "self.text!length<".parse
+            fail("Should have thrown exception on invalid syntax")
+        } catch (JqlParseException expected) {
+        }
 
     }
 
@@ -299,7 +302,7 @@ class JqlDslGrammarTest {
 
     @Test
     def void cast() {
-        val exp = "self.od@String!toUpperCase".parse as NavigationExpression
+        val exp = "self.od@String!toUpperCase()".parse as NavigationExpression
         "self".assertEquals(exp.base)
         "String".assertEquals(exp.cast)
 
