@@ -6,21 +6,19 @@ generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
 Expression returns Expression:
     SwitchExpression;
 
-// right associative rule
+    // right associative rule
 SwitchExpression returns Expression:
-    ImpliesExpression (=> ({TernaryOperation.condition=current} '?') thenExpression = SwitchExpression ':' elseExpression = SwitchExpression)?
-;  
-    
+    ImpliesExpression (=> ({TernaryOperation.condition=current} '?') thenExpression=SwitchExpression ':'
+    elseExpression=SwitchExpression)?;
+
 ImpliesExpression returns Expression:
-    OrExpression (=> ({BinaryOperation.leftOperand=current} operator='implies') rightOperand=OrExpression)*
-;
+    OrExpression (=> ({BinaryOperation.leftOperand=current} operator='implies') rightOperand=OrExpression)*;
 
 OrExpression returns Expression:
     XorExpression (=> ({BinaryOperation.leftOperand=current} operator='or') rightOperand=XorExpression)*;
 
 XorExpression returns Expression:
-    AndExpression (=> ({BinaryOperation.leftOperand=current} operator='xor') rightOperand=AndExpression)*
-;
+    AndExpression (=> ({BinaryOperation.leftOperand=current} operator='xor') rightOperand=AndExpression)*;
 
 AndExpression returns Expression:
     EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator='and') rightOperand=EqualityExpression)*;
@@ -47,17 +45,22 @@ OpAdd:
     '+' | '-';
 
 MultiplicativeExpression returns Expression:
-    UnaryOperation  (=> '!' functions += Function)* (=> ({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
+    ExponentExpression (=> ({BinaryOperation.leftOperand=current} operator=OpMulti)
+    rightOperand=ExponentExpression)*;
 
 OpMulti:
-    '*' | '/' | 'div' | 'mod' ;
+    '*' | '/' | 'div' | 'mod';
+
+ExponentExpression returns Expression:
+    UnaryOperation (=> '!' functions+=Function)* (=> ({BinaryOperation.leftOperand=current} operator='^')
+    rightOperand=UnaryOperation)*;
 
 UnaryOperation returns Expression:
     {UnaryOperation} operator=OpUnary operand=UnaryOperation
-        | PrimaryExpression;
+    | PrimaryExpression;
 
 OpUnary:
-    'not' |"-";
+    'not' | "-";
 
 ParenthesizedExpression returns Expression:
     '(' Expression ')';
@@ -66,13 +69,13 @@ PrimaryExpression returns Expression:
     ParenthesizedExpression |
     NavigationExpression |
     Literal;
-    
+
 LambdaExpression:
     {LambdaExpression} argument=Feature '|' statement=Expression;
 
 Function:
-    {Function} feature=Feature '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)? ')'
-;
+    {Function} feature=Feature '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)?
+    ')';
 
 Literal returns Expression:
     BooleanLiteral |
@@ -116,7 +119,7 @@ QualifiedName:
 
 ValidID:
     ID;
-    
+
 terminal DATE:
     '`' ('0'..'9' | '-')+ '`';
 
@@ -135,7 +138,6 @@ terminal ID:
 terminal STRING:
     '"' ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | '"'))* '"' |
     "'" ('\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\' | "'"))* "'";
-
 
 terminal ML_COMMENT:
     '/*'->'*/';

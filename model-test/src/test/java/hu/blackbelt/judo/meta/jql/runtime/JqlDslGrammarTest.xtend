@@ -86,6 +86,15 @@ class JqlDslGrammarTest {
 
         operation = "a - b".parse as BinaryOperation
         "-".assertEquals(operation.operator)
+        
+        operation = "a^b".parse as BinaryOperation
+        "^".assertEquals(operation.operator)
+        
+        operation = "-1.5 * 10^-200".parse as BinaryOperation
+        "(* (- 1.5) (^ 10 (- 200)))".assertEquals(operation.asString)
+          
+        operation = "a ^ b * c + d / e".parse as BinaryOperation
+        "(+ (* (^ a b) c) (/ d e))".assertEquals(operation.asString)
     }
 
     @Test
