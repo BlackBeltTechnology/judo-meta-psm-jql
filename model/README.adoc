@@ -60,8 +60,8 @@ Optionally an identifier name can be prefixed with a caret (`^`) symbol. Valid i
 * `-` - arithmetical negation
  
 ==== Logical operators
-* `=` - equals
-* `<>` - not equals
+* `=` - equals, for Strings case-insensitive comparison
+* `<>` - not equals, for Strings case-insensitive comparison
 * `and`- logical AND operation
 * `xor` - logical XOR operation
 * `or` - logical OR operation
@@ -126,11 +126,22 @@ You can use some *built-in* functions using the following syntax: `self.descript
 * `upperCase()`
 * `length()`
 * `substring(startIndex, endIndex)`
+* `first(n)`
+* `last(n)`
 * `position(str)`
+* `match(regex)`
 * `replace(regex, replacement)`
 * `trim()`
 
+=== Date functions
+* `difference(date)`
+
+=== Timestamp functions
+* `difference(timestamp)`
+
 === Collection functions
+* `head()`
+* `tail()`
 * `join(delimiter)`
 * `count()`
 * `limit(count, offset)`

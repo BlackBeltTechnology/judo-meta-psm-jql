@@ -124,7 +124,7 @@ public class JqlParser {
         XtextResource resource = loadJqlFromString(jqlExpression, resourceUri);
         EList<Diagnostic> errors = resource.getErrors();
         if (!errors.isEmpty()) {
-            throw new JqlParseException(errors);
+            throw new JqlParseException(jqlExpression, errors);
         }
         Iterator<EObject> iterator = resource.getContents().iterator();
         if (iterator.hasNext()) {

@@ -34,6 +34,12 @@ class JqlDslGrammarTest {
         '''.parse
         "hello".assertEquals(string.expressionValue)
     }
+    
+    @Test
+    def void stringEscaping() {
+        "___'hello___".assertEquals(("'___\\'hello___'".parse.expressionValue))
+        '___"hello"___'.assertEquals(('"___\\"hello\\"___"'.parse.expressionValue))
+    }
 
     @Test
     def void booleanLiterals() {
