@@ -217,25 +217,24 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.emf.ecore"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.eclipse.emf.mwe2.launch"/>
-      <import plugin="org.apache.log4j"/>
-      <import plugin="org.eclipse.equinox.common"/>
-      <import plugin="org.apache.commons.logging"/>
-      <import plugin="org.eclipse.emf.codegen.ecore"/>
-      <import plugin="org.eclipse.emf.mwe.core"/>
-      <import plugin="org.eclipse.emf.mwe.utils"/>
-      <import plugin="org.eclipse.emf.mwe2.lib"/>
-      <import plugin="org.eclipse.xtend"/>
-      <import plugin="org.eclipse.xtend.lib"/>
-      <import plugin="org.eclipse.xtend.lib.macro"/>
-      <import plugin="org.eclipse.xtend.typesystem.emf"/>
-      <import plugin="org.junit"/>
       <import plugin="org.eclipse.xtext"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.antlr.runtime" version="3.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.xtend.lib" version="2.14.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.xtext.util"/>
+      <import plugin="org.eclipse.xtext.xbase.lib" version="2.14.0" match="greaterOrEqual"/>
+      <import plugin="org.slf4j.api"/>
+      <import plugin="org.eclipse.xtext.ide"/>
+      <import plugin="org.eclipse.xtext.xbase.ide"/>
+      <import plugin="org.eclipse.compare"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.xtext.builder"/>
+      <import plugin="org.eclipse.xtext.ui"/>
+      <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
+      <import plugin="org.eclipse.xtext.ui.shared"/>
    </requires>
 
    <plugin
@@ -245,15 +244,17 @@
          version="0.0.0"/>
 
    <plugin
-         id="hu.blackbelt.judo.meta.jql.ide-common"
+         id="hu.blackbelt.judo.meta.jql.ide.common"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
-         id="hu.blackbelt.judo.meta.jql.ui"
+         id="hu.blackbelt.judo.meta.jql.ide.ui"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>         
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

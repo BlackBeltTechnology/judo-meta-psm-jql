@@ -298,7 +298,7 @@ class JqlDslGrammarTest {
             assertEquals(conditionalFunction.asString)
 
         try {
-            "self.text!length<".parse
+            "self.text!length()<".parse
             fail("Should have thrown exception on invalid syntax")
         } catch (JqlParseException expected) {
         }

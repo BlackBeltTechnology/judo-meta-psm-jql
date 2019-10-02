@@ -10,15 +10,15 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
     
-    <groupId>hu.blackbelt.judo.meta</groupId>
     <artifactId>hu.blackbelt.judo.meta.jql.ide</artifactId>
+    <name>Judo :: Jql :: Model :: JQL IDE Parent</name>
 	
     <packaging>pom</packaging>
 
     <modules>
         <module>generator</module>
         <module>ide-common</module>
-        <module>ui</module>            
+        <module>ui</module>
     </modules>
 
 </project>

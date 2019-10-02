@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: hu.blackbelt.judo.meta.jql.ui
-Bundle-SymbolicName: hu.blackbelt.judo.meta.jql.ui;singleton:=true
+Bundle-SymbolicName: hu.blackbelt.judo.meta.jql.ide.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
@@ -18,8 +18,9 @@ Require-Bundle: org.eclipse.compare,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
- hu.blackbelt.judo.meta.jql.ide-common,
- hu.blackbelt.judo.meta.jql.model;visibility:=reexport
+ hu.blackbelt.judo.meta.jql.ide.common,
+ hu.blackbelt.judo.meta.jql.model;visibility:=reexport,
+ com.altran.general.integration.xtextsirius.runtime
 Import-Package: org.apache.log4j
 Bundle-Activator: hu.blackbelt.judo.meta.jql.ui.internal.JqlActivator
-Automatic-Module-Name: hu.blackbelt.judo.meta.jql.ui
+Automatic-Module-Name: hu.blackbelt.judo.meta.jql.ide.ui

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-	<extension
+    <extension point="com.altran.general.integration.xtextsirius.runtime.xtextLanguageInjector">
+      <injector
+            id="hu.blackbelt.judo.meta.jql.JqlDsl"
+            class="hu.blackbelt.judo.meta.jql.ui.sirius.JqlSiriusLanguageInjector"
+        />
+</extension>
+    
+    <extension
 		point="org.eclipse.ui.editors">
 		<editor
 			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"

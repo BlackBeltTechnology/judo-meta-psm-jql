@@ -10,10 +10,10 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>hu.blackbelt.judo.meta.jql.ide-common</artifactId>
+	<artifactId>hu.blackbelt.judo.meta.jql.ide.common</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
-	<name>JQL Generic Ide</name>
+    <name>Judo :: Jql :: Model :: JQL IDE Common</name>
 
 	<build>
 		<plugins>
@@ -55,7 +55,7 @@
         </dependency>
         <dependency>
         	<groupId>hu.blackbelt.judo.meta</groupId>
-        	<artifactId>hu.blackbelt.judo.meta.jql.ide-generator</artifactId>
+        	<artifactId>hu.blackbelt.judo.meta.jql.ide.generator</artifactId>
             <version>${project.version}</version>
         </dependency>
      </dependencies>
