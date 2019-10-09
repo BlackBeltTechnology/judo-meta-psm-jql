@@ -1,14 +1,12 @@
 package hu.blackbelt.judo.meta.jql.ui.sirius;
 
-import com.altran.general.integration.xtextsirius.runtime.IXtextLanguageInjector;
 import com.google.inject.Injector;
-import hu.blackbelt.judo.meta.jql.ui.internal.JqlActivator;
+import hu.blackbelt.judo.meta.jql.ide.ui.internal.IdeActivator;
 
-public class JqlSiriusLanguageInjector implements IXtextLanguageInjector {
+public class JqlSiriusLanguageInjector {
 
-    @Override
     public Injector getInjector() {
-        return JqlActivator.getInstance().getInjector(JqlActivator.HU_BLACKBELT_JUDO_META_JQL_JQLDSL);
+        return IdeActivator.getInstance().getInjector(IdeActivator.HU_BLACKBELT_JUDO_META_JQL_JQLDSL);
     }
 
 }

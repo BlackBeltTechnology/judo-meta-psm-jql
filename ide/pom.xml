@@ -19,6 +19,7 @@
         <module>generator</module>
         <module>ide-common</module>
         <module>ui</module>
+        <module>sirius</module>
     </modules>
 
 </project>

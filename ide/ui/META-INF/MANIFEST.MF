@@ -7,7 +7,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hu.blackbelt.judo.meta.jql.ui.contentassist,
  hu.blackbelt.judo.meta.jql.ui.quickfix,
- hu.blackbelt.judo.meta.jql.ui.internal
+ hu.blackbelt.judo.meta.jql.ide.ui.internal,
+ hu.blackbelt.judo.meta.jql.ui.sirius
 Require-Bundle: org.eclipse.compare,
  org.eclipse.ui,
  org.eclipse.ui.editors,
@@ -20,7 +21,7 @@ Require-Bundle: org.eclipse.compare,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  hu.blackbelt.judo.meta.jql.ide.common,
  hu.blackbelt.judo.meta.jql.model;visibility:=reexport,
- com.altran.general.integration.xtextsirius.runtime
+ hu.blackbelt.judo.meta.esm.model;bundle-version="1.1.0"
 Import-Package: org.apache.log4j
-Bundle-Activator: hu.blackbelt.judo.meta.jql.ui.internal.JqlActivator
+Bundle-Activator: hu.blackbelt.judo.meta.jql.ide.ui.internal.IdeActivator
 Automatic-Module-Name: hu.blackbelt.judo.meta.jql.ide.ui

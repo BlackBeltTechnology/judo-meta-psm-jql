@@ -20,7 +20,7 @@ Workflow {
 				}
 				eclipsePlugin = {
 					enabled = true
-					name = "hu.blackbelt.judo.meta.jql.ui"		
+					name = "hu.blackbelt.judo.meta.jql.ide.ui"		
 					root = "${rootPath}/ide/ui"					
 				}
 				eclipsePluginTest = {
