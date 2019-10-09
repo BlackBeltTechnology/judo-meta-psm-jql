@@ -6,9 +6,6 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import org.eclipse.eef.EEFCustomWidgetDescription;
-import org.eclipse.eef.EEFTextDescription;
-import org.eclipse.eef.EefFactory;
-import org.eclipse.eef.EefPackage;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
 import org.eclipse.eef.core.api.EEFExpressionUtils;
 import org.eclipse.eef.core.api.EditingContextAdapter;
@@ -25,8 +22,6 @@ import com.google.inject.Injector;
 
 import hu.blackbelt.judo.meta.jql.ide.sirius.runtime.eef.ui.JqlSiriusWidget;
 import hu.blackbelt.judo.meta.jql.ui.sirius.JqlSiriusLanguageInjector;
-import hu.blackbelt.judo.meta.esm.expression.ExpressionType;
-import hu.blackbelt.judo.meta.esm.expression.impl.AttributeSelectorTypeImpl;
 
 public class JqlSiriusEefLifecycleManager extends AbstractEEFWidgetLifecycleManager {
 
