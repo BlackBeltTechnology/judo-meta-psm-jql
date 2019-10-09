@@ -155,18 +155,16 @@ You can use some *built-in* functions using the following syntax: `self.descript
 * `count()`
 * `limit(count, offset)`
 * `sort(field, descending)`
+* `asCollection(type)`
 
 === Lambda functions
 * `filter(lambda)` eg. `self.orderDetails!filter(od | od.price 10)` 
 
-=== Type-checking functions
+=== Object functions
+* `container(type)` evaluates to the container of the object when it is part of a container, which type is `type`, otherwise `undefined`
 * `kindof(type)`, evaluates to `true` if the given object is or a descendant of type eg. `self.field!instanceof(Lib::MyType)`
 * `typeof(type)` evaluates to `true` if the given object is of type
+* `asType(type)` evaluates to the operand if its type is the same as given, otherwise evaluates as `undefined`.
 
 == Type safety
 JQL expressions do strict type checking.
-
-=== Casting
-The cast operator (`@`) will evaluate to the operand if its type is the same as given, otherwise evaluates as `undefined`., eg. 
-`self.od@Lib::MyIntegerCollection!filter(elem | elem < 10)`
-

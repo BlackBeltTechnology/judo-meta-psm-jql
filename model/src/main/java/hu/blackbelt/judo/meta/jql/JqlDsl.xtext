@@ -106,7 +106,7 @@ EnumLiteral returns Expression:
     {EnumLiteral} type=(QualifiedName)? '#' value=ValidID;
 
 NavigationExpression:
-    base=NavigationBase (=> ('.' | '=>' | '->') features+=Feature)* ('@' cast=NavigationBase)?;
+    base=NavigationBase (=> ('.' | '=>' | '->') features+=Feature)*;
 
 Feature:
     name=ID;

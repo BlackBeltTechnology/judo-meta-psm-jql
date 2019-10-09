@@ -325,19 +325,6 @@ class JqlDslGrammarTest {
     }
 
     @Test
-    def void cast() {
-        val exp = "self.od@String!toUpperCase()".parse as NavigationExpression
-        "self".assertEquals(exp.base)
-        "String".assertEquals(exp.cast)
-
-        val fqExp = "self.od@Lib::Custom!filter(e | e < 10)".parse as NavigationExpression
-        "self".assertEquals(fqExp.base)
-        "Lib::Custom".assertEquals(fqExp.cast)
-        val fqLambda = fqExp.functions.get(0).lambda as LambdaExpression
-        "e".assertEquals(fqLambda.argument.name)
-    }
-
-    @Test
     def void typeFunctions() {
         val exp = "self.field!instanceof(Lib::MyType)".parse as NavigationExpression
         "Lib::MyType".assertEquals((exp.functions.get(0).parameters.get(0) as NavigationExpression).base)
