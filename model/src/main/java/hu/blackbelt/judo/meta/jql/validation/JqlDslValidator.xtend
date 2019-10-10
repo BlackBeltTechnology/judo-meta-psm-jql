@@ -3,23 +3,25 @@
  */
 package hu.blackbelt.judo.meta.jql.validation
 
+import hu.blackbelt.judo.meta.jql.jqldsl.Expression
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 
- *
+ * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class JqlDslValidator extends AbstractJqlDslValidator {
-	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					JqlDslPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
-	
+
+	@Check
+	def checkSomething(Expression expression) {
+
+	}
+
+	def currentElem(EObject grammarElement) {
+		return grammarElement.eResource.resourceSet.getResource(URI.createURI("self_synthetic"), true).contents.get(0)
+	}
+
 }

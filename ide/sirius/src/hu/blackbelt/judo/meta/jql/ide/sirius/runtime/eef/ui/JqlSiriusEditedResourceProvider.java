@@ -2,6 +2,11 @@ package hu.blackbelt.judo.meta.jql.ide.sirius.runtime.eef.ui;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.transaction.RecordingCommand;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
@@ -36,11 +41,19 @@ public class JqlSiriusEditedResourceProvider implements IEditedResourceProvider 
 	public XtextResource createResource() {
 		XtextResourceSet resourceSet = this.resourceSetProvider.get();
 		resourceSet.setClasspathURIContext(getClass());
-		
+		Resource selfResource = this.resourceFactory.createResource(URI.createURI("self_synthetic"));
+		EObject containingElement = self.eContainer().eContainer();
+		TransactionalEditingDomain domain = TransactionUtil.getEditingDomain(containingElement);
+		domain.getCommandStack().execute(new RecordingCommand(domain) {
+			@Override
+			protected void doExecute() {
+				selfResource.getContents().add(new EcoreUtil.Copier(false).copy(containingElement));		
+			}
+		});		
 		XtextResource resource = (XtextResource) this.resourceFactory
 				.createResource(URI.createURI("_synthetic." + this.fileExtension));
 		resourceSet.getResources().add(resource);
-		resourceSet.getResources().add(self.eResource());
+		resourceSet.getResources().add(selfResource);
 		
 		return resource;
 	}
