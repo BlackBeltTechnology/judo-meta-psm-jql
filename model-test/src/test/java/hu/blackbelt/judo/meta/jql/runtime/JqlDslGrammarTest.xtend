@@ -185,7 +185,7 @@ class JqlDslGrammarTest {
             result.append(exp.base)
             exp.features.forEach[result.append("." + it.name)]
             exp.functions.forEach [
-                result.append(String.format("!%s(", it.feature.name))
+                result.append(String.format("!%s(", it.function.name))
                 it.parameters.forEach [ parameter, i |
                     result.append(parameter.asString)
                     if (i < parameters.size - 1) {
@@ -275,11 +275,11 @@ class JqlDslGrammarTest {
     @Test
     def void functions() {
         val stringExp = "('hello')!toUpperCase()".parse as StringLiteral
-        "toUpperCase".assertEquals(stringExp.functions.get(0).feature.name)
+        "toUpperCase".assertEquals(stringExp.functions.get(0).function.name)
         val navigationExp = "self.description!length()".parse as NavigationExpression
-        "length".assertEquals(navigationExp.functions.get(0).feature.name)
+        "length".assertEquals(navigationExp.functions.get(0).function.name)
         val sumExp = "('hello'!length() + 'world'!length())".parse as BinaryOperation
-        "length".assertEquals((sumExp.leftOperand as StringLiteral).functions.get(0).feature.name)
+        "length".assertEquals((sumExp.leftOperand as StringLiteral).functions.get(0).function.name)
 
         val concatExp = "self.description!concat(self.copyright, a<12)".parse
         "copyright".assertEquals(
@@ -288,8 +288,8 @@ class JqlDslGrammarTest {
 
         val unaryExp = "-123.0!round()!radix(16)".parse as UnaryOperation
         "-".assertEquals(unaryExp.operator)
-        "round".assertEquals(unaryExp.functions.get(0).feature.name)
-        "radix".assertEquals(unaryExp.functions.get(1).feature.name)
+        "round".assertEquals(unaryExp.functions.get(0).function.name)
+        "radix".assertEquals(unaryExp.functions.get(1).function.name)
         BigInteger.valueOf(16).assertEquals(unaryExp.functions.get(1).parameters.get(0).expressionValue)
 
         val conditionalFunction = "self.text!length() < 10 ? self.text!fun(param1, param2) : model::Text.item > 0 ? true : false".
@@ -314,7 +314,7 @@ class JqlDslGrammarTest {
                     od | od.price > 10
                 )
         ".parse as NavigationExpression
-        "filter".assertEquals(filterExp.functions.get(0).feature.name)
+        "filter".assertEquals(filterExp.functions.get(0).function.name)
         val filterLambda = filterExp.functions.get(0).lambda as LambdaExpression
         "od".assertEquals(filterLambda.argument.name)
         val filterLambdaStatement = filterLambda.statement as BinaryOperation

@@ -52,7 +52,7 @@ OpMulti:
     '*' | '/' | 'div' | 'mod';
 
 ExponentExpression returns Expression:
-    UnaryOperation (=> '!' functions+=Function)* (=> ({BinaryOperation.leftOperand=current} operator='^')
+    UnaryOperation (=> '!' functions+=FunctionCall)* (=> ({BinaryOperation.leftOperand=current} operator='^')
     rightOperand=UnaryOperation)*;
 
 UnaryOperation returns Expression:
@@ -71,10 +71,10 @@ PrimaryExpression returns Expression:
     Literal;
 
 LambdaExpression:
-    {LambdaExpression} argument=Feature '|' statement=Expression;
+    {LambdaExpression} argument=LambdaArgument '|' statement=Expression;
 
-Function:
-    {Function} feature=Feature '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)?
+FunctionCall:
+    {FunctionCall} function=Function '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)?
     ')';
 
 Literal returns Expression:
@@ -108,8 +108,14 @@ EnumLiteral returns Expression:
 NavigationExpression:
     base=NavigationBase (=> ('.' | '=>' | '->') features+=Feature)*;
 
+Function:
+    name=ID;
+
 Feature:
     name=ID;
+
+LambdaArgument:
+	name=ID;
 
 NavigationBase:
     ValidID | QualifiedName;
