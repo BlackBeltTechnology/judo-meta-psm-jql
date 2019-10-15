@@ -182,7 +182,12 @@ class JqlDslGrammarTest {
             result.append(exp.rightOperand.asString)
             result.append(")")
         } else if (exp instanceof NavigationExpression) {
-            result.append(exp.base)
+        	val base = exp.base;
+            result.append(String.join("::", base.namespaceElements))
+            if (!base.namespaceElements.isEmpty) {
+            	result.append("::")
+            }
+            result.append(base.name)
             exp.features.forEach[result.append("." + it.name)]
             exp.functions.forEach [
                 result.append(String.format("!%s(", it.function.name))
@@ -223,14 +228,15 @@ class JqlDslGrammarTest {
 
         exp = parser.parseString("0.1[model::Mass#mg]") as MeasuredLiteral
         BigDecimal.valueOf(0.1).assertEquals(exp.expressionValue)
-        "model::Mass".assertEquals(exp.type)
+        "Mass".assertEquals(exp.type.name)
+        "model".assertEquals(exp.type.namespaceElements.get(0));
         "mg".assertEquals(exp.measure)
     }
 
     @Test
     def void navigation() {
         var exp = parser.parseString("a.b.c") as NavigationExpression
-        "a".assertEquals(exp.base)
+        "a".assertEquals(exp.base.name)
         var features = exp.features
         2.assertEquals(features.size)
         "b".equals(features.get(0).name)
@@ -259,7 +265,7 @@ class JqlDslGrammarTest {
         var exp = "self.quantity * self.unitPrice * (1 - self.discount)".parse as BinaryOperation
         "*".assertEquals(exp.operator)
         var left = exp.leftOperand as BinaryOperation
-        "self".assertEquals((left.leftOperand as NavigationExpression).base)
+        "self".assertEquals((left.leftOperand as NavigationExpression).base.name)
         "quantity".assertEquals((left.leftOperand as NavigationExpression).features.get(0).name)
         var right = exp.rightOperand as BinaryOperation
         "-".assertEquals(right.operator)
@@ -320,14 +326,14 @@ class JqlDslGrammarTest {
         val filterLambdaStatement = filterLambda.statement as BinaryOperation
         ">".assertEquals(filterLambdaStatement.operator)
         BigInteger.valueOf(10).assertEquals(filterLambdaStatement.rightOperand.expressionValue)
-        "od".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).base)
+        "od".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).base.name)
         "price".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).features.get(0).name)
     }
 
     @Test
     def void typeFunctions() {
         val exp = "self.field!instanceof(Lib::MyType)".parse as NavigationExpression
-        "Lib::MyType".assertEquals((exp.functions.get(0).parameters.get(0) as NavigationExpression).base)
+        "Lib::MyType".assertEquals((exp.functions.get(0).parameters.get(0) as NavigationExpression).asString)
 
     }
 
@@ -336,7 +342,8 @@ class JqlDslGrammarTest {
         var exp = "#MONDAY".parse as EnumLiteral
         "MONDAY".assertEquals(exp.value)
         exp = "model::Days#MONDAY".parse as EnumLiteral
-        "model::Days".assertEquals(exp.type)
+        "Days".assertEquals(exp.type.name)
+        "model".assertEquals(exp.type.namespaceElements.get(0));
         "MONDAY".assertEquals(exp.value)
     }
 

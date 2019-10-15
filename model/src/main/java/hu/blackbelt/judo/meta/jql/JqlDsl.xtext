@@ -106,7 +106,7 @@ EnumLiteral returns Expression:
     {EnumLiteral} type=(QualifiedName)? '#' value=ValidID;
 
 NavigationExpression:
-    base=NavigationBase (=> ('.' | '=>' | '->') features+=Feature)*;
+    base=QualifiedName (=> ('.' | '=>' | '->') features+=Feature)*;
 
 Function:
     name=ID;
@@ -117,11 +117,9 @@ Feature:
 LambdaArgument:
 	name=ID;
 
-NavigationBase:
-    ValidID | QualifiedName;
-
 QualifiedName:
-    ID (=> '::' ID)+;
+    {QualifiedName} (namespaceElements+=ID '::')* name=ID
+    ;
 
 ValidID:
     ID;
