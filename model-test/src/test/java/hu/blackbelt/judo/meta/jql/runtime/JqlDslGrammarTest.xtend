@@ -5,8 +5,8 @@ import hu.blackbelt.judo.meta.jql.jqldsl.BooleanLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.DateLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.DecimalLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.EnumLiteral
-import hu.blackbelt.judo.meta.jql.jqldsl.Expression
 import hu.blackbelt.judo.meta.jql.jqldsl.IntegerLiteral
+import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.LambdaExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.MeasuredLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
@@ -173,7 +173,7 @@ class JqlDslGrammarTest {
         "(xor (= a b) c)".assertEquals("a = b xor c".parse.asString)
     }
 
-    def String asString(Expression exp) {
+    def String asString(JqlExpression exp) {
         val result = new StringBuilder();
         if (exp instanceof BinaryOperation) {
             result.append(String.format("(%s ", exp.operator))
@@ -347,11 +347,11 @@ class JqlDslGrammarTest {
         "MONDAY".assertEquals(exp.value)
     }
 
-    def Expression parse(CharSequence expressionText) {
+    def JqlExpression parse(CharSequence expressionText) {
         return parser.parseString(expressionText.toString);
     }
 
-    def Object expressionValue(Expression exp) {
+    def Object expressionValue(JqlExpression exp) {
         switch exp {
             StringLiteral: exp.value
             IntegerLiteral: exp.value

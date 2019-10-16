@@ -3,7 +3,7 @@
  */
 package hu.blackbelt.judo.meta.jql.validation
 
-import hu.blackbelt.judo.meta.jql.jqldsl.Expression
+import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.xtext.validation.Check
@@ -16,8 +16,7 @@ import org.eclipse.xtext.validation.Check
 class JqlDslValidator extends AbstractJqlDslValidator {
 
 	@Check
-	def checkSomething(Expression expression) {
-
+	def checkSomething(JqlExpression expression) {
 	}
 
 	def currentElem(EObject grammarElement) {
