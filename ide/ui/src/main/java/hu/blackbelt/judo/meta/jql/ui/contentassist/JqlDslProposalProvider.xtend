@@ -18,8 +18,7 @@ import org.eclipse.xtext.Keyword
  */
 class JqlDslProposalProvider extends AbstractJqlDslProposalProvider {
 
-	override complete_NavigationBase(EObject model, RuleCall ruleCall, ContentAssistContext context,
-		ICompletionProposalAcceptor acceptor) {
+	override complete_QualifiedName(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		acceptor.accept(createCompletionProposal("self", context));
 	}
 
