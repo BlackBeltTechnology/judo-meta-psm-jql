@@ -108,7 +108,7 @@ Expressions can be parenthesized, `(1 + 2)`, `(true)`.
 
 === Qualified names
 
-* A qualified name is an identifier followed by two colons and an other identifier `::`. Qualified names can be chained as in `Measurements::Mass::kg`.
+A qualified name consists of namespaces and identifier, like: `demo::measures::Time`.
 
 === Selectors
 
