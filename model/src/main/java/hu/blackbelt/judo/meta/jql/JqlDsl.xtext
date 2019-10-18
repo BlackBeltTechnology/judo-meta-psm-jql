@@ -70,12 +70,12 @@ PrimaryExpression returns JqlExpression:
     NavigationExpression |
     Literal;
 
-LambdaExpression:
-    {LambdaExpression} argument=LambdaArgument '|' statement=Expression;
-
 FunctionCall:
-    {FunctionCall} function=Function '(' (lambda=LambdaExpression | parameters+=Expression (',' parameters+=Expression)*)?
+    {FunctionCall} function=Function '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
     ')';
+
+FunctionParameter:
+	{FunctionParameter} expression = Expression (parameterExtension=ValidId)?;
 
 Literal returns JqlExpression:
     BooleanLiteral |
@@ -100,10 +100,10 @@ TemporalLiteral returns JqlExpression:
     {TimeStampLiteral} value=TIMESTAMP;
 
 MeasuredLiteral returns JqlExpression:
-    {MeasuredLiteral} value=NumberLiteral '[' (type=QualifiedName '#')? measure=ValidID ']';
+    {MeasuredLiteral} value=NumberLiteral '[' (type=QualifiedName '#')? measure=ValidId ']';
 
 EnumLiteral returns JqlExpression:
-    {EnumLiteral} type=(QualifiedName)? '#' value=ValidID;
+    {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
 
 NavigationExpression:
     base=QualifiedName (=> ('.' | '=>' | '->') features+=Feature)*;
@@ -114,14 +114,11 @@ Function:
 Feature:
     name=ID;
 
-LambdaArgument:
-	name=ID;
-
 QualifiedName:
     {QualifiedName} (namespaceElements+=ID '::')* name=ID
     ;
 
-ValidID:
+ValidId:
     ID;
 
 terminal DATE:

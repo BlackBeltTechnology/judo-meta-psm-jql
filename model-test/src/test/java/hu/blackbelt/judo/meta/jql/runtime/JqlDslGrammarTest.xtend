@@ -7,7 +7,6 @@ import hu.blackbelt.judo.meta.jql.jqldsl.DecimalLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.EnumLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.IntegerLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression
-import hu.blackbelt.judo.meta.jql.jqldsl.LambdaExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.MeasuredLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.StringLiteral
@@ -192,7 +191,10 @@ class JqlDslGrammarTest {
             exp.functions.forEach [
                 result.append(String.format("!%s(", it.function.name))
                 it.parameters.forEach [ parameter, i |
-                    result.append(parameter.asString)
+                    result.append(parameter.expression.asString)                    
+                    if (parameter.parameterExtension !== null) {
+                    	result.append(" " + parameter.parameterExtension)
+                    }
                     if (i < parameters.size - 1) {
                         result.append(",")
                     }
@@ -289,14 +291,14 @@ class JqlDslGrammarTest {
 
         val concatExp = "self.description!concat(self.copyright, a<12)".parse
         "copyright".assertEquals(
-            (concatExp.functions.get(0).parameters.get(0) as NavigationExpression).features.get(0).name)
-        "a".assertEquals((concatExp.functions.get(0).parameters.get(1) as BinaryOperation).leftOperand.asString)
+            (concatExp.functions.get(0).parameters.get(0).expression as NavigationExpression).features.get(0).name)
+        "a".assertEquals((concatExp.functions.get(0).parameters.get(1).expression as BinaryOperation).leftOperand.asString)
 
         val unaryExp = "-123.0!round()!radix(16)".parse as UnaryOperation
         "-".assertEquals(unaryExp.operator)
         "round".assertEquals(unaryExp.functions.get(0).function.name)
         "radix".assertEquals(unaryExp.functions.get(1).function.name)
-        BigInteger.valueOf(16).assertEquals(unaryExp.functions.get(1).parameters.get(0).expressionValue)
+        BigInteger.valueOf(16).assertEquals(unaryExp.functions.get(1).parameters.get(0).expression.expressionValue)
 
         val conditionalFunction = "self.text!length() < 10 ? self.text!fun(param1, param2) : model::Text.item > 0 ? true : false".
             parse
@@ -320,20 +322,28 @@ class JqlDslGrammarTest {
                     od | od.price > 10
                 )
         ".parse as NavigationExpression
-        "filter".assertEquals(filterExp.functions.get(0).function.name)
-        val filterLambda = filterExp.functions.get(0).lambda as LambdaExpression
-        "od".assertEquals(filterLambda.argument.name)
-        val filterLambdaStatement = filterLambda.statement as BinaryOperation
+        val filterFunction = filterExp.functions.get(0);
+        "filter".assertEquals(filterFunction.function.name)
+        "od".assertEquals(filterFunction.lambdaArgument)
+        val filterLambdaStatement = filterFunction.parameters.get(0).expression as BinaryOperation
         ">".assertEquals(filterLambdaStatement.operator)
         BigInteger.valueOf(10).assertEquals(filterLambdaStatement.rightOperand.expressionValue)
         "od".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).base.name)
         "price".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).features.get(0).name)
+        
+        val sortExp = "self=>products!sort(elem | elem.unitPrice ASC, elem.name DESC)".parse as NavigationExpression;
+        val sortFunction = sortExp.functions.get(0);
+        "elem".assertEquals(sortFunction.lambdaArgument)
+        "ASC".assertEquals(sortFunction.parameters.get(0).parameterExtension)
+        "elem.unitPrice".assertEquals(sortFunction.parameters.get(0).expression.asString)
+		"DESC".assertEquals(sortFunction.parameters.get(1).parameterExtension)
+        "elem.name".assertEquals(sortFunction.parameters.get(1).expression.asString)
     }
 
     @Test
     def void typeFunctions() {
         val exp = "self.field!instanceof(Lib::MyType)".parse as NavigationExpression
-        "Lib::MyType".assertEquals((exp.functions.get(0).parameters.get(0) as NavigationExpression).asString)
+        "Lib::MyType".assertEquals((exp.functions.get(0).parameters.get(0).expression as NavigationExpression).asString)
 
     }
 
