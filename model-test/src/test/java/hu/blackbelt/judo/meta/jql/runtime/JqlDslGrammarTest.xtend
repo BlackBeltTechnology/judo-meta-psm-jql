@@ -296,9 +296,13 @@ class JqlDslGrammarTest {
 
         val unaryExp = "-123.0!round()!radix(16)".parse as UnaryOperation
         "-".assertEquals(unaryExp.operator)
-        "round".assertEquals(unaryExp.functions.get(0).function.name)
-        "radix".assertEquals(unaryExp.functions.get(1).function.name)
-        BigInteger.valueOf(16).assertEquals(unaryExp.functions.get(1).parameters.get(0).expression.expressionValue)
+        "round".assertEquals(unaryExp.operand.functions.get(0).function.name)
+        "radix".assertEquals(unaryExp.operand.functions.get(1).function.name)
+        BigInteger.valueOf(16).assertEquals(unaryExp.operand.functions.get(1).parameters.get(0).expression.expressionValue)
+
+        val logicalExp = "not self.product!kindof(demo::entities::Category)".parse as UnaryOperation
+        "not".assertEquals(logicalExp.operator)
+        "kindof".assertEquals(logicalExp.operand.functions.get(0).function.name)
 
         val conditionalFunction = "self.text!length() < 10 ? self.text!fun(param1, param2) : model::Text.item > 0 ? true : false".
             parse

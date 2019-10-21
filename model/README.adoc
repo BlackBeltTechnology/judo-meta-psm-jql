@@ -131,7 +131,7 @@ You can use some *built-in* functions using the following syntax: `self.descript
 
 === String functions
 
-* `lowerCase()` eg. `self.name!lowerCase()`
+* `lowerCase()` eg. `self.name!lowerCase()` 
 * `upperCase()`
 * `length()`
 * `substring(startIndex, length)`
@@ -149,20 +149,23 @@ You can use some *built-in* functions using the following syntax: `self.descript
 * `difference(timestamp)`
 
 === Collection functions
-* `head()`
-* `tail()`
-* `join(delimiter)`
-* `count()`
+* `head(n)`
+* `tail(n)`
 * `limit(count, offset)`
-* `sort(field, descending)`
+* `join(<variable name> | <selector>, <delimiter>)` - Evaluates to a string, where the given selection is concatenated using delimiter e.g.
+`self\=>products!join(p | p.productName, ', '`
+* `count()`
+* `sort(<variable name> | <selector> [ASC|DESC])` - Evaluates to a sorted collection, e.g. `self\=>products!sort(p | p.unitPrice, p.productName DESC)`
 * `asCollection(type)`
-
-=== Lambda functions
-* `filter(lambda)` eg. `self.orderDetails!filter(od | od.price 10)` 
+* `filter(<variable name> | <logical expression>)` eg. `self.orderDetails!filter(od | od.price < 10)`
+* `min(<variable name> | <selector>)`
+* `max(<variable name> | <selector>)`
+* `avg(<variable name> | <selector>)`
+* `sum(<variable name> | <selector>)`
 
 === Object functions
 * `container(type)` evaluates to the container of the object when it is part of a container, which type is `type`, otherwise `undefined`
-* `kindof(type)`, evaluates to `true` if the given object is or a descendant of type eg. `self.field!instanceof(Lib::MyType)`
+* `kindof(type)`, evaluates to `true` if the given object is or a descendant of type eg. `self.field!kindof(Lib::MyType)`
 * `typeof(type)` evaluates to `true` if the given object is of type
 * `asType(type)` evaluates to the operand if its type is the same as given, otherwise evaluates as `undefined`.
 

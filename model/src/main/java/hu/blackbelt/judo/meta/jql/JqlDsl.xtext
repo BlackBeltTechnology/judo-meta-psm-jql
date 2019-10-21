@@ -52,12 +52,12 @@ OpMulti:
     '*' | '/' | 'div' | 'mod';
 
 ExponentExpression returns JqlExpression:
-    UnaryOperation (=> '!' functions+=FunctionCall)* (=> ({BinaryOperation.leftOperand=current} operator='^')
+    UnaryOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
     rightOperand=UnaryOperation)*;
 
 UnaryOperation returns JqlExpression:
     {UnaryOperation} operator=OpUnary operand=UnaryOperation
-    | PrimaryExpression;
+    | PrimaryExpression (=> '!' functions+=FunctionCall)*;
 
 OpUnary:
     'not' | "-";
