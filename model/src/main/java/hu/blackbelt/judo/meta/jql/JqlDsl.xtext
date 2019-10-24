@@ -106,12 +106,13 @@ EnumLiteral returns JqlExpression:
     {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
 
 NavigationExpression:
-    base=QualifiedName (=> ('.' | '=>' | '->') features+=Feature)*;
-
-Function:
-    name=ID;
+    base=QualifiedName (=> '!' functions +=FunctionCall)* (features += Feature)*;
 
 Feature:
+	{Feature} (=> ('.' | '=>' | '->') name=ID) (=> '!' functions+=FunctionCall)*
+;
+
+Function:
     name=ID;
 
 QualifiedName:
