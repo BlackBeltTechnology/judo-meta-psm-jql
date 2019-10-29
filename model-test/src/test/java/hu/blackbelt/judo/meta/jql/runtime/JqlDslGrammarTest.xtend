@@ -239,6 +239,10 @@ class JqlDslGrammarTest {
 		var exp = parser.parseString("10[kg]") as MeasuredLiteral
 		BigInteger.valueOf(10).assertEquals(exp.expressionValue)
 		"kg".assertEquals(exp.measure)
+		
+		exp = parser.parseString("1[km/h]") as MeasuredLiteral
+		BigInteger.valueOf(1).assertEquals(exp.expressionValue)
+		"km/h".assertEquals(exp.measure)
 
 		exp = parser.parseString("0.1[model::Mass#mg]") as MeasuredLiteral
 		BigDecimal.valueOf(0.1).assertEquals(exp.expressionValue)
