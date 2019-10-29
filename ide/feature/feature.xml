@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="hu.blackbelt.judo.meta.jql.feature"
-      label="Judo Jql Model Feature"
+      id="hu.blackbelt.judo.meta.jql.ide.feature"
+      label="Judo Jql IDE Feature"
       version="1.0.0.qualifier"
       provider-name="BlackBelt Technology">
 
@@ -235,12 +235,22 @@
       <import plugin="org.eclipse.xtext.ui"/>
       <import plugin="org.eclipse.xtext.ui.codetemplates.ui"/>
       <import plugin="org.eclipse.xtext.ui.shared"/>
+      <import plugin="hu.blackbelt.judo.meta.jql.model"/>
+
    </requires>
 
    <plugin
-         id="hu.blackbelt.judo.meta.jql.model"
+         id="hu.blackbelt.judo.meta.jql.ide.common"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="hu.blackbelt.judo.meta.jql.ide.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
