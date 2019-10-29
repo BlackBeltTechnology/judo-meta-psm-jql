@@ -246,9 +246,7 @@ class JqlDslGrammarTest {
 
 		exp = parser.parseString("0.1[model::Mass#mg]") as MeasuredLiteral
 		BigDecimal.valueOf(0.1).assertEquals(exp.expressionValue)
-		"Mass".assertEquals(exp.type.name)
-		"model".assertEquals(exp.type.namespaceElements.get(0));
-		"mg".assertEquals(exp.measure)
+		"model::Mass#mg".assertEquals(exp.measure)
 	}
 
 	@Test

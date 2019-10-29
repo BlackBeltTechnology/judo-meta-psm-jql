@@ -126,6 +126,10 @@ JQL expressions support measured quantities, eg. `10[kg]`, where the measure is 
 
 You can use some *built-in* functions using the following syntax: `self.description!length()`
 
+=== Functions available for all elements
+* `isDefined()`
+* `isUndefined()`
+
 === Numeric functions
 * `round()`
 
