@@ -24,7 +24,7 @@
         </server>
         
         <server>
-            <id>blackbelt-nexus-mirror</id>
+            <id>judong-nexus-mirror</id>
             <username>${env.JUDONG_NEXUS_USERNAME}</username>
             <password>${env.JUDONG_NEXUS_PASSWORD}</password>
         </server>
