@@ -30,9 +30,9 @@
 							*
 						</Import-Package>
 						<Export-Package>
-                            hu.blackbelt.judo.meta.jql*;version=${project.version},
+                            hu.blackbelt.judo.meta.jql.*;version=${project.version},
                         </Export-Package>
-						<Include-Resource>{maven-resources},meta/jql=../model/model</Include-Resource>
+						<Include-Resource>{maven-resources},meta/jql=../model/model</Include-Resource>						
 					</instructions>
 				</configuration>
 			</plugin>

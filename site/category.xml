@@ -3,23 +3,45 @@
    <description>
       To install these features, point Eclipse at this site.
    </description>
+
+    <category-def name="jql" label="Judo Jql Model">
+       <description>
+          Judo Jql Model Update Site: contains all features in this build.
+       </description>
+    </category-def>
+    <category-def name="jql_source" label="Judo Jql Model Source">
+       <description>
+          Judo Jql Model source code.
+       </description>
+    </category-def>
+
+    <category-def name="jql_ide" label="Judo Jql IDE">
+       <description>
+          Judo Jql Model IDE intrgration.
+       </description>
+    </category-def>
+    <category-def name="jql_ide_source" label="Judo Jql IDE Source">
+       <description>
+          Judo Jql Model IDE intrgration source code
+       </description>
+    </category-def>
+
    <feature id="hu.blackbelt.judo.meta.jql.feature">
       <category name="jql"/>
    </feature>
-   <category-def name="jql" label="Judo Jql Model">
-      <description>
-         Judo Jql Model Update Site: contains all features in this build.
-      </description>
-   </category-def>
 
    <feature id="hu.blackbelt.judo.meta.jql.feature.source">
       <category name="jql_source"/>
    </feature>
-   <category-def name="jql_source" label="Judo Jql Model Source">
-      <description>
-         Judo Jql Model source code.
-      </description>
-   </category-def>
+
+   <feature id="hu.blackbelt.judo.meta.jql.ide.feature">
+      <category name="jql_ide"/>
+   </feature>
+
+   <feature id="hu.blackbelt.judo.meta.jql.ide.feature.source">
+      <category name="jql_ide_source"/>
+   </feature>
+
 
    <!-- This is currently ignored by Tycho, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=453708 -->
    <!-- The tycho plugin 1.5.0 will fix it -->

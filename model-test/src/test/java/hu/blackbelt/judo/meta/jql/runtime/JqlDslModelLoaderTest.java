@@ -27,7 +27,7 @@ public class JqlDslModelLoaderTest {
     @DisplayName("Load Jql Model")
     void loadJqlModel() throws IOException, JqlDslModel.JqlDslValidationException {
         JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
-                .uri(URI.createFileURI(new File("src/test/model/test.jql").getAbsolutePath()))
+                .uri(URI.createFileURI(new File("src/test/model/test.jql.xmi").getAbsolutePath()))
                 .name("test"));
 
         for (Iterator<EObject> i = jqlModel.getResourceSet().getResource(jqlModel.getUri(), false).getAllContents(); i.hasNext(); ) {

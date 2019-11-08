@@ -2,7 +2,7 @@ package hu.blackbelt.judo.meta.jql.runtime;
 
 import com.google.common.collect.ImmutableMap;
 import hu.blackbelt.judo.meta.jql.jqldsl.BinaryOperation;
-import hu.blackbelt.judo.meta.jql.jqldsl.Expression;
+import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -58,7 +58,7 @@ public class JqlDslParserTest {
         }
     }
 
-    private void validateExpression(final Expression jqlExpression) {
+    private void validateExpression(final JqlExpression jqlExpression) {
         Assertions.assertTrue(jqlExpression instanceof BinaryOperation);
     }
 
@@ -82,19 +82,19 @@ public class JqlDslParserTest {
 
     @Test
     public void testParseFile() {
-        final Expression jqlExpression = parser.parseFile(new File("src/test/model/sample.jql"));
+        final JqlExpression jqlExpression = parser.parseFile(new File("src/test/model/sample.jql"));
         validateExpression(jqlExpression);
     }
 
     @Test
     public void testParseStream() {
-        final Expression jqlExpression = parser.parseStream(new ByteArrayInputStream(TEST_EXPRESSION.getBytes()));
+        final JqlExpression jqlExpression = parser.parseStream(new ByteArrayInputStream(TEST_EXPRESSION.getBytes()));
         validateExpression(jqlExpression);
     }
 
     @Test
     public void testParseString() {
-        final Expression jqlExpression = parser.parseString(TEST_EXPRESSION);
+        final JqlExpression jqlExpression = parser.parseString(TEST_EXPRESSION);
         validateExpression(jqlExpression);
     }
 
