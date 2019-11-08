@@ -18,8 +18,11 @@ Workflow {
 				runtimeTest = {
 					enabled = false
 				}
+				genericIde = {
+                    enabled = true
+				}
 				eclipsePlugin = {
-					enabled = true
+					enabled = false
 					name = "hu.blackbelt.judo.meta.jql.ide.ui"		
 					root = "${rootPath}/ide/ui"					
 				}
@@ -64,21 +67,4 @@ Workflow {
 		}
 	}
 
-		// Helper for model
-	component = hu.blackbelt.eclipse.emf.genmodel.generator.helper.HelperGeneratorWorkflow {
-		modelDir = "${rootPath}/${modelDir}"
-		javaGenPath = "${rootPath}/${javaGenPath}"
-	}
-
-	// Builder for model
-	component = hu.blackbelt.eclipse.emf.genmodel.generator.builder.BuilderGeneratorWorkflow {
-		modelDir = "${rootPath}/${modelDir}"
-		javaGenPath = "${rootPath}/${javaGenPath}"
-	}	
-
-	// Judo RuntimeModel for model
-	component = hu.blackbelt.judo.eclipse.emf.genmodel.generator.runtimemodel.RuntimeModelGeneratorWorkflow {
-		modelDir = "${rootPath}/${modelDir}"
-		javaGenPath = "${rootPath}/${javaGenPath}"
-	}
 }
