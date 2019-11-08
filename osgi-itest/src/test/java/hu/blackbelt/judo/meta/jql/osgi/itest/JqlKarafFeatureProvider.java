@@ -248,11 +248,11 @@ public class JqlKarafFeatureProvider {
      * @param message the error message to use when timeout occurs
      * @throws InterruptedException if interrupted while sleeping
      */
-    public static void sleepOrTimeout(long startTime, long timeout, String message)
+    public static void sleepOrTimeout(long startTime, long timeoutSeconds, String message)
             throws InterruptedException, TimeoutException {
-        timeout *= 1000; // seconds to millis
+        long timeoutMillis = timeoutSeconds * 1000; 
         long elapsed = System.currentTimeMillis() - startTime;
-        long remaining = timeout - elapsed;
+        long remaining = timeoutMillis - elapsed;
         if (remaining <= 0) {
             throw new TimeoutException(message);
         }

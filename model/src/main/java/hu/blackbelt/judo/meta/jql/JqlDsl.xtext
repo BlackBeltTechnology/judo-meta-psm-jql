@@ -1,113 +1,159 @@
 grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden(WS, ML_COMMENT, SL_COMMENT)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
-
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
 
-Expression returns Expression:
-	ConcatenateExpression;
+Expression returns JqlExpression:
+    SwitchExpression;
 
-ConcatenateExpression returns Expression:
-	OrExpression (=>({BinaryOperation.leftOperand=current} operator=OpConcat) rightOperand=OrExpression)*;
+    // right associative rule
+SwitchExpression returns JqlExpression:
+    ImpliesExpression (=> ({TernaryOperation.condition=current} '?') thenExpression=SwitchExpression ':'
+    elseExpression=SwitchExpression)?;
 
-OpConcat:
-	'||';
+ImpliesExpression returns JqlExpression:
+    OrExpression (=> ({BinaryOperation.leftOperand=current} operator='implies') rightOperand=OrExpression)*;
 
-OrExpression returns Expression:
-	AndExpression (=>({BinaryOperation.leftOperand=current} operator=OpOr) rightOperand=AndExpression)*;
+OrExpression returns JqlExpression:
+    XorExpression (=> ({BinaryOperation.leftOperand=current} operator='or') rightOperand=XorExpression)*;
 
-OpOr:
-	'or' | 'OR';
+XorExpression returns JqlExpression:
+    AndExpression (=> ({BinaryOperation.leftOperand=current} operator='xor') rightOperand=AndExpression)*;
 
-AndExpression returns Expression:
-	EqualityExpression (=>({BinaryOperation.leftOperand=current} operator=OpAnd) rightOperand=EqualityExpression)*;
+AndExpression returns JqlExpression:
+    EqualityExpression (=> ({BinaryOperation.leftOperand=current} operator='and') rightOperand=EqualityExpression)*;
 
-OpAnd:
-	'and' | 'AND';
-
-EqualityExpression returns Expression:
-	RelationalExpression (=>({BinaryOperation.leftOperand=current} operator=OpEquality)
-	rightOperand=RelationalExpression)*;
+EqualityExpression returns JqlExpression:
+    RelationalExpression (=> ({BinaryOperation.leftOperand=current} operator=OpEquality)
+    rightOperand=RelationalExpression)*;
 
 OpEquality:
-	'==' | '!=' ;
+    '<>' | '=';
 
-RelationalExpression returns Expression:
-	AdditiveExpression
-	(=>({BinaryOperation.leftOperand=current} operator=OpCompare) rightOperand=AdditiveExpression)*;
+RelationalExpression returns JqlExpression:
+    AdditiveExpression
+    (=> ({BinaryOperation.leftOperand=current} operator=OpCompare) rightOperand=AdditiveExpression)*;
 
 OpCompare:
-	'>=' | '<' '=' | '>' | '<' ;
+    '>=' | '<' '=' | '>' | '<';
 
-AdditiveExpression returns Expression:
-	MultiplicativeExpression (=>({BinaryOperation.leftOperand=current} operator=OpAdd)
-	rightOperand=MultiplicativeExpression)*;
+AdditiveExpression returns JqlExpression:
+    MultiplicativeExpression (=> ({BinaryOperation.leftOperand=current} operator=OpAdd)
+    rightOperand=MultiplicativeExpression)*;
 
 OpAdd:
-	'+' | '-';
+    '+' | '-';
 
-MultiplicativeExpression returns Expression:
-	UnaryOperation (=>({BinaryOperation.leftOperand=current} operator=OpMulti) rightOperand=UnaryOperation)*;
+MultiplicativeExpression returns JqlExpression:
+    ExponentExpression (=> ({BinaryOperation.leftOperand=current} operator=OpMulti)
+    rightOperand=ExponentExpression)*;
 
 OpMulti:
-	'*' | '/' | '%';
+    '*' | '/' | 'div' | 'mod';
 
-UnaryOperation returns Expression:
-	{UnaryOperation} operator=OpUnary operand=UnaryOperation
-	| PrimaryExpression;
+ExponentExpression returns JqlExpression:
+    UnaryOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
+    rightOperand=UnaryOperation)*;
+
+UnaryOperation returns JqlExpression:
+    {UnaryOperation} operator=OpUnary operand=UnaryOperation
+    | PrimaryExpression (=> '!' functions+=FunctionCall)*;
 
 OpUnary:
-	"!" | 'not' | 'NOT' | "-" | "+";
+    'not' | "-";
 
-ParenthesizedExpression returns Expression:
-	'(' Expression ')';
+ParenthesizedExpression returns JqlExpression:
+    '(' Expression ')';
 
-PrimaryExpression returns Expression:
-	NavigationExpression |
-	Literal |
-	ParenthesizedExpression;
+PrimaryExpression returns JqlExpression:
+    ParenthesizedExpression |
+    NavigationExpression |
+    Literal;
 
-Literal returns Expression:
-	BooleanLiteral |
-	NumberLiteral |
-	StringLiteral;
+FunctionCall:
+    {FunctionCall} function=Function '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
+    ')';
 
-BooleanLiteral returns Expression :
-	{BooleanLiteral} ('false' | isTrue?='true');
+FunctionParameter:
+	{FunctionParameter} expression = Expression (parameterExtension=ValidId)?;
 
-NumberLiteral returns Expression :
-	{IntegerLiteral} value=INTEGER |
+Literal returns JqlExpression:
+    BooleanLiteral |
+    NumberLiteral |
+    StringLiteral |
+    TemporalLiteral |
+    EnumLiteral |
+    MeasuredLiteral;
+
+BooleanLiteral returns JqlExpression:
+    {BooleanLiteral} ('false' | isTrue?='true');
+
+NumberLiteral returns JqlExpression:
+    {IntegerLiteral} value=INTEGER |
     {DecimalLiteral} value=DECIMAL;
 
-StringLiteral returns Expression:
-	{StringLiteral} value=STRING;
+StringLiteral returns JqlExpression:
+    {StringLiteral} value=STRING;
+
+TemporalLiteral returns JqlExpression:
+    {DateLiteral} value=DATE |
+    {TimeStampLiteral} value=TIMESTAMP;
+
+MeasuredLiteral returns JqlExpression:
+    {MeasuredLiteral} value=NumberLiteral measure=MEASURE_NAME
+    ;
+
+EnumLiteral returns JqlExpression:
+    {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
 
 NavigationExpression:
-	base=NavigationBase (=>'.' features+=Feature)*;
+    base=QualifiedName (=> '!' functions +=FunctionCall)* (features += Feature)*;
 
 Feature:
-	name=ID;
+	{Feature} (=> ('.' | '=>' | '->') name=ID) (=> '!' functions+=FunctionCall)*
+;
 
-NavigationBase:
-	ValidID | QualifiedName;
+Function:
+    name=ID;
 
 QualifiedName:
-	ID (=>'::' ID)+;
+    {QualifiedName} (namespaceElements+=ID '::')* name=ID
+    ;
 
-ValidID:
-	ID;
+ValidId:
+    ID;
 
-terminal DECIMAL returns ecore::EBigDecimal: INTEGER '.' INTEGER;
-terminal INTEGER returns ecore::EBigInteger: ('0'..'9')+;
+terminal MEASURE_NAME:
+	'[' ('\\]' | !('\\' | ']'))+ ']'
+;
 
-terminal ID: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
+terminal DATE:
+    '`' ('0'..'9' | '-')+ '`';
+
+terminal TIMESTAMP:
+    '`' ('0'..'9' | '-')+ 'T'->'`';
+
+terminal DECIMAL returns ecore::EBigDecimal:
+    INTEGER '.' INTEGER;
+
+terminal INTEGER returns ecore::EBigInteger:
+    ('0'..'9')+;
+
+terminal ID:
+    '\\'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+
 terminal STRING:
-			'"' ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|'"') )* '"' |
-			"'" ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|"'") )* "'"
-		;
-terminal ML_COMMENT : '/*' -> '*/';
-terminal SL_COMMENT : '//' !('\n'|'\r')* ('\r'? '\n')?;
+    '"' ('\\' . | !('\\' | '"'))* '"' |
+    "'" ('\\' . | !('\\' | "'"))* "'";
 
-terminal WS         : (' '|'\t'|'\r'|'\n')+;
+terminal ML_COMMENT:
+    '/*'->'*/';
 
-terminal ANY_OTHER: .;
+terminal SL_COMMENT:
+    '//' !('\n' | '\r')* ('\r'? '\n')?;
+
+terminal WS:
+    (' ' | '\t' | '\r' | '\n')+;
+
+terminal ANY_OTHER:
+    .;

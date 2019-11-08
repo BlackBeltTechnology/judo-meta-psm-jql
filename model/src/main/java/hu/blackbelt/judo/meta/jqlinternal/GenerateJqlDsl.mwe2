@@ -1,4 +1,4 @@
-module hu.blackbelt.judo.meta.jql.GenerateJqlDsl
+module hu.blackbelt.judo.meta.jqlinternal.GenerateJqlDsl
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
@@ -12,7 +12,7 @@ Workflow {
 	component = XtextGenerator {
 		configuration = {
 			project = StandardProjectConfig {
-                    mavenLayout = true
+			    mavenLayout = true
 				baseName = "model"
 				rootPath = rootPath
 				runtimeTest = {
@@ -27,7 +27,6 @@ Workflow {
 				web = {
 					enabled = false
 				}
-				createEclipseMetaData = true
 			}
 			code = {
 				encoding = "UTF-8"
@@ -38,6 +37,16 @@ Workflow {
 		language = StandardLanguage {
 			name = "hu.blackbelt.judo.meta.jql.JqlDsl"
 			fileExtensions = "jql"
+
+            parserGenerator = {
+                options = {
+                    ignoreCase = true
+                }
+            }
+            
+            scopeProvider = {
+                ignoreCase = true
+            }
 
 			serializer = {
 				generateStub = false

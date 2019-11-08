@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
+      <descriptor
+            class="hu.blackbelt.judo.meta.jql.ide.sirius.internal.JqlSiriusEefLifecycleManagerProvider"
+            description="JQL Editor"
+            id="hu.blackbelt.judo.meta.jql.ide.sirius.properties.widget"
+            label="JQL Editor">
+      </descriptor>
+   </extension>
+
+</plugin>

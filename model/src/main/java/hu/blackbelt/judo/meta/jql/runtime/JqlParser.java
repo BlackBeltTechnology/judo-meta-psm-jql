@@ -2,16 +2,19 @@ package hu.blackbelt.judo.meta.jql.runtime;
 
 import com.google.inject.Injector;
 import hu.blackbelt.judo.meta.jql.JqlDslStandaloneSetupGenerated;
-import hu.blackbelt.judo.meta.jql.jqldsl.Expression;
+import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.resource.IResourceFactory;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.util.Iterator;
 import java.util.UUID;
@@ -27,7 +30,8 @@ public class JqlParser {
         if (injectorInstance == null) {
             final long startTs = System.currentTimeMillis();
             injectorInstance = new JqlDslStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
-            Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put(JQLSCRIPT_CONTENT_TYPE, injectorInstance.getInstance(IResourceFactory.class));
+            Resource.Factory.Registry.INSTANCE.getContentTypeToFactoryMap().put(JQLSCRIPT_CONTENT_TYPE,
+                    injectorInstance.getInstance(IResourceFactory.class));
             log.trace("Initialized XText for JQL in {} ms", (System.currentTimeMillis() - startTs));
         }
         return injectorInstance;
@@ -36,12 +40,14 @@ public class JqlParser {
     public XtextResource loadJqlFromFile(final File jqlFile) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(URI.createFileURI(jqlFile.getAbsolutePath()), JQLSCRIPT_CONTENT_TYPE);
-            jqlResource.load(new FileInputStream(jqlFile), injector().getInstance(XtextResourceSet.class).getLoadOptions());
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(URI.createFileURI(jqlFile.getAbsolutePath()), JQLSCRIPT_CONTENT_TYPE);
+            jqlResource.load(new FileInputStream(jqlFile),
+                    injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
             return jqlResource;
         } catch (IOException ex) {
-            throw new IllegalStateException("Unable to parse expression", ex);
+            throw new IllegalStateException("Unable to parse JqlExpression", ex);
         } finally {
             log.trace("Loaded JQL from file in {} ms", (System.currentTimeMillis() - startTs));
         }
@@ -50,12 +56,13 @@ public class JqlParser {
     public XtextResource loadJqlFromStream(final InputStream stream, final URI resourceUri) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             jqlResource.load(stream, injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
             return jqlResource;
         } catch (IOException ex) {
-            throw new IllegalStateException("Unable to parse expression", ex);
+            throw new IllegalStateException("Unable to parse JqlExpression", ex);
         } finally {
             log.trace("Loaded JQL stream in {} ms", (System.currentTimeMillis() - startTs));
         }
@@ -68,55 +75,60 @@ public class JqlParser {
         }
 
         if (log.isDebugEnabled()) {
-            log.trace("Parsing expression: {}", jqlExpression);
+            log.trace("Parsing JqlExpression: {}", jqlExpression);
         }
 
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class).createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
+            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+                    .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             final InputStream in = new ByteArrayInputStream(jqlExpression.getBytes("UTF-8"));
             jqlResource.load(in, injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
             return jqlResource;
         } catch (IOException ex) {
-            throw new IllegalStateException("Unable to parse expression", ex);
+            throw new IllegalStateException("Unable to parse JqlExpression", ex);
         } finally {
             log.trace("Loaded JQL string in {} ms", (System.currentTimeMillis() - startTs));
         }
     }
 
-    public Expression parseFile(final File jqlFile) {
-        // get first entry of jqlResource (root expression)
+    public JqlExpression parseFile(final File jqlFile) {
+        // get first entry of jqlResource (root JqlExpression)
         final Iterator<EObject> iterator = loadJqlFromFile(jqlFile).getContents().iterator();
         if (iterator.hasNext()) {
-            return (Expression) EcoreUtil.copy(iterator.next());
+            return (JqlExpression) EcoreUtil.copy(iterator.next());
         } else {
             return null;
         }
     }
 
-    public Expression parseStream(final InputStream stream) {
+    public JqlExpression parseStream(final InputStream stream) {
         return parseStream(stream, URI.createURI("urn:" + UUID.randomUUID()));
     }
 
-    public Expression parseStream(final InputStream stream, final URI resourceUri) {
-        // get first entry of jqlResource (root expression)
+    public JqlExpression parseStream(final InputStream stream, final URI resourceUri) {
+        // get first entry of jqlResource (root JqlExpression)
         final Iterator<EObject> iterator = loadJqlFromStream(stream, resourceUri).getContents().iterator();
         if (iterator.hasNext()) {
-            return (Expression) EcoreUtil.copy(iterator.next());
+            return (JqlExpression) EcoreUtil.copy(iterator.next());
         } else {
             return null;
         }
     }
 
-    public Expression parseString(final String jqlExpression) {
+    public JqlExpression parseString(final String jqlExpression) {
         return parseString(jqlExpression, URI.createURI("urn:" + UUID.randomUUID()));
     }
 
-    public Expression parseString(final String jqlExpression, final URI resourceUri) {
-        // get first entry of jqlResource (root expression)
-        final Iterator<EObject> iterator = loadJqlFromString(jqlExpression, resourceUri).getContents().iterator();
+    public JqlExpression parseString(final String jqlExpression, final URI resourceUri) {
+        XtextResource resource = loadJqlFromString(jqlExpression, resourceUri);
+        EList<Diagnostic> errors = resource.getErrors();
+        if (!errors.isEmpty()) {
+            throw new JqlParseException(jqlExpression, errors);
+        }
+        Iterator<EObject> iterator = resource.getContents().iterator();
         if (iterator.hasNext()) {
-            return (Expression) EcoreUtil.copy(iterator.next());
+            return (JqlExpression) EcoreUtil.copy(iterator.next());
         } else {
             return null;
         }
