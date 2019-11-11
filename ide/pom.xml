@@ -18,6 +18,7 @@
     <modules>
         <module>generator</module>
         <module>ide-common</module>
+        <module>ui</module>
         <module>feature</module>
     </modules>
 
