@@ -82,7 +82,7 @@
 		<eclipse-p2-base>http://download.eclipse.org/releases/2019-03</eclipse-p2-base>
 
 		<emf-genmodel-generator-version>1.0.0.20191105_182930_676cf43_develop</emf-genmodel-generator-version>
-		<judo-genmodel-generator-version>1.0.0.20191105_183255_7673428_develop</judo-genmodel-generator-version>
+		<judo-genmodel-generator-version>1.0.0.20191105_185759_897db9c_develop</judo-genmodel-generator-version>
 
 
 		<!-- Xtend / Xcore -->
