@@ -12,36 +12,26 @@
 	    <unit id="org.eclipse.sdk.feature.group" version="4.12.0.v20190605-1801"/>
         <unit id="org.eclipse.xtext.sdk.feature.group" version="2.18.0.v20190528-0716"/>
     </location>
+
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 		  <unit id="org.eclipse.epsilon.core.dt.feature.feature.group" version="1.5.1.201809302027"/>
 		  <unit id="org.eclipse.epsilon.core.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.emc.graphml.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.emc.spreadsheets.excel.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.emc.spreadsheets.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.emc.spreadsheets.google.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.emf.dt.feature.feature.group" version="1.5.1.201809302027"/>
 		  <unit id="org.eclipse.epsilon.emf.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.eunit.dt.emf.feature.feature.group" version="1.5.1.201809302027"/>
 		  <unit id="org.eclipse.epsilon.evl.emf.validation.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.ewl.emf.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.ewl.gmf.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.simulink.dt.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.simulink.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.uml.dt.feature.feature.group" version="1.5.1.201809302027"/>
-		  <unit id="org.eclipse.epsilon.uml.feature.feature.group" version="1.5.1.201809302027"/>
 		  <repository location="http://download.eclipse.org/epsilon/updates"/>
 	  </location>
+
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		  <unit id="hu.blackbelt.eclipse.emf.genmodel.generator.feature.feature.group" version="1.0.0.develop_00025"/>
-		  <repository location="https://nexus.blackbelt.cloud/repository/p2-judo/emf-genmodel-generator/1.0.0.develop_00025"/>
+		  <repository location="https://nexus.judo.technology/repository/p2/emf-genmodel-generator/1.0.0.20191105_182930_676cf43_develop"/>
+		  <unit id="hu.blackbelt.eclipse.emf.genmodel.generator.feature.feature.group" version="1.0.0.20191105_182930_676cf43_develop"/>
 	  </location>
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		  <unit id="hu.blackbelt.judo.eclipse.emf.genmodel.generator.feature.feature.group" version="1.0.0.develop_00018"/>
-		  <repository location="https://nexus.blackbelt.cloud/repository/p2-judo/judo-genmodel-generator/1.0.0.develop_00018"/>
+		  <repository location="https://nexus.judo.technology/repository/p2/judo-genmodel-generator/1.0.0.20191105_183255_7673428_develop"/>
+		  <unit id="hu.blackbelt.judo.eclipse.emf.genmodel.generator.feature.feature.group" version="1.0.0.20191105_183255_7673428_develop"/>
 	  </location>
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		  <repository location="https://nexus.judo.technology/repository/p2/epsilon-runtime-eclipse/1.2.0.develop_00011"/>
 		  <unit id="hu.blackbelt.epsilon.runtime.feature.feature.group" version="1.2.0.develop_00011"/>
-		  <repository location="https://nexus.blackbelt.cloud/repository/p2-judo/epsilon-runtime-eclipse/1.2.0.develop_00011"/>
 	  </location>
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 		  <repository location="https://download.eclipse.org/sirius/updates/releases/6.2.2/2019-06/"/>
@@ -52,9 +42,9 @@
 		  <unit id="org.eclipse.eef.sdk.feature.feature.group" version="2.1.2.201903071543"/>
 	  </location>
 	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		  <repository location="https://nexus.blackbelt.cloud/repository/p2-judo/judo-meta-esm/1.0.0.develop_00069"/>
-		  <unit id="hu.blackbelt.judo.meta.esm.feature.feature.group" version="1.0.0.develop_00069"/>
-	  </location>	  
+		  <repository location="https://nexus.judo.technology/repository/p2/judo-meta-esm/1.1.0.20191112_124545_425a326_develop"/>
+		  <unit id="hu.blackbelt.judo.meta.esm.feature.feature.group" version="1.1.0.20191112_124545_425a326_develop"/>
+	  </location>
   </locations>
   <targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 </target>
