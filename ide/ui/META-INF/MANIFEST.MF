@@ -7,8 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: hu.blackbelt.judo.meta.jql.ui.contentassist,
  hu.blackbelt.judo.meta.jql.ui.quickfix,
- hu.blackbelt.judo.meta.jql.ide.ui.internal,
- hu.blackbelt.judo.meta.jql.ui.sirius
+ hu.blackbelt.judo.meta.jql.ui
 Require-Bundle: org.eclipse.compare,
  org.eclipse.ui,
  org.eclipse.ui.editors,
