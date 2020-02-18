@@ -803,6 +803,7 @@
                             <tag>${project.version}</tag>
                             <deleteRelease>true</deleteRelease>
                             <commitish>${env.WERCKER_GIT_COMMIT}</commitish>
+                            <!--
                             <fileSets>
                                 <fileSet>
                                     <directory>${basedir}/model/target</directory>
@@ -828,7 +829,7 @@
                                         <include>*.zip</include>
                                     </includes>
                                 </fileSet>
-                            </fileSets>
+                            </fileSets> -->
                         </configuration>
                         <executions>
                             <execution>
