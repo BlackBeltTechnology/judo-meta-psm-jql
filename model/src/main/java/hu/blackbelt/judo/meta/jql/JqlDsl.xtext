@@ -28,7 +28,7 @@ EqualityExpression returns JqlExpression:
     rightOperand=RelationalExpression)*;
 
 OpEquality:
-    '<>' | '=';
+    '!=' | '==';
 
 RelationalExpression returns JqlExpression:
     AdditiveExpression

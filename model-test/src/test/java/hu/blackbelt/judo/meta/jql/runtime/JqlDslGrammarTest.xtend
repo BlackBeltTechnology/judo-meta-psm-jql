@@ -133,9 +133,9 @@ class JqlDslGrammarTest {
 
 		val hardExpParen = "a ? (b ? c : d) : (e ? (f ? g : h) : (i ? j : (k ? l : m))) ".parse as TernaryOperation
 		"(if a (if b c d) (if e (if f g h) (if i j (if k l m))))".assertEquals(hardExpParen.asString)
-		val hardExp = "a<0 ? b=q ? c : d : e ? f ? g : h : i ? j : k = q xor r ? l and o or p : m implies n ".
+		val hardExp = "a<0 ? b==q ? c : d : e ? f ? g : h : i ? j : k == q xor r ? l and o or p : m implies n ".
 			parse as TernaryOperation
-		"(if (< a 0) (if (= b q) c d) (if e (if f g h) (if i j (if (xor (= k q) r) (or (and l o) p) (implies m n)))))".
+		"(if (< a 0) (if (== b q) c d) (if e (if f g h) (if i j (if (xor (== k q) r) (or (and l o) p) (implies m n)))))".
 			assertEquals(hardExp.asString)
 	}
 
@@ -162,15 +162,15 @@ class JqlDslGrammarTest {
 		"(implies a (or b (xor c (and d (not e)))))".assertEquals("a implies b or c xor d and not e".parse.asString)
 		"(implies (or (xor (and (not a) b) c) d) e)".assertEquals("not a and b xor c or d implies e".parse.asString)
 
-		"(or (<> a b) (= b c))".assertEquals("a <> b or b = c".parse.asString)
-		"(implies (and (<> a b) (= b c)) (or (<= c d) (>= d e)))".assertEquals(
-			"a <> b and b = c implies c <= d or d >= e".parse.asString)
+		"(or (!= a b) (== b c))".assertEquals("a != b or b == c".parse.asString)
+		"(implies (and (!= a b) (== b c)) (or (<= c d) (>= d e)))".assertEquals(
+			"a != b and b == c implies c <= d or d >= e".parse.asString)
 
-		"(= (< a b) (< c d))".assertEquals("a<b=c<d".parse.asString)
+		"(== (< a b) (< c d))".assertEquals("a<b == c<d".parse.asString)
 
-		"(and (= a b) c)".assertEquals("a = b and c".parse.asString)
-		"(or (= a b) c)".assertEquals("a = b or c".parse.asString)
-		"(xor (= a b) c)".assertEquals("a = b xor c".parse.asString)
+		"(and (== a b) c)".assertEquals("a == b and c".parse.asString)
+		"(or (== a b) c)".assertEquals("a == b or c".parse.asString)
+		"(xor (== a b) c)".assertEquals("a == b xor c".parse.asString)
 	}
 
 	def String asString(FunctionCall fun) {
@@ -263,7 +263,7 @@ class JqlDslGrammarTest {
 		"self.items->product".parse
 		"self.items.product".parse
 
-		var keywordNavigation = "self.items.\\and = self.\\or.\\not".parse() as BinaryOperation
+		var keywordNavigation = "self.items.\\and == self.\\or.\\not".parse() as BinaryOperation
 		"and".assertEquals((keywordNavigation.leftOperand as NavigationExpression).features.get(1).name)
 		"or".assertEquals((keywordNavigation.rightOperand as NavigationExpression).features.get(0).name)
 	}
