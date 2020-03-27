@@ -9,7 +9,6 @@ import hu.blackbelt.judo.meta.jql.jqldsl.FunctionCall
 import hu.blackbelt.judo.meta.jql.jqldsl.IntegerLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.MeasuredLiteral
-import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.StringLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.TernaryOperation
 import hu.blackbelt.judo.meta.jql.jqldsl.TimeStampLiteral
@@ -20,6 +19,9 @@ import org.junit.jupiter.api.Test
 
 import static extension org.junit.jupiter.api.Assertions.*
 import hu.blackbelt.judo.meta.jql.jqldsl.FunctionedExpression
+import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
+import hu.blackbelt.judo.meta.jql.jqldsl.Feature
+import hu.blackbelt.judo.meta.jql.jqldsl.QualifiedName
 
 class JqlDslGrammarTest {
 
@@ -187,8 +189,8 @@ class JqlDslGrammarTest {
             }
         ]
         result.append(")")
-        if (functionCall.feature != null) {
-                result.append("." + functionCall.feature.name)
+        for (feature : functionCall.features) {
+                result.append("." + feature.name)
         }
         if (functionCall.call !== null) {
             result.append(functionCall.call.asString);
@@ -199,7 +201,15 @@ class JqlDslGrammarTest {
 	def dispatch String asString(FunctionedExpression fun) {
 		return String.format("%s%s", fun.operand.asString, fun.functionCall.asString)
 	}
-
+	
+   def dispatch String asString(Feature fun) {
+       return "."+fun.name
+    }
+	
+   def dispatch String asString(QualifiedName exp) {
+       '''«IF (!exp.namespaceElements.isEmpty)»«String.join("::", exp.namespaceElements)»::«ENDIF»«exp.name»'''
+    }
+    
 	def dispatch String asString(JqlExpression exp) {
 		val result = new StringBuilder();
 		if (exp instanceof BinaryOperation) {
@@ -211,16 +221,16 @@ class JqlDslGrammarTest {
 		} else if (exp instanceof FunctionedExpression) {
 		    result.append(exp.asString)
 		} else if (exp instanceof NavigationExpression) {
-			val base = exp.base;
-			result.append(String.join("::", base.namespaceElements))
-			if (!base.namespaceElements.isEmpty) {
-				result.append("::")
-			}
-			result.append(base.name)
-//			exp.features.forEach [
-//				result.append("." + it.name)
-//			]
-		} else if (exp instanceof UnaryOperation) {
+		    if (exp.base != null) {
+		      result.append(exp.base.asString)  
+		    }
+		    if (exp.QName != null) {
+		        result.append(exp.QName.asString);
+		    }
+		    for (feature : exp.features) {
+		        result.append(feature.asString)
+		    }
+	    } else if (exp instanceof UnaryOperation) {
 			result.append(String.format("(%s %s)", exp.operator, exp.operand.asString))
 		} else if (exp instanceof TernaryOperation) {
 			result.append(String.format("(if %s %s %s)", exp.condition.asString, exp.thenExpression.asString,
@@ -265,11 +275,11 @@ class JqlDslGrammarTest {
 
 	@Test
 	def void navigation() {
-		var expr = parser.parseString("a.b.c")
-		var exp = expr as NavigationExpression
-		"a".assertEquals(exp.base.name)
-		"b".equals(exp.feature.name)
-		"c".equals(exp.feature.feature.name)
+	    var simple = parser.parseString("a") as NavigationExpression
+		var exp = parser.parseString("a.b.c") as NavigationExpression
+		"a".assertEquals((exp.base as QualifiedName).name)
+		"b".equals(exp.features.get(0).name)
+		"c".equals(exp.features.get(1).name)
 
 		var nav = "self=>items->product".parse
 		nav = "self=>items.product".parse
@@ -289,8 +299,8 @@ class JqlDslGrammarTest {
         parenNavigation = "((self!selfFun().elem!elemFun().items)!itemsFun())!itemsFunFun().products!productsFun()".parse
         print(parenNavigation.asString)
 		var keywordNavigation = "self.items.\\and == self.\\or.\\not".parse() as BinaryOperation
-		"and".assertEquals((keywordNavigation.leftOperand as NavigationExpression).feature.feature.name)
-		"or".assertEquals((keywordNavigation.rightOperand as NavigationExpression).feature.name)
+		"and".assertEquals((keywordNavigation.leftOperand as NavigationExpression).features.get(1).name)
+		"or".assertEquals((keywordNavigation.rightOperand as NavigationExpression).features.get(0).name)
 	}
 
 	@Test
@@ -306,12 +316,12 @@ class JqlDslGrammarTest {
 		var exp = "self.quantity * self.unitPrice * (1 - self.discount)".parse as BinaryOperation
 		"*".assertEquals(exp.operator)
 		var left = exp.leftOperand as BinaryOperation
-		"self".assertEquals((left.leftOperand as NavigationExpression).base.name)
-		"quantity".assertEquals((left.leftOperand as NavigationExpression).feature.name)
+		"self".assertEquals(((left.leftOperand as NavigationExpression).QName as QualifiedName).name)
+		"quantity".assertEquals((left.leftOperand as NavigationExpression).features.get(0).name)
 		var right = exp.rightOperand as BinaryOperation
 		"-".assertEquals(right.operator)
 		BigInteger.valueOf(1).assertEquals(right.leftOperand.expressionValue)
-		"discount".assertEquals((right.rightOperand as NavigationExpression).feature.name)
+		"discount".assertEquals((right.rightOperand as NavigationExpression).features.get(0).name)
 
 		exp = "self.quantity * self.unitPrice + self.unitDiscount * self.quantity".parse as BinaryOperation
 		"+".assertEquals(exp.operator)
@@ -325,15 +335,14 @@ class JqlDslGrammarTest {
 		exp = "self.products!sort(p | p.name)!head().weight".parse;
 	}
 
-//	@Test
-//	def void functions() {
-//		val stringExp = "('hello')!toUpperCase()".parse as StringLiteral
-//		"toUpperCase".assertEquals(stringExp.functions.get(0).function.name)
-//		val navigationExp = "self.description!length()".parse as NavigationExpression
-//		"length".assertEquals(navigationExp.features.get(0).functions.get(0).function.name)
-//		val sumExp = "('hello'!length() + 'world'!length())".parse as BinaryOperation
-//		"length".assertEquals((sumExp.leftOperand as StringLiteral).functions.get(0).function.name)
-//
+	@Test
+	def void functions() {
+		val stringExp = "('hello')!toUpperCase()".parse as FunctionedExpression
+		"toUpperCase".assertEquals(stringExp.functionCall.function.name)
+		val navigationExp = "self.description!length()".parse as FunctionedExpression
+		"length".assertEquals(navigationExp.functionCall.function.name)
+		val sumExp = "('hello'!length() + 'world'!length())".parse as BinaryOperation
+		"length".assertEquals((sumExp.leftOperand as FunctionedExpression).functionCall.function.name)
 //		val concatExp = "self.description!concat(self.copyright, a<12)".parse as NavigationExpression
 //		"copyright".assertEquals(
 //			(concatExp.features.get(0).functions.get(0).parameters.get(0).expression as NavigationExpression).features.
@@ -353,22 +362,22 @@ class JqlDslGrammarTest {
 //		"not".assertEquals(logicalExp.operator)
 //		"kindof".assertEquals(
 //			(logicalExp.operand as NavigationExpression).features.get(0).functions.get(0).function.name)
-//
-//		val conditionalFunction = "self.text!length() < 10 ? self.text!fun(param1, param2) : model::Text.item > 0 ? true : false".
-//			parse
-//		"(if (< self.text!length() 10) self.text!fun(param1,param2) (if (> model::Text.item 0) true false))".
-//			assertEquals(conditionalFunction.asString)
-//
-//		try {
-//			"self.text!length()<".parse
-//			fail("Should have thrown exception on invalid syntax")
-//		} catch (JqlParseException expected) {
-//		}
-//
-//	}
 
-//	@Test
-//	def void functionsLambda() {
+		val conditionalFunction = "self.text!length() < 10 ? self.text!fun(param1, param2) : model::Text.item > 0 ? true : false".
+			parse
+		"(if (< self.text!length() 10) self.text!fun(param1,param2) (if (> model::Text.item 0) true false))".
+			assertEquals(conditionalFunction.asString)
+
+		try {
+			"self.text!length()<".parse
+			fail("Should have thrown exception on invalid syntax")
+		} catch (JqlParseException expected) {
+		}
+
+	}
+
+	@Test
+	def void functionsLambda() {
 //		val filterExp = "
 //            // multiline expression
 //            self.od!
@@ -384,7 +393,7 @@ class JqlDslGrammarTest {
 //		BigInteger.valueOf(10).assertEquals(filterLambdaStatement.rightOperand.expressionValue)
 //		"od".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).base.name)
 //		"price".assertEquals((filterLambdaStatement.leftOperand as NavigationExpression).features.get(0).name)
-
+//
 //		val sortExp = "self=>products!sort(elem | elem.unitPrice ASC, elem.name DESC)".parse as NavigationExpression;
 //		val sortFunction = sortExp.features.get(0).functions.get(0);
 //		"elem".assertEquals(sortFunction.lambdaArgument)
@@ -392,23 +401,22 @@ class JqlDslGrammarTest {
 //		"elem.unitPrice".assertEquals(sortFunction.parameters.get(0).expression.asString)
 //		"DESC".assertEquals(sortFunction.parameters.get(1).parameterExtension)
 //		"elem.name".assertEquals(sortFunction.parameters.get(1).expression.asString)
-//	}
+	}
 
-//	@Test
-//	def void typeFunctions() {
-//		val exp = "self.field!instanceof(Lib::MyType)".parse as NavigationExpression
-//		"Lib::MyType".assertEquals(
-//			(exp.features.get(0).functions.get(0).parameters.get(0).expression as NavigationExpression).asString)
-//
-//	}
+	@Test
+	def void typeFunctions() {
+		val exp = "self.field!instanceof(Lib::MyType)".parse as FunctionedExpression
+		"Lib::MyType".assertEquals(
+		    (exp.functionCall.function.parameters.get(0).expression as NavigationExpression).asString)
+	}
 
 	@Test
 	def void enumLiteral() {
 		var exp = "#MONDAY".parse as EnumLiteral
 		"MONDAY".assertEquals(exp.value)
-		exp = "model::Days#MONDAY".parse as EnumLiteral
-		"Days".assertEquals(exp.type.name)
-		"model".assertEquals(exp.type.namespaceElements.get(0));
+		var nav = "model::Days#MONDAY".parse as NavigationExpression
+		"Days".assertEquals(nav.QName.name)
+		"model".assertEquals(nav.QName.namespaceElements.get(0));
 		"MONDAY".assertEquals(exp.value)
 	}
 

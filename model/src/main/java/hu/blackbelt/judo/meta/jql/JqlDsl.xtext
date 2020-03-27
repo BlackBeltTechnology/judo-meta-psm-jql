@@ -59,22 +59,26 @@ UnaryOperation returns JqlExpression:
     {UnaryOperation} operator=OpUnary operand=FunctionedExpression
     | FunctionedExpression
 ;
-    
+
 FunctionedExpression returns JqlExpression:
-    PrimaryExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? | // 2.0!round() 
-    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)?
+    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? // 2.0!round() 
 ;
 
-FunctionCall returns JqlExpression:
+NavigationExpression returns JqlExpression:
+    PrimaryExpression ({NavigationExpression.base = current} features+=Feature+)?
+    | NavigationBase
+;
+
+NavigationBase returns NavigationExpression:
+    {NavigationExpression} qName=QualifiedName (features+=Feature+ | enumLiteral=EnumLiteral)?
+;
+    
+FunctionCall:
     {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?
 ;
 
 OpUnary:
     'not' | "-";
-
-NavigationExpression returns JqlExpression: 
-    {NavigationExpression} base=QualifiedName features += Feature*
-;
 
 Feature:
     {Feature} ('.' | '->' | '=>') name=ID
@@ -121,7 +125,7 @@ MeasuredLiteral returns JqlExpression:
     ;
 
 EnumLiteral returns JqlExpression:
-    {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
+    {EnumLiteral} '#' value=ValidId;
 
 QualifiedName:
     {QualifiedName} (namespaceElements+=ID '::')* name=ID

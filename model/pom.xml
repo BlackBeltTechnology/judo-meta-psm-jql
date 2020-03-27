@@ -154,6 +154,5 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.6</version>
 		</dependency>
-
-	</dependencies>
+    </dependencies>
 </project>
