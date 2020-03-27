@@ -56,22 +56,39 @@ ExponentExpression returns JqlExpression:
     rightOperand=UnaryOperation)*;
 
 UnaryOperation returns JqlExpression:
-    {UnaryOperation} operator=OpUnary operand=UnaryOperation
-    | PrimaryExpression (=> '!' functions+=FunctionCall)*;
+    {UnaryOperation} operator=OpUnary operand=FunctionedExpression
+    | FunctionedExpression
+;
+    
+FunctionedExpression returns JqlExpression:
+    PrimaryExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? | // 2.0!round() 
+    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)?
+;
+
+FunctionCall returns JqlExpression:
+    {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?
+;
 
 OpUnary:
     'not' | "-";
+
+NavigationExpression returns JqlExpression: 
+    {NavigationExpression} base=QualifiedName features += Feature*
+;
+
+Feature:
+    {Feature} ('.' | '->' | '=>') name=ID
+;
 
 ParenthesizedExpression returns JqlExpression:
     '(' Expression ')';
 
 PrimaryExpression returns JqlExpression:
     ParenthesizedExpression |
-    NavigationExpression |
-    Literal;
+    Literal ;
 
-FunctionCall:
-    {FunctionCall} function=Function '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
+Function returns JqlFunction:
+    name=ID '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
     ')';
 
 FunctionParameter:
@@ -105,16 +122,6 @@ MeasuredLiteral returns JqlExpression:
 
 EnumLiteral returns JqlExpression:
     {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
-
-NavigationExpression:
-    base=QualifiedName (=> '!' functions +=FunctionCall)* (=> ('.' | '=>' | '->') features += Feature)*;
-
-Feature:
-	{Feature} name=ID (=> '!' functions+=FunctionCall)*
-;
-
-Function:
-    name=ID;
 
 QualifiedName:
     {QualifiedName} (namespaceElements+=ID '::')* name=ID
