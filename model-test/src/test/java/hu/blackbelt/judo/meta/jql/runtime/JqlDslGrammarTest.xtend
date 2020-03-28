@@ -251,6 +251,12 @@ class JqlDslGrammarTest {
 		"2001-09-12T12:00:00-05:00 Europe/Budapest".assertEquals(timeStamp.value)
 	}
 	
+	
+	@Test
+	def void staticNavigation() {
+	    "demo::model::Person".parse
+	}
+	
 	@Test
     def void temporalDifference() {
         var date = parser.parseString("`2001-09-12`!difference(`2019-09-12`, demo::measures::Time)")
@@ -277,9 +283,9 @@ class JqlDslGrammarTest {
 	def void navigation() {
 	    var simple = parser.parseString("a") as NavigationExpression
 		var exp = parser.parseString("a.b.c") as NavigationExpression
-		"a".assertEquals((exp.base as QualifiedName).name)
-		"b".equals(exp.features.get(0).name)
-		"c".equals(exp.features.get(1).name)
+		"a".assertEquals(exp.QName.name)
+		"b".assertEquals(exp.features.get(0).name)
+		"c".assertEquals(exp.features.get(1).name)
 
 		var nav = "self=>items->product".parse
 		nav = "self=>items.product".parse
@@ -331,7 +337,7 @@ class JqlDslGrammarTest {
 
 	@Test
 	def void functionNavigation() {
-		var exp = "demo::entities::Product!head().weight".parse;
+		var exp = "demo :: entities::Product!head().weight".parse;
 		exp = "self.products!sort(p | p.name)!head().weight".parse;
 	}
 
@@ -412,12 +418,12 @@ class JqlDslGrammarTest {
 
 	@Test
 	def void enumLiteral() {
-		var exp = "#MONDAY".parse as EnumLiteral
-		"MONDAY".assertEquals(exp.value)
-		var nav = "model::Days#MONDAY".parse as NavigationExpression
-		"Days".assertEquals(nav.QName.name)
-		"model".assertEquals(nav.QName.namespaceElements.get(0));
-		"MONDAY".assertEquals(exp.value)
+		var exp = "Days#MONDAY".parse as EnumLiteral
+		"MONDAY".assertEquals(exp.name.value)
+		var nav = "model :: time::Days#MONDAY".parse as EnumLiteral
+		"Days".assertEquals(nav.name.name)
+		"model".assertEquals(nav.namespaceElements.get(0));
+		"MONDAY".assertEquals(exp.name.value)
 	}
 
 	def JqlExpression parse(CharSequence expressionText) {
@@ -433,7 +439,7 @@ class JqlDslGrammarTest {
 			TimeStampLiteral: exp.value
 			BooleanLiteral: exp.isIsTrue
 			MeasuredLiteral: exp.value.expressionValue
-			EnumLiteral: (exp.type === null ? "" : exp.type + "#") + exp.value
+			EnumLiteral: (exp.namespaceElements === null ? "" : exp.namespaceElements + "#" + exp.name.name)
 			default: null
 		}
 	}

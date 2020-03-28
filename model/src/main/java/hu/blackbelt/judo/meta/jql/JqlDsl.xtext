@@ -1,4 +1,4 @@
-grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden(WS, ML_COMMENT, SL_COMMENT)
+grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden (SL_COMMENT, ML_COMMENT, WS)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
@@ -70,7 +70,7 @@ NavigationExpression returns JqlExpression:
 ;
 
 NavigationBase returns NavigationExpression:
-    {NavigationExpression} qName=QualifiedName (features+=Feature+ | enumLiteral=EnumLiteral)?
+    {NavigationExpression} qName=QualifiedName features+=Feature*
 ;
     
 FunctionCall:
@@ -125,7 +125,11 @@ MeasuredLiteral returns JqlExpression:
     ;
 
 EnumLiteral returns JqlExpression:
-    {EnumLiteral} '#' value=ValidId;
+    {EnumLiteral} (namespaceElements+=ID '::')* name=EnumName;
+
+EnumName hidden():
+    name=ID '#' value=ValidId
+;
 
 QualifiedName:
     {QualifiedName} (namespaceElements+=ID '::')* name=ID
@@ -165,6 +169,6 @@ terminal SL_COMMENT:
 
 terminal WS:
     (' ' | '\t' | '\r' | '\n')+;
-
+    
 terminal ANY_OTHER:
     .;
