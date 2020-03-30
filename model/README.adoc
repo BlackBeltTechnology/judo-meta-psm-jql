@@ -45,7 +45,7 @@ A string literal is a character sequence inside either single or double quotes, 
 * Timestsamps can be represented as literals using the syntax `+`2019-09-01T14:30Z+``
 
 === Enum literals
-Use hashmark (`#`) character to denote enum literals, eg. `#MONDAY` or `model::Days#MONDAY` 
+Use hashmark (`#`) character to denote enum literals, eg. `Days#MONDAY` or `model::Days#MONDAY` 
 
 === Identifiers
 

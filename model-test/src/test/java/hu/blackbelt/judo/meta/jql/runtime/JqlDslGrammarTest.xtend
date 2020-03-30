@@ -419,11 +419,11 @@ class JqlDslGrammarTest {
 	@Test
 	def void enumLiteral() {
 		var exp = "Days#MONDAY".parse as EnumLiteral
-		"MONDAY".assertEquals(exp.name.value)
+		"MONDAY".assertEquals(exp.enumConstant.value)
 		var nav = "model :: time::Days#MONDAY".parse as EnumLiteral
-		"Days".assertEquals(nav.name.name)
+		"Days".assertEquals(nav.enumConstant.name)
 		"model".assertEquals(nav.namespaceElements.get(0));
-		"MONDAY".assertEquals(exp.name.value)
+		"MONDAY".assertEquals(exp.enumConstant.value)
 	}
 
 	def JqlExpression parse(CharSequence expressionText) {
@@ -439,7 +439,7 @@ class JqlDslGrammarTest {
 			TimeStampLiteral: exp.value
 			BooleanLiteral: exp.isIsTrue
 			MeasuredLiteral: exp.value.expressionValue
-			EnumLiteral: (exp.namespaceElements === null ? "" : exp.namespaceElements + "#" + exp.name.name)
+			EnumLiteral: (exp.namespaceElements === null ? "" : exp.namespaceElements + "#" + exp.enumConstant.name)
 			default: null
 		}
 	}

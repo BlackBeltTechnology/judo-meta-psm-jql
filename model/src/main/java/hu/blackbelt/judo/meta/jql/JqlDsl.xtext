@@ -61,7 +61,7 @@ UnaryOperation returns JqlExpression:
 ;
 
 FunctionedExpression returns JqlExpression:
-    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? // 2.0!round() 
+    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? 
 ;
 
 NavigationExpression returns JqlExpression:
@@ -125,9 +125,9 @@ MeasuredLiteral returns JqlExpression:
     ;
 
 EnumLiteral returns JqlExpression:
-    {EnumLiteral} (namespaceElements+=ID '::')* name=EnumName;
+    {EnumLiteral} (namespaceElements+=ID '::')* enumConstant=EnumConstant;
 
-EnumName hidden():
+EnumConstant hidden():
     name=ID '#' value=ValidId
 ;
 
