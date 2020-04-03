@@ -1,4 +1,4 @@
-grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden(WS, ML_COMMENT, SL_COMMENT)
+grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden (SL_COMMENT, ML_COMMENT, WS)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
@@ -56,22 +56,43 @@ ExponentExpression returns JqlExpression:
     rightOperand=UnaryOperation)*;
 
 UnaryOperation returns JqlExpression:
-    {UnaryOperation} operator=OpUnary operand=UnaryOperation
-    | PrimaryExpression (=> '!' functions+=FunctionCall)*;
+    {UnaryOperation} operator=OpUnary operand=FunctionedExpression
+    | FunctionedExpression
+;
+
+FunctionedExpression returns JqlExpression:
+    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? 
+;
+
+NavigationExpression returns JqlExpression:
+    PrimaryExpression ({NavigationExpression.base = current} features+=Feature+)?
+    | NavigationBase
+;
+
+NavigationBase returns NavigationExpression:
+    {NavigationExpression} qName=QualifiedName features+=Feature*
+;
+    
+FunctionCall:
+    {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?
+;
 
 OpUnary:
     'not' | "-";
+
+Feature:
+    {Feature} ('.' | '->' | '=>') name=ID
+;
 
 ParenthesizedExpression returns JqlExpression:
     '(' Expression ')';
 
 PrimaryExpression returns JqlExpression:
     ParenthesizedExpression |
-    NavigationExpression |
-    Literal;
+    Literal ;
 
-FunctionCall:
-    {FunctionCall} function=Function '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
+Function returns JqlFunction:
+    name=ID '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
     ')';
 
 FunctionParameter:
@@ -104,17 +125,11 @@ MeasuredLiteral returns JqlExpression:
     ;
 
 EnumLiteral returns JqlExpression:
-    {EnumLiteral} type=(QualifiedName)? '#' value=ValidId;
+    {EnumLiteral} (namespaceElements+=ID '::')* enumConstant=EnumConstant;
 
-NavigationExpression:
-    base=QualifiedName (=> '!' functions +=FunctionCall)* (=> ('.' | '=>' | '->') features += Feature)*;
-
-Feature:
-	{Feature} name=ID (=> '!' functions+=FunctionCall)*
+EnumConstant hidden():
+    name=ID '#' value=ValidId
 ;
-
-Function:
-    name=ID;
 
 QualifiedName:
     {QualifiedName} (namespaceElements+=ID '::')* name=ID
@@ -154,6 +169,6 @@ terminal SL_COMMENT:
 
 terminal WS:
     (' ' | '\t' | '\r' | '\n')+;
-
+    
 terminal ANY_OTHER:
     .;

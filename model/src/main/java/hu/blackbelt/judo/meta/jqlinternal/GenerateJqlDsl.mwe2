@@ -42,6 +42,7 @@ Workflow {
                 options = {
                     ignoreCase = true
                 }
+                debugGrammar = true
             }
             
             scopeProvider = {
