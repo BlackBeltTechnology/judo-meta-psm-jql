@@ -11,76 +11,106 @@ import org.eclipse.xtext.nodemodel.INode;
 @Singleton
 public class JqlTerminalConverters extends DefaultTerminalConverters {
 
-    @ValueConverter(rule = "ID")
-    public IValueConverter<String> getIdTerminalConverter() {
-        return new IDValueConverter() {
+	private IValueConverter<String> idConverter = new IValueConverter<String>() {
 
-            @Override
-            public String toValue(String string, INode node) {
-                if (string == null)
-                    return null;
-                return string.startsWith("\\") ? string.substring(1) : string;
-            }
+		/** Must delegate, as extending it will not work with data type rules. */
+		IDValueConverter delegate = new IDValueConverter() {
+			@Override
+			public String toValue(String string, INode node) {
+				if (string == null)
+					return null;
+				return string.startsWith("\\") ? string.substring(1) : string;
+			}
+			
+			@Override
+			protected String toEscapedString(String value) {
+				if (mustEscape(value))
+					return "\\" + value;
+				return value;
+			}
+		};
 
-            protected String toEscapedString(String value) {
-                if (mustEscape(value))
-                    return "\\" + value;
-                return value;
-            }
-        };
+		@Override
+		public String toValue(String string, INode node) {
+			return delegate.toValue(string, node);
+		};
 
-    }
+		@Override
+		public String toString(String value) throws ValueConverterException {
+			return delegate.toString(value);
+		}
+	};
 
-    @ValueConverter(rule = "DATE")
-    public IValueConverter<String> getDateTerminalConverter() {
-        return new IValueConverter<String>() {
+	@ValueConverter(rule = "QualifiedNameElement")
+	public IValueConverter<String> getQualifiedNameElementConverter() {
+		return idConverter;
+	}
+	
+	@ValueConverter(rule = "ID")
+	public IValueConverter<String> getIDConverter() {
+		return idConverter;
+	}
+	
+	@ValueConverter(rule = "FeatureName")
+	public IValueConverter<String> getFeatureNameConverter() {
+		return idConverter;
+	}
 
-            @Override
-            public String toString(String value) throws ValueConverterException {
-                return String.format("`%s`", value);
-            }
+	
+	@ValueConverter(rule = "FunctionName")
+	public IValueConverter<String> getFunctionNameConverter() {
+		return idConverter;
+	}
 
-            @Override
-            public String toValue(String string, INode node) throws ValueConverterException {
-                return string.substring(1, string.length() - 1);
-            }
+	@ValueConverter(rule = "DATE")
+	public IValueConverter<String> getDateTerminalConverter() {
+		return new IValueConverter<String>() {
 
-        };
-    }
+			@Override
+			public String toString(String value) throws ValueConverterException {
+				return String.format("`%s`", value);
+			}
 
-    @ValueConverter(rule = "TIMESTAMP")
-    public IValueConverter<String> getTimeStampTerminalConverter() {
-        return new IValueConverter<String>() {
+			@Override
+			public String toValue(String string, INode node) throws ValueConverterException {
+				return string.substring(1, string.length() - 1);
+			}
 
-            @Override
-            public String toString(String value) throws ValueConverterException {
-                return String.format("`%s`", value);
-            }
+		};
+	}
 
-            @Override
-            public String toValue(String string, INode node) throws ValueConverterException {
-                return string.substring(1, string.length() - 1);
-            }
+	@ValueConverter(rule = "TIMESTAMP")
+	public IValueConverter<String> getTimeStampTerminalConverter() {
+		return new IValueConverter<String>() {
 
-        };
-    }
-    
-    @ValueConverter(rule = "MEASURE_NAME")
-    public IValueConverter<String> getMeasureNameTerminalConverter() {
-        return new IValueConverter<String>() {
+			@Override
+			public String toString(String value) throws ValueConverterException {
+				return String.format("`%s`", value);
+			}
 
-            @Override
-            public String toString(String value) throws ValueConverterException {
-                return String.format("[%s]", value);
-            }
+			@Override
+			public String toValue(String string, INode node) throws ValueConverterException {
+				return string.substring(1, string.length() - 1);
+			}
 
-            @Override
-            public String toValue(String string, INode node) throws ValueConverterException {
-                return string.substring(1, string.length() - 1);
-            }
+		};
+	}
 
-        };
-    }
+	@ValueConverter(rule = "MEASURE_NAME")
+	public IValueConverter<String> getMeasureNameTerminalConverter() {
+		return new IValueConverter<String>() {
 
+			@Override
+			public String toString(String value) throws ValueConverterException {
+				return String.format("[%s]", value);
+			}
+
+			@Override
+			public String toValue(String string, INode node) throws ValueConverterException {
+				return string.substring(1, string.length() - 1);
+			}
+
+		};
+	}
 
 }

@@ -3,7 +3,7 @@ module hu.blackbelt.judo.meta.jqlinternal.GenerateJqlIde
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
 
-var rootPath = ".."
+var rootPath = "../.."
 var modelDir = "model/model"
 var javaGenPath = "model/src/main/xtext-gen"
 

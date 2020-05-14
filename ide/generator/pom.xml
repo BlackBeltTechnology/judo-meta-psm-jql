@@ -13,7 +13,7 @@
     <name>Judo :: Jql :: Model :: JQL IDE Generator</name>
     <artifactId>hu.blackbelt.judo.meta.jql.ide.generator</artifactId>
 	
-    <packaging>jar</packaging>
+    <packaging>eclipse-plugin</packaging>
 
     <build>
         <plugins>

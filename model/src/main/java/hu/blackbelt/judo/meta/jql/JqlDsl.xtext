@@ -1,4 +1,4 @@
-grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden (SL_COMMENT, ML_COMMENT, WS)
+grammar hu.blackbelt.judo.meta.jql.JqlDsl hidden(SL_COMMENT, ML_COMMENT, WS)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 generate jqldsl "http://www.blackbelt.hu/judo/meta/jql/JqlDsl"
@@ -57,53 +57,58 @@ ExponentExpression returns JqlExpression:
 
 UnaryOperation returns JqlExpression:
     {UnaryOperation} operator=OpUnary operand=FunctionedExpression
-    | FunctionedExpression
-;
+    | FunctionedExpression;
 
 FunctionedExpression returns JqlExpression:
-    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)? 
-;
+    NavigationExpression ({FunctionedExpression.operand=current} functionCall=FunctionCall)?;
 
 NavigationExpression returns JqlExpression:
-    PrimaryExpression ({NavigationExpression.base = current} features+=Feature+)?
-    | NavigationBase
+    PrimaryExpression ({NavigationExpression.base=current} features+=Feature+)?
+    | NavigationBase;
+
+// enums as separate literals cause problems with completion and script
+NavigationBase returns NavigationExpression:
+    {NavigationExpression} qName=QualifiedName (features+=Feature* | '#' enumValue = EnumValue);
+
+EnumValue:
+    ID
 ;
 
-NavigationBase returns NavigationExpression:
-    {NavigationExpression} qName=QualifiedName features+=Feature*
-;
-    
 FunctionCall:
-    {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?
-;
+    {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?;
 
 OpUnary:
     'not' | "-";
 
 Feature:
-    {Feature} ('.' | '->' | '=>') name=ID
-;
+    {Feature} ('.' | '->' | '=>') name=FeatureName;
+
+FeatureName:
+    ID;
 
 ParenthesizedExpression returns JqlExpression:
     '(' Expression ')';
 
 PrimaryExpression returns JqlExpression:
     ParenthesizedExpression |
-    Literal ;
+    Literal;
 
 Function returns JqlFunction:
-    name=ID '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (',' parameters+=FunctionParameter)*)?
+    name=FunctionName '(' (lambdaArgument=ValidId '|')? (parameters+=FunctionParameter (','
+    parameters+=FunctionParameter)*)?
     ')';
 
+FunctionName:
+    ID;
+
 FunctionParameter:
-	{FunctionParameter} expression = Expression (parameterExtension=ValidId)?;
+    {FunctionParameter} expression=Expression (parameterExtension=ValidId)?;
 
 Literal returns JqlExpression:
     BooleanLiteral |
     NumberLiteral |
     StringLiteral |
     TemporalLiteral |
-    EnumLiteral |
     MeasuredLiteral;
 
 BooleanLiteral returns JqlExpression:
@@ -121,26 +126,21 @@ TemporalLiteral returns JqlExpression:
     {TimeStampLiteral} value=TIMESTAMP;
 
 MeasuredLiteral returns JqlExpression:
-    {MeasuredLiteral} value=NumberLiteral measure=MEASURE_NAME
-    ;
-
-EnumLiteral returns JqlExpression:
-    {EnumLiteral} (namespaceElements+=ID '::')* enumConstant=EnumConstant;
-
-EnumConstant hidden():
-    name=ID '#' value=ValidId
-;
+    {MeasuredLiteral} value=NumberLiteral measure=MEASURE_NAME;
 
 QualifiedName:
-    {QualifiedName} (namespaceElements+=ID '::')* name=ID
+    {QualifiedName} (namespaceElements+=QualifiedNameElement '::')* name=QualifiedNameElement
     ;
+    
+QualifiedNameElement:
+    ValidId
+;
 
 ValidId:
     ID;
 
 terminal MEASURE_NAME:
-	'[' ('\\]' | !('\\' | ']'))+ ']'
-;
+    '[' ('\\]' | !('\\' | ']'))+ ']';
 
 terminal DATE:
     '`' ('0'..'9' | '-')+ '`';
@@ -169,6 +169,6 @@ terminal SL_COMMENT:
 
 terminal WS:
     (' ' | '\t' | '\r' | '\n')+;
-    
+
 terminal ANY_OTHER:
     .;

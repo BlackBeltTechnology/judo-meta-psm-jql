@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: hu.blackbelt.judo.meta.jql.ide.generator
+Bundle-SymbolicName: hu.blackbelt.judo.meta.jql.ide.generator;singleton:=true
+Bundle-Version: 1.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ org.eclipse.emf.common,
+ org.eclipse.emf.ecore,
+ org.eclipse.xtend.lib;bundle-version="2.14.0",
+ org.eclipse.xtext,
+ org.eclipse.xtext.util,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ hu.blackbelt.judo.meta.jql.model
+Import-Package: org.apache.log4j
+Automatic-Module-Name: hu.blackbelt.judo.meta.jql.ide.generator
