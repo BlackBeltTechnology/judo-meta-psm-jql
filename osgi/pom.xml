@@ -61,14 +61,14 @@
 		<dependency>
 			<groupId>hu.blackbelt.osgi.utils</groupId>
 			<artifactId>osgi-api</artifactId>
-			<version>1.0.7</version>
+			<version>${osgi-utils-version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.6</version>
+			<version>1.18.12</version>
 		</dependency>
 
 		<dependency>
