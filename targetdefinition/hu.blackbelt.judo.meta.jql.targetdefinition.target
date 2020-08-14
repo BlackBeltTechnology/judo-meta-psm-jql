@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
-<target includeMode="feature" name="hu.blackbelt.judo.meta.jql.target" sequenceNumber="1596110636000">
+<target includeMode="feature" name="hu.blackbelt.judo.meta.jql.target" sequenceNumber="1597388220885">
   <locations>
 
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
