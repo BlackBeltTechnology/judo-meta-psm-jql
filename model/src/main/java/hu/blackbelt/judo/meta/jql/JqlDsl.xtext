@@ -52,11 +52,12 @@ OpMulti:
     '*' | '/' | 'div' | 'mod';
 
 ExponentExpression returns JqlExpression:
-    CastOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
-    rightOperand=CastOperation)*;
+    SpawnOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
+    rightOperand=SpawnOperation)*;
 
-CastOperation returns JqlExpression:
-	UnaryOperation (=> ({CastOperation.operand=current} 'as' type=QualifiedName))?
+// TODO: this should be in JCL grammar only
+SpawnOperation returns JqlExpression:
+	UnaryOperation (=> ({SpawnOperation.operand=current} 'as' type=QualifiedName))?
 ;
 
 UnaryOperation returns JqlExpression:
