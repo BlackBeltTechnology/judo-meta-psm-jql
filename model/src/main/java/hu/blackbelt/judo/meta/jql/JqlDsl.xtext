@@ -52,8 +52,13 @@ OpMulti:
     '*' | '/' | 'div' | 'mod';
 
 ExponentExpression returns JqlExpression:
-    UnaryOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
-    rightOperand=UnaryOperation)*;
+    SpawnOperation (=> ({BinaryOperation.leftOperand=current} operator='^')
+    rightOperand=SpawnOperation)*;
+
+// TODO: this should be in JCL grammar only
+SpawnOperation returns JqlExpression:
+	UnaryOperation (=> ({SpawnOperation.operand=current} 'as' type=QualifiedName))?
+;
 
 UnaryOperation returns JqlExpression:
     {UnaryOperation} operator=OpUnary operand=FunctionedExpression

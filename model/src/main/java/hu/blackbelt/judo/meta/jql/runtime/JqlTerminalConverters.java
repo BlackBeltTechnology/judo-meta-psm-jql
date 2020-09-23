@@ -41,6 +41,11 @@ public class JqlTerminalConverters extends DefaultTerminalConverters {
 		}
 	};
 
+	@ValueConverter(rule = "ValidId")
+	public IValueConverter<String> getValidIdConverter() {
+		return idConverter;
+	}
+	
 	@ValueConverter(rule = "QualifiedNameElement")
 	public IValueConverter<String> getQualifiedNameElementConverter() {
 		return idConverter;
