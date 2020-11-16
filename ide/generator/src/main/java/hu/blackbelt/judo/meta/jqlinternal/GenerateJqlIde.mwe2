@@ -52,7 +52,9 @@ Workflow {
                     ignoreCase = true
                 }
             }
-            fragment = validation.ValidatorFragment2 {}
+            fragment = validation.ValidatorFragment2 {
+				generatePropertyPage = true
+            }
             fragment = builder.BuilderIntegrationFragment2 {}
             fragment = generator.GeneratorFragment2 {}
             fragment = ui.contentAssist.ContentAssistFragment2 {}

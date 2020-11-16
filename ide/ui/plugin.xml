@@ -263,49 +263,6 @@
 			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
 			fileExtensions="jql"/>
 	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="hu.blackbelt.judo.meta.jql.JqlDsl"
-			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="hu.blackbelt.judo.meta.jql.JqlDsl.compiler.preferencePage"
-			name="Compiler">
-			<keywordReference id="hu.blackbelt.judo.meta.jql.ui.keyword_JqlDsl"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.propertyPages">
-		<page
-			category="hu.blackbelt.judo.meta.jql.JqlDsl"
-			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-			id="hu.blackbelt.judo.meta.jql.JqlDsl.compiler.propertyPage"
-			name="Compiler">
-			<keywordReference id="hu.blackbelt.judo.meta.jql.ui.keyword_JqlDsl"/>
-			<enabledWhen>
-				<adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
-		</page>
-	</extension>
-	<extension point="org.eclipse.ui.menus">
-		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
-			<command
-				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
-				id="hu.blackbelt.judo.meta.jql.JqlDsl.OpenGeneratedCode"
-				style="push">
-				<visibleWhen checkEnabled="false">
-					<reference definitionId="hu.blackbelt.judo.meta.jql.JqlDsl.Editor.opened" />
-				</visibleWhen>
-			</command>
-		</menuContribution>
-	</extension>
-	<extension point="org.eclipse.ui.handlers">
-		<handler
-			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
-			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
-			<activeWhen>
-				<reference definitionId="hu.blackbelt.judo.meta.jql.JqlDsl.Editor.opened" />
-			</activeWhen>
-		</handler>
-	</extension>
 	<!-- Quick Outline -->
 	<extension
 		point="org.eclipse.ui.handlers">
@@ -391,15 +348,6 @@
 				</visibleWhen>
 			</command>
 		</menuContribution>
-	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="hu.blackbelt.judo.meta.jql.JqlDsl"
-			class="hu.blackbelt.judo.meta.jql.ui.JqlDslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-			id="hu.blackbelt.judo.meta.jql.JqlDsl.refactoring"
-			name="Refactoring">
-			<keywordReference id="hu.blackbelt.judo.meta.jql.ui.keyword_JqlDsl"/>
-		</page>
 	</extension>
 	<extension point="org.eclipse.compare.contentViewers">
 		<viewer id="hu.blackbelt.judo.meta.jql.JqlDsl.compare.contentViewers"
