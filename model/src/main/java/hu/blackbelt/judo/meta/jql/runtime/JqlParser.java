@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 public class JqlParser {
@@ -82,7 +85,10 @@ public class JqlParser {
             final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
                     .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             final InputStream in = new ByteArrayInputStream(jqlExpression.getBytes("UTF-8"));
-            jqlResource.load(in, injector().getInstance(XtextResourceSet.class).getLoadOptions());
+            Map<Object, Object> defaultLoadOptions = injector().getInstance(XtextResourceSet.class).getLoadOptions();
+            HashMap<Object, Object> loadOptions = new HashMap<>(defaultLoadOptions);
+            loadOptions.put(XtextResource.OPTION_ENCODING,  "UTF-8");
+            jqlResource.load(in, loadOptions);
 
             return jqlResource;
         } catch (IOException ex) {
