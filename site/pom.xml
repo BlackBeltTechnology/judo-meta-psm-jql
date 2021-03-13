@@ -16,7 +16,6 @@
     <description>Judo Jql model Update Site</description>
 
 
-    <profiles>
     <build>
         <plugins>
             <plugin>
