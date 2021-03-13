@@ -284,16 +284,8 @@ public class JqlKarafFeatureProvider {
         return maven().groupId("hu.blackbelt.karaf.features").artifactId("apache-httpclient-features").versionAsInProject().classifier("features").type("xml");
     }
 
-    public static MavenArtifactUrlReference blackbeltApachePoi() {
-        return maven().groupId("hu.blackbelt.karaf.features").artifactId("apache-poi-features").versionAsInProject().classifier("features").type("xml");
-    }
-
     public static MavenArtifactUrlReference blackbeltEclipseEmf() {
         return maven().groupId("hu.blackbelt.karaf.features").artifactId("eclipse-emf-features").versionAsInProject().classifier("features").type("xml");
-    }
-
-    public static MavenArtifactUrlReference blackbeltEclipseEpsilon() {
-        return maven().groupId("hu.blackbelt.karaf.features").artifactId("eclipse-epsilon-features").versionAsInProject().classifier("features").type("xml");
     }
 
     public static MavenArtifactUrlReference blackbeltEclipseXtext() {
@@ -308,10 +300,6 @@ public class JqlKarafFeatureProvider {
         return maven().groupId("hu.blackbelt.karaf.features").artifactId("antlr-features").versionAsInProject().classifier("features").type("xml");
     }
 
-    public static MavenArtifactUrlReference blackbeltEpsilonRuntime() {
-        return maven().groupId("hu.blackbelt.epsilon").artifactId("features").versionAsInProject().classifier("features").type("xml");
-    }
-
     public static Option[] getRuntimeFeaturesForMetamodel(Class clazz) throws FileNotFoundException {
         return combine(karafConfig(clazz),
 
@@ -323,8 +311,6 @@ public class JqlKarafFeatureProvider {
 
                 features(blackbeltApacheHttpClient()),
 
-                features(blackbeltApachePoi()),
-
                 features(blackbeltOsgiUtils(), "osgi-utils"),
 
                 features(blackbeltGoogle(), "guice"),
@@ -334,10 +320,6 @@ public class JqlKarafFeatureProvider {
                 features(blackbeltEclipseEmf()),
 
                 features(blackbeltAntlr(), "antlr3"),
-
-                features(blackbeltEclipseEpsilon()),
-
-                features(blackbeltEpsilonRuntime(), "epsilon-runtime"),
 
                 features(blackbeltEclipseXtext(), "eclipse-xtext"),
 
