@@ -66,9 +66,6 @@
     <maven.build.timestamp.format>yyyyMMddHHmmss
     </maven.build.timestamp.format>
 
-    <epsilon-runtime-version>1.2.5.20201120_160408_045ee84_develop</epsilon-runtime-version>
-    <epsilon-runtime-eclipse-version>1.2.5.20210115_043021_15e0c93_develop</epsilon-runtime-eclipse-version>
-
     <src.dir>src/main</src.dir>
 
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -79,9 +76,6 @@
 
     <emf-genmodel-generator-version>1.0.1</emf-genmodel-generator-version>
     <judo-genmodel-generator-version>1.0.0</judo-genmodel-generator-version>
-
-    <judo-meta-psm-version>1.1.0.20210219_121045_4177fd4_develop</judo-meta-psm-version>
-    <judo-meta-psm-import-range>[1.0,1.1)</judo-meta-psm-import-range>
 
     <!-- Xtend / Xcore -->
     <emf-version>2.18.0</emf-version>
@@ -99,7 +93,6 @@
     <emf-mwe-utils-version>1.4.0</emf-mwe-utils-version>
     <xpand-version>2.0.0</xpand-version>
     <emf-mapping-ecore2xml>2.11.0</emf-mapping-ecore2xml>
-    <epsilon-version>1.5.1</epsilon-version>
     <slf4j-version>1.6.6</slf4j-version>
 
     <!-- Pax exam dependencies -->
@@ -109,11 +102,9 @@
     <tinybundles-karaf-features-version>1.0.0</tinybundles-karaf-features-version>
     <google-karaf-features-version>1.0.6</google-karaf-features-version>
     <eclipse-emf-karaf-features-version>1.0.1</eclipse-emf-karaf-features-version>
-    <eclipse-epsilon-karaf-features-version>1.0.3</eclipse-epsilon-karaf-features-version>
     <eclipse-xtext-karaf-features-version>1.0.2</eclipse-xtext-karaf-features-version>
     <antlr-karaf-features-version>1.0.1</antlr-karaf-features-version>
     <apache-commons-karaf-features-version>1.0.5</apache-commons-karaf-features-version>
-    <apache-poi-karaf-features-version>1.0.2</apache-poi-karaf-features-version>
     <apache-httpclient-karaf-features-version>1.0.0</apache-httpclient-karaf-features-version>
     <pax-exam-version>4.13.3</pax-exam-version>
     <log4j.configuration>log4j.properties</log4j.configuration>
@@ -241,28 +232,6 @@
           <configuration>
             <lifecycleMappingMetadata>
               <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>
-                      hu.blackbelt.epsilon
-                    </groupId>
-                    <artifactId>
-                      epsilon-maven-plugin
-                    </artifactId>
-                    <versionRange>
-                      [1.1.1,)
-                    </versionRange>
-                    <goals>
-                      <goal>execute</goal>
-                      <goal>
-                        executeConfiguration
-                      </goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>
@@ -565,18 +534,6 @@
       <version>${slf4j-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.epsilon</groupId>
-      <artifactId>epsilon-core</artifactId>
-      <version>${epsilon-version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.epsilon</groupId>
-      <artifactId>epsilon-emf</artifactId>
-      <version>${epsilon-version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>hu.blackbelt.eclipse</groupId>
       <artifactId>hu.blackbelt.eclipse.emf.genmodel.generator.core
       </artifactId>
@@ -603,13 +560,6 @@
       </artifactId>
       <version>${judo-genmodel-generator-version}</version>
     </dependency>
-    <!-- <dependency> <groupId>hu.blackbelt.epsilon</groupId> <artifactId>hu.blackbelt.epsilon.runtime.execution</artifactId> 
-      <version>${epsilon-runtime-eclipse-version}</version> </dependency> <dependency> 
-      <groupId>org.xtext</groupId> <artifactId>antlr-generator</artifactId> <version>3.2.1</version> 
-      </dependency> <dependency> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
-      <version>1.2.16</version> </dependency> <dependency> <groupId>org.eclipse.xtend</groupId> 
-      <artifactId>org.eclipse.xtend.lib</artifactId> <version>${xtext-version}</version> 
-      </dependency> -->
 
     <dependency>
       <groupId>org.eclipse.emf</groupId>
