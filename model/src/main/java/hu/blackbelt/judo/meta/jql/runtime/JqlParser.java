@@ -29,7 +29,7 @@ public class JqlParser {
     public static final String JQLSCRIPT_CONTENT_TYPE = "jql";
     private static Injector injectorInstance;
 
-    private static Injector injector() {
+    private static synchronized Injector injector() {
         if (injectorInstance == null) {
             final long startTs = System.currentTimeMillis();
             injectorInstance = new JqlDslStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
@@ -43,7 +43,8 @@ public class JqlParser {
     public XtextResource loadJqlFromFile(final File jqlFile) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+            final XtextResourceSet xtextResourceSet =  injector().getInstance(XtextResourceSet.class);
+            final XtextResource jqlResource = (XtextResource) xtextResourceSet
                     .createResource(URI.createFileURI(jqlFile.getAbsolutePath()), JQLSCRIPT_CONTENT_TYPE);
             jqlResource.load(new FileInputStream(jqlFile),
                     injector().getInstance(XtextResourceSet.class).getLoadOptions());
@@ -59,7 +60,8 @@ public class JqlParser {
     public XtextResource loadJqlFromStream(final InputStream stream, final URI resourceUri) {
         final long startTs = System.currentTimeMillis();
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+            final XtextResourceSet xtextResourceSet =  injector().getInstance(XtextResourceSet.class);
+            final XtextResource jqlResource = (XtextResource) xtextResourceSet
                     .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             jqlResource.load(stream, injector().getInstance(XtextResourceSet.class).getLoadOptions());
 
@@ -82,7 +84,8 @@ public class JqlParser {
         }
 
         try {
-            final XtextResource jqlResource = (XtextResource) injector().getInstance(XtextResourceSet.class)
+            final XtextResourceSet xtextResourceSet =  injector().getInstance(XtextResourceSet.class);
+            final XtextResource jqlResource = (XtextResource) xtextResourceSet
                     .createResource(resourceUri, JQLSCRIPT_CONTENT_TYPE);
             final InputStream in = new ByteArrayInputStream(jqlExpression.getBytes("UTF-8"));
             Map<Object, Object> defaultLoadOptions = injector().getInstance(XtextResourceSet.class).getLoadOptions();
