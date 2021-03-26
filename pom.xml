@@ -97,7 +97,7 @@
 
     <!-- Pax exam dependencies -->
     <karaf-version>4.2.6</karaf-version>
-    <osgi-utils-version>1.0.10</osgi-utils-version>
+    <osgi-utils-version>1.0.11</osgi-utils-version>
     <bouncycastle-karaf-features-version>1.61.2</bouncycastle-karaf-features-version>
     <tinybundles-karaf-features-version>1.0.0</tinybundles-karaf-features-version>
     <google-karaf-features-version>1.0.6</google-karaf-features-version>
