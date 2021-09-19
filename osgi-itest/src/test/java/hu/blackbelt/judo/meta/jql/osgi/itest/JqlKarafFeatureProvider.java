@@ -303,7 +303,7 @@ public class JqlKarafFeatureProvider {
     public static Option[] getRuntimeFeaturesForMetamodel(Class clazz) throws FileNotFoundException {
         return combine(karafConfig(clazz),
 
-                features(karafStandardRepo()),
+                features(karafStandardRepo(), "(wrap)"),
 
                 features(blackbeltBouncCastle()),
 
