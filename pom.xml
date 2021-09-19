@@ -100,11 +100,11 @@
     <osgi-utils-version>1.0.11</osgi-utils-version>
     <bouncycastle-karaf-features-version>1.61.2</bouncycastle-karaf-features-version>
     <tinybundles-karaf-features-version>1.0.0</tinybundles-karaf-features-version>
-    <google-karaf-features-version>1.0.6</google-karaf-features-version>
+    <google-karaf-features-version>1.0.7</google-karaf-features-version>
     <eclipse-emf-karaf-features-version>1.0.1</eclipse-emf-karaf-features-version>
     <eclipse-xtext-karaf-features-version>1.0.2</eclipse-xtext-karaf-features-version>
     <antlr-karaf-features-version>1.0.1</antlr-karaf-features-version>
-    <apache-commons-karaf-features-version>1.0.5</apache-commons-karaf-features-version>
+    <apache-commons-karaf-features-version>1.0.6</apache-commons-karaf-features-version>
     <apache-httpclient-karaf-features-version>1.0.0</apache-httpclient-karaf-features-version>
     <pax-exam-version>4.13.3</pax-exam-version>
     <log4j.configuration>log4j.properties</log4j.configuration>
