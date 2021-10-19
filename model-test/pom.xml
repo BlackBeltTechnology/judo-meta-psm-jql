@@ -7,8 +7,7 @@
 	<parent>
 		<groupId>hu.blackbelt.judo.meta</groupId>
 		<artifactId>hu.blackbelt.judo.meta.jql</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<version>${revision}</version>
 	</parent>
 	<artifactId>hu.blackbelt.judo.meta.jql.model.test</artifactId>
 
@@ -20,6 +19,12 @@
 			<groupId>hu.blackbelt.judo.meta</groupId>
 			<artifactId>hu.blackbelt.judo.meta.jql.model</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.eclipse.xtext</groupId>
+		    <artifactId>org.eclipse.xtext.testing</artifactId>
+		    <scope>test</scope>
 		</dependency>
 
 		<dependency>

@@ -55,5 +55,7 @@ local.properties
 wercker.env
 /**/.wercker
 .release
+**/.flattened-pom.xml
+**/.antlr-generator-3.2.0-patch.jar
 
 

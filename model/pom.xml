@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -15,16 +15,73 @@
 	<name>Judo :: Jql :: Model :: Eclipse plugin</name>
 	<description>Judo Jql model eclipse plugin</description>
 
+	<properties>
+		<src.dir>src/main/java</src.dir>
+	</properties>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<configuration>
+					<filesets combine.children="append">
+						<fileset>
+							<directory>${basedir}/src/main/xtext-gen/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/xtend-gen/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/model/generated/</directory>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/../ide/ui/src/main/xtext-gen/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+						<fileset>
+							<directory>${basedir}../ide/ui/xtend-gen/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+						</fileset>
+
+					</filesets>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Generate MWE2 class dependencies</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includes>hu/blackbelt/judo/meta/jqlinternal/JqlXtextProjectConfig.java
+					</includes>
+				</configuration>
+			</plugin>
+
 			<!-- Generates the Ecore model via MWE2 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.0.0</version>
 				<executions>
-
 					<execution>
 						<id>mwe2Launcher-builder</id>
 						<phase>generate-sources</phase>
@@ -34,9 +91,9 @@
 						<configuration>
 							<mainClass>org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher</mainClass>
 							<arguments>
-								<argument>/${project.basedir}/src/workflow/generateModel.mwe2</argument>
+								<argument>/${project.basedir}/src/main/java/hu/blackbelt/judo/meta/jqlinternal/GenerateJqlDsl.mwe2</argument>
 								<argument>-p</argument>
-								<argument>rootPath=${project.basedir}</argument>
+								<argument>rootPath=/${project.basedir}/..</argument>
 							</arguments>
 							<classpathScope>compile</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
@@ -52,32 +109,12 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
 			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
-				<version>1.5.3</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<ignoreMissingFile>false</ignoreMissingFile>
-					<basedir>${basedir}/src-gen</basedir>
-					<includes>
-						<include>**/*.java</include>
-					</includes>
-					<replacements>
-						<replacement>
-							<token>\$VERSION_PLACEHOLDER\$</token>
-							<value>${project.version}</value>
-						</replacement>
-					</replacements>
-				</configuration>
+				<groupId>org.eclipse.xtend</groupId>
+				<artifactId>xtend-maven-plugin</artifactId>
 			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -94,7 +131,8 @@
 							<!-- This should be in sync with xtext-maven-plugin//source-roots,
                              except for /model directory -->
 							<sources>
-								<source>${project.basedir}/src-gen</source>
+								<source>${project.basedir}/src/main/xtext-gen</source>
+								<source>${project.basedir}/xtend-gen</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -174,5 +212,12 @@
 			<artifactId>epsilon-runtime-execution</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.xtext</groupId>
+			<artifactId>org.eclipse.xtext</artifactId>
+			<version>${xtext-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 </project>
