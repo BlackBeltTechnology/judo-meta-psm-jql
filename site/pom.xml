@@ -6,8 +6,7 @@
     <parent>
         <groupId>hu.blackbelt.judo.meta</groupId>
         <artifactId>hu.blackbelt.judo.meta.jql</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
-        <relativePath>../</relativePath>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>hu.blackbelt.judo.meta.jql.site</artifactId>
@@ -15,34 +14,46 @@
     <name>Judo :: Jql :: Model :: Eclipse update site</name>
     <description>Judo Jql model Update Site</description>
 
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jboss.tools.tycho-plugins</groupId>
-                <artifactId>repository-utils</artifactId>
-                <version>${tycho-version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-facade</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>generate-repository-facade</goal>
-                        </goals>
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <id>update-category-versions</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.code.maven-replacer-plugin</groupId>
+                        <artifactId>replacer</artifactId>
+                        <version>1.5.3</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>replace</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <configuration>
-                            <symbols>
-                                <update.site.name>${project.description} Update site</update.site.name>
-                                <update.site.description>Use this URL in Eclipse to install</update.site.description>
-                            </symbols>
-                            <associateSites>
-                                <site>https://download.eclipse.org/epsilon/updates/1.5/</site>
-                                <site>https://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/</site>
-                                <site>https://nexus.judo.technology/repository/p2/epsilon-runtime-eclipse/${epsilon-runtime-eclipse-version}/</site>
-                            </associateSites>
+                            <file>${project.basedir}/category.xml</file>
+                            <replacements>
+                                <!-- EPP Common -->
+                                <replacement>
+                                    <token>(repository-reference\ location\=\")(.*?)(judo-epp-common\/)(.*?)(\")</token>
+                                    <value>repository-reference location="$2$3${judo-epp-common-version}"</value>
+                                </replacement>
+
+                                <!-- Epsilon Runtime -->
+                                <replacement>
+                                    <token>(repository-reference\ location\=\")(.*?)(epsilon-runtime-eclipse\/)(.*?)(\")</token>
+                                    <value>repository-reference location="$2$3${epsilon-runtime-eclipse-version}"</value>
+                                </replacement>
+                            </replacements>
+                            <regex>true</regex>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

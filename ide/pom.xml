@@ -6,8 +6,7 @@
     <parent>
 		<relativePath>../pom.xml</relativePath>
 		<groupId>hu.blackbelt.judo.meta</groupId>
-		<artifactId>hu.blackbelt.judo.meta.jql</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
 	</parent>
     
     <artifactId>hu.blackbelt.judo.meta.jql.ide</artifactId>
