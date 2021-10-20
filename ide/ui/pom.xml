@@ -5,10 +5,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<relativePath>../pom.xml</relativePath>
 		<groupId>hu.blackbelt.judo.meta</groupId>
 		<artifactId>hu.blackbelt.judo.meta.jql.ide</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 
 	<artifactId>hu.blackbelt.judo.meta.jql.ide.ui</artifactId>

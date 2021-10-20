@@ -4,10 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<relativePath>../pom.xml</relativePath>
 		<groupId>hu.blackbelt.judo.meta</groupId>
 		<artifactId>hu.blackbelt.judo.meta.jql.ide</artifactId>
-		<version>1.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 
 	<artifactId>hu.blackbelt.judo.meta.jql.ide.common</artifactId>
@@ -52,11 +51,6 @@
         	<groupId>org.eclipse.xtext</groupId>
         	<artifactId>org.eclipse.xtext.ide</artifactId>
         	<version>${xtext-version}</version>
-        </dependency>
-        <dependency>
-        	<groupId>hu.blackbelt.judo.meta</groupId>
-        	<artifactId>hu.blackbelt.judo.meta.jql.ide.generator</artifactId>
-            <version>${project.version}</version>
         </dependency>
      </dependencies>
      
