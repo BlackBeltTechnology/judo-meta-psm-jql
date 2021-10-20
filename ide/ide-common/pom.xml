@@ -52,11 +52,6 @@
         	<artifactId>org.eclipse.xtext.ide</artifactId>
         	<version>${xtext-version}</version>
         </dependency>
-        <dependency>
-        	<groupId>hu.blackbelt.judo.meta</groupId>
-        	<artifactId>hu.blackbelt.judo.meta.jql.ide.generator</artifactId>
-            <version>${project.version}</version>
-        </dependency>
      </dependencies>
      
 </project>
