@@ -23,6 +23,7 @@ JQL has the following built-in primitive types
 * Decimal
 * Date
 * Timestamp
+* Time
 
 Also some expressions or expression fragments might evaluate to the special `undefined` value. `undefined` cannot be used directly.
 
@@ -43,6 +44,7 @@ A string literal is a character sequence inside either single or double quotes, 
 * Temporal literals use backtick (```) as delimiter.
 * Dates can be represented as literals using the syntax `+`2019-09-01+``.
 * Timestsamps can be represented as literals using the syntax `+`2019-09-01T14:30Z+``
+* Time can be represented as literals using the syntax `+`14:30``
 
 === Enum literals
 Use hashmark (`#`) character to denote enum literals, eg. `Days#MONDAY` or `model::Days#MONDAY` 
@@ -151,6 +153,9 @@ You can use some *built-in* functions using the following syntax: `self.descript
 
 === Timestamp functions
 * `difference(timestamp)`
+
+=== Time functions
+* `difference(time)`
 
 === Collection functions
 * `head(n)`
