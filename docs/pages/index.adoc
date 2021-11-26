@@ -1,4 +1,10 @@
 = Judo Query Language
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+// Settings
+:idprefix:
+:idseparator: -
 
 JQL is a simple expression language, which is generally independent of the queried data model.
 
@@ -53,8 +59,6 @@ Identifiers represent names such as entities, attributes, relations. They start 
 Valid identifiers include `order`, `_order10`.
 
 TIP: Optionally an identifier name can be escaped with a backslash (`\`) symbol if a navigation element has the same name as a JQL keyword, e.g. `\implies` will refer to the entity, attribute etc. called `implies`.
-
-
 
 
 === Operators
