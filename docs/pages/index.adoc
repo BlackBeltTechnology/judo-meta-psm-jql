@@ -1,4 +1,10 @@
 = Judo Query Language
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+// Settings
+:idprefix:
+:idseparator: -
 
 JQL is a simple expression language, which is generally independent of the queried data model.
 
@@ -55,8 +61,6 @@ Identifiers represent names such as entities, attributes, relations. They start 
 Valid identifiers include `order`, `_order10`.
 
 TIP: Optionally an identifier name can be escaped with a backslash (`\`) symbol if a navigation element has the same name as a JQL keyword, e.g. `\implies` will refer to the entity, attribute etc. called `implies`.
-
-
 
 
 === Operators
@@ -180,3 +184,247 @@ You can use some *built-in* functions using the following syntax: `self.descript
 
 == Type safety
 JQL expressions do strict type checking.
+
+== Example model
+
+[plantuml]
+----
+@startuml
+package demo {
+package entities { }
+package types {
+class  String
+class Double
+class Long
+class Text
+class Phone
+class Binary
+class URL
+class Integer
+class Boolean
+class Timestamp
+class Date
+
+enum Titles {
+MS
+MRS
+MR
+DR
+}
+
+enum Countries {
+HU
+AT
+RO
+}
+
+
+package measured {
+class MassStoredInKilograms
+class TimeStoredInMonths
+class TimeStoredInSeconds
+class AreaStoredInSquareMetre
+class VolumeStoredInLitre
+class VelocityStoredInKmPerHour
+}
+
+}
+@enduml
+----
+
+[plantuml]
+----
+@startuml
+package demo {
+
+package entities {
+
+	class Order {
+		shipName : String
+		freight: Double
+		orderDate: Timestamp
+		requiredDate: Timestamp
+		shippedDate: Timestamp
+	}
+	
+	Order -- "0..1" Customer
+	Order "shipperOrders" -- "0..1" Shipper
+	Order -- "0..1" Employee
+	Order *--> "1" InternationalAddress
+	Order *--> "1..*" OrderDetail
+	
+	class Product {
+		productName: String
+		quantityPerUnit: Integer
+		unitPrice : Double
+		unitsInStock : Integer
+		unitsOnOrder : Integer
+		reorderLevel : Integer
+		weight : MassStoredInKilograms
+		discounted : Boolean
+	}
+	
+	Product "products" -- "0..1" Category
+	Product "suppliedProducts" -- "0..1" Supplier
+	Product "manufacturedProducts" -- "manufacturers" Company
+	Product -- "0..1" Store	
+	
+	class Category {
+		categoryName : String
+		description : Text
+		picture: Binary
+	}
+    Category -- "0..1 owner" Employee
+	
+	class OrderDetail {
+        unitPrice : Double
+        quantity: Integer
+        discount : Double
+	}
+
+    OrderDetail -- "1" Product
+	
+	class Customer {
+	}
+
+    Customer *--> Address
+	
+	class Company extends Customer {
+        companyName : String
+        contactName : String
+        contactTitle : String
+        phone : Phone
+        fax : Phone
+	}
+
+	class Supplier extends Company {
+        homePage : URL
+	}
+	
+	class Shipper extends Company {
+	}
+
+    Shipper -- "0..1" Territory
+	
+	class InternationalOrder extends Order {
+        customsDescription : String
+        exciseTax : Double
+	}
+	
+	class Person {
+        lastName : String
+        firstName : String
+        title : Titles
+	}
+
+	class Employee extends Person {
+        titleOfCourtesy : String
+        homePhone : Phone
+        extension : String
+        notes : Text
+        photoPath : String
+        photo : Binary
+        birthDate : Date
+        hireDate : Date
+	}
+
+    Employee -- "0..1 reportsTo" Employee
+    Employee -- "0..1" Territory
+    Employee *--> Address
+	
+	class Territory {
+        territoryDescription : String
+	}
+
+    Territory -- "0..1" Region
+	
+	class Region {
+        regionDescription : String
+	}
+	
+	class OnlineOrder extends Order {
+        webshopUrl : URL
+	}
+	
+	class OnlineInternationalOrder extends InternationalOrder, OnlineOrder {
+        onlineTrackingNumber : String
+	}
+	
+	class City {
+        name : String
+	}
+	
+	class Address {
+        address : String
+        region : String
+        postalCode : String
+	}
+
+    Address --> City
+	
+	class Individual extends Person, Customer {
+        phone : Phone
+	}
+	
+	class InternationalAddress extends Address {
+        country : Countries
+	}
+	
+	class PaymentList { 
+	}
+
+    PaymentList --> "1..*" Employee
+	
+	class MailingList { 
+	}
+
+    MailingList --> Person
+	
+	class Store {
+	} 
+	
+
+}
+
+}
+
+
+@enduml
+----
+
+== Expression examples
+
+=== Static expressions
+
+==== All products
+`demo::entitites::Product`
+
+==== Total number of orders
+`demo::entitites::Order!count()`
+
+==== Orders assigned to (any) employee
+`demo::entities::Employee\=>orders`
+
+=== Derived attributes
+
+==== Order: name of shipper company
+`self\->shipper.companyName`
+
+==== OrderDetail
+
+===== Product name
+`self\->product.productName`
+
+===== Category name
+`self\->product\->category.categoryName`
+
+===== Price
+`self.quantity * self.unitPrice * (1 - self.discount)`
+
+=== Derived references
+
+==== Order: collection of categories
+`self\=>orderDetails\->product\->category`
+
+==== Get all categories, where the category has more than 10 products
+`demo::entities::Category!filter(c | demo::entities::Product!filter(p | p.category = c)!count() > 10)`
