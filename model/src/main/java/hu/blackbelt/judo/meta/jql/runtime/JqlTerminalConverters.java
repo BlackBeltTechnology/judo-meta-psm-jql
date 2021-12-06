@@ -101,6 +101,23 @@ public class JqlTerminalConverters extends DefaultTerminalConverters {
 		};
 	}
 
+	@ValueConverter(rule = "TIME")
+	public IValueConverter<String> getTimeTerminalConverter() {
+		return new IValueConverter<String>() {
+
+			@Override
+			public String toString(String value) throws ValueConverterException {
+				return String.format("`%s`", value);
+			}
+
+			@Override
+			public String toValue(String string, INode node) throws ValueConverterException {
+				return string.substring(1, string.length() - 1);
+			}
+
+		};
+	}
+
 	@ValueConverter(rule = "MEASURE_NAME")
 	public IValueConverter<String> getMeasureNameTerminalConverter() {
 		return new IValueConverter<String>() {

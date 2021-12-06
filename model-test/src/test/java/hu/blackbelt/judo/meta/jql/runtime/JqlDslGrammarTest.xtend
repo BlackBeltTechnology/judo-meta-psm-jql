@@ -21,6 +21,7 @@ import hu.blackbelt.judo.meta.jql.jqldsl.FunctionedExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.NavigationExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.Feature
 import hu.blackbelt.judo.meta.jql.jqldsl.QualifiedName
+import hu.blackbelt.judo.meta.jql.jqldsl.TimeLiteral
 
 class JqlDslGrammarTest {
 
@@ -242,12 +243,15 @@ class JqlDslGrammarTest {
 
 	@Test
 	def void temporalLiterals() {
-		var date = parser.parseString("`2001-09-12` ")
-		"2001-09-12".assertEquals(date.expressionValue)
+		var date = parser.parseString("`2001-09-12` ") as DateLiteral
+		"2001-09-12".assertEquals(date.value)
 
-		val parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00-05:00 Europe/Budapest`")
-		var timeStamp = parsedTimeStamp as TimeStampLiteral
-		"2001-09-12T12:00:00-05:00 Europe/Budapest".assertEquals(timeStamp.value)
+		val parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00Z`") as TimeStampLiteral
+		"2001-09-12T12:00:00Z".assertEquals(parsedTimeStamp.value)
+
+		val parsedTime = parser.parseString("`12:00:00.123`") as TimeLiteral
+		"12:00:00.123".assertEquals(parsedTime.value)
+
 	}
 	
 	
@@ -257,9 +261,16 @@ class JqlDslGrammarTest {
 	}
 	
 	@Test
-    def void temporalDifference() {
-        var date = parser.parseString("`2001-09-12`!difference(`2019-09-12`, demo::measures::Time)")
-        val parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00-05:00 Europe/Budapest`!difference(`2001-09-12T`, demo::measures::Time)")
+    def void temporalEllapsedTimeFrom() {
+        var parsedDateDiff = parser.parseString("`2001-09-12`!elapsedTimeFrom(`2019-09-12`, demo::measures::Time)") as FunctionedExpression
+		"elapsedTimeFrom".assertEquals(parsedDateDiff.getFunctionCall.getFunction.getName)
+
+        var parsedTimeStampDiff = parser.parseString("`2001-09-12T12:00:00Z`!elapsedTimeFrom(`2001-09-12T12:00:00+02:00`, demo::measures::Time)") as FunctionedExpression
+		"elapsedTimeFrom".assertEquals(parsedTimeStampDiff.getFunctionCall.getFunction.getName)
+
+        var parsedTimeDiff = parser.parseString("`12:45`!elapsedTimeFrom(`11:28`, demo::measures::Time)") as FunctionedExpression
+		"elapsedTimeFrom".assertEquals(parsedTimeDiff.getFunctionCall.getFunction.getName)
+
     }
 	
 

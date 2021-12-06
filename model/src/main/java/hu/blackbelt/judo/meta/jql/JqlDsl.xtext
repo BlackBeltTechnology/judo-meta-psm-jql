@@ -128,7 +128,8 @@ StringLiteral returns JqlExpression:
 
 TemporalLiteral returns JqlExpression:
     {DateLiteral} value=DATE |
-    {TimeStampLiteral} value=TIMESTAMP;
+    {TimeStampLiteral} value=TIMESTAMP |
+    {TimeLiteral} value=TIME;
 
 MeasuredLiteral returns JqlExpression:
     {MeasuredLiteral} value=NumberLiteral measure=MEASURE_NAME;
@@ -147,11 +148,17 @@ ValidId:
 terminal MEASURE_NAME:
     '[' ('\\]' | !('\\' | ']'))+ ']';
 
-terminal DATE:
-    '`' ('0'..'9' | '-')+ '`';
-
 terminal TIMESTAMP:
-    '`' ('0'..'9' | '-')+ 'T'->'`';
+    '`' DIGIT+ '-' DIGIT DIGIT '-' DIGIT DIGIT 'T' DIGIT DIGIT ':' DIGIT DIGIT (':' DIGIT DIGIT ('.' DIGIT+ )? )? ('Z' | ('+' | '-') DIGIT DIGIT ':' DIGIT DIGIT )'`';
+
+terminal TIME:
+    '`' DIGIT DIGIT ':' DIGIT DIGIT (':' DIGIT DIGIT ('.' DIGIT+ )? )? '`';
+
+terminal DATE:
+    '`' DIGIT+ '-' DIGIT DIGIT '-' DIGIT DIGIT '`';
+
+terminal DIGIT:
+	'0'..'9';
 
 terminal DECIMAL returns ecore::EBigDecimal:
     INTEGER '.' INTEGER;
