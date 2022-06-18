@@ -78,8 +78,8 @@
 		<epsilon-runtime-version>1.4.0.20220616_093846_72efef9e_develop</epsilon-runtime-version>
 		<epsilon-runtime-eclipse-version>1.4.0.20220616_120313_0d84d4a0_develop</epsilon-runtime-eclipse-version>
 
-        <emf-genmodel-generator-version>1.0.2.20220330_082302_0cadb6da_develop</emf-genmodel-generator-version>
-        <judo-genmodel-generator-version>1.0.1.20220405_155701_8eaa7eb0_develop</judo-genmodel-generator-version>
+        <emf-genmodel-generator-version>1.0.2.20220618_215944_95bc4477_develop</emf-genmodel-generator-version>
+        <judo-genmodel-generator-version>1.0.1.20220618_221434_844b9e84_develop</judo-genmodel-generator-version>
         <judo-epp-common-version>4.23.0.20220617_120427_1e370db3_develop</judo-epp-common-version>
 
         <xtext-version>2.27.0</xtext-version>

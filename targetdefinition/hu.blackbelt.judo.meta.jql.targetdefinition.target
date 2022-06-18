@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde?>
-<target includeMode="feature" name="hu.blackbelt.judo.meta.jql.targetdefinition.target" sequenceNumber="1655493419987">
+<target includeMode="feature" name="hu.blackbelt.judo.meta.jql.targetdefinition.target" sequenceNumber="1655591932740">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <repository location="https://nexus.judo.technology/repository/p2/judo-epp-common/4.23.0.20220617_120427_1e370db3_develop"/>
@@ -13,11 +13,11 @@
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <repository location="https://nexus.judo.technology/repository/p2/emf-genmodel-generator/1.0.2.20220330_082302_0cadb6da_develop"/>
+      <repository location="https://nexus.judo.technology/repository/p2/emf-genmodel-generator/1.0.2.20220618_215944_95bc4477_develop"/>
       <unit id="hu.blackbelt.eclipse.emf.genmodel.generator.feature.feature.group" version="0.0.0"/>
     </location>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <repository location="https://nexus.judo.technology/repository/p2/judo-genmodel-generator/1.0.1.20220405_155701_8eaa7eb0_develop"/>
+      <repository location="https://nexus.judo.technology/repository/p2/judo-genmodel-generator/1.0.1.20220618_221434_844b9e84_develop"/>
       <unit id="hu.blackbelt.judo.eclipse.emf.genmodel.generator.feature.feature.group" version="0.0.0"/>
     </location>
   </locations>
