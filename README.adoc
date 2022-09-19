@@ -1,6 +1,6 @@
 = judo-meta-jql
 
-image::https://github.com/BlackBeltTechnology/judo-meta-jql/actions/workflows/build.yml/badge.svg?branch=develop[link="https://github.com/BlackBeltTechnology/judo-meta-jql/actions/workflows/build.yml" float="center"]
+image::https://github.com/BlackBeltTechnology/judo-meta-psm-jql/actions/workflows/build.yml/badge.svg?branch=develop[link="https://github.com/BlackBeltTechnology/judo-meta-psm-jql/actions/workflows/build.yml" float="center"]
 
 == Introduction
 
