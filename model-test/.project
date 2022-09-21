@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>hu.blackbelt.judo.meta.jql</name>
+	<name>hu.blackbelt.judo.meta.jql.model.test</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -11,24 +11,19 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
-	<filteredResources>
-		<filter>
-			<id>1589446947570</id>
-			<name></name>
-			<type>9</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-.settings</arguments>
-			</matcher>
-		</filter>
-	</filteredResources>
 </projectDescription>

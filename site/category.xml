@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description>
+      To install these features, point Eclipse at this site.
+   </description>
+
+    <category-def name="jql" label="Judo Jql Model">
+       <description>
+          Judo Jql Model Update Site: contains all features in this build.
+       </description>
+    </category-def>
+    <category-def name="jql_source" label="Judo Jql Model Source">
+       <description>
+          Judo Jql Model source code.
+       </description>
+    </category-def>
+
+    <category-def name="jql_ide" label="Judo Jql IDE">
+       <description>
+          Judo Jql Model IDE intrgration.
+       </description>
+    </category-def>
+    <category-def name="jql_ide_source" label="Judo Jql IDE Source">
+       <description>
+          Judo Jql Model IDE intrgration source code
+       </description>
+    </category-def>
+
+   <feature id="hu.blackbelt.judo.meta.jql.feature">
+      <category name="jql"/>
+   </feature>
+
+   <feature id="hu.blackbelt.judo.meta.jql.feature.source">
+      <category name="jql_source"/>
+   </feature>
+
+   <feature id="hu.blackbelt.judo.meta.jql.ide.feature">
+      <category name="jql_ide"/>
+   </feature>
+
+   <feature id="hu.blackbelt.judo.meta.jql.ide.feature.source">
+      <category name="jql_ide_source"/>
+   </feature>
+
+	<!--
+    <repository-reference location="https://nexus.judo.technology/repository/p2/epsilon-runtime-eclipse/1.4.0.20220616_120313_0d84d4a0_develop" enabled="true" />
+    <repository-reference location="https://nexus.judo.technology/repository/p2/judo-epp-common/4.23.0.20220617_120427_1e370db3_develop" enabled="true" />
+    -->
+</site>
