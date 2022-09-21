@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jqldsl:BinaryOperation xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jqldsl="http://www.blackbelt.hu/judo/meta/psm/jql/JqlDsl" operator="*">
+  <leftOperand xsi:type="jqldsl:BinaryOperation" operator="*">
+    <leftOperand xsi:type="jqldsl:NavigationExpression" base="self">
+      <features name="quantity"/>
+    </leftOperand>
+    <rightOperand xsi:type="jqldsl:NavigationExpression" base="self">
+      <features name="unitPrice"/>
+    </rightOperand>
+  </leftOperand>
+  <rightOperand xsi:type="jqldsl:BinaryOperation" operator="-">
+    <leftOperand xsi:type="jqldsl:IntegerLiteral" value="1"/>
+    <rightOperand xsi:type="jqldsl:NavigationExpression" base="self">
+      <features name="discount"/>
+    </rightOperand>
+  </rightOperand>
+</jqldsl:BinaryOperation>

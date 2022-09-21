@@ -54,5 +54,8 @@ local.properties
 **/.DS_Store
 wercker.env
 /**/.wercker
-/**/src-gen/
-/**/xtend-gen/
+.release
+**/.flattened-pom.xml
+**/.antlr-generator-3.2.0-patch.jar
+
+

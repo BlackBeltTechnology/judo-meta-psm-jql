@@ -1,0 +1,430 @@
+= Judo Query Language
+ifndef::env-site,env-github[]
+include::_attributes.adoc[]
+endif::[]
+// Settings
+:idprefix:
+:idseparator: -
+
+JQL is a simple expression language, which is generally independent of the queried data model.
+
+== Syntax overview
+
+An expression is evaluated to a single value (which of course can be a collection etc.) Newline characters are ignored in the expressions, so it is possible (and often advisable) to create multiline expression.
+
+JQL keywords are case insensitive, so you can write the boolean `true` value as `TRUE` or `True` as well. 
+
+=== Comments
+Comments can be used to expression documentation. Two kinds of comments exist:
+
+* Single line comments, starting with `//`
+* Multiline comments, between `/\*` and `*/` characters.
+
+=== Primitive types
+JQL has the following built-in primitive types
+
+* Boolean
+* String
+* Integer
+* Decimal
+* Date
+* Timestamp
+* Time
+
+Also some expressions or expression fragments might evaluate to the special `undefined` value. `undefined` cannot be used directly.
+
+=== Literals
+
+==== Numeric literals
+
+* An *integer literal* is a sequence of digits, in base 10, eg. `42`.
+* A *decimal literal* represents an arbitrary precision real number: `3.14`, `100.0`
+
+=== Boolean literal
+A boolean literal is either `true` or `false`.
+
+=== String literal
+A string literal is a character sequence inside either single or double quotes, eg. `'Hello'` or `"world"`.
+
+=== Temporal literals
+* Temporal literals use backtick (```) as delimiter.
+* Dates can be represented as literals using the syntax `+`2019-09-01+``.
+* Timestsamps can be represented as literals using the syntax `+`2019-09-01T14:30Z+``
+* Time can be represented as literals using the syntax `+`14:30``
+
+=== Enum literals
+Use hashmark (`#`) character to denote enum literals, eg. `Days#MONDAY` or `model::Days#MONDAY` 
+
+=== Identifiers
+
+Identifiers represent names such as entities, attributes, relations. They start with letter or underscore consecuted by letters, underscore or digits.
+Valid identifiers include `order`, `_order10`.
+
+TIP: Optionally an identifier name can be escaped with a backslash (`\`) symbol if a navigation element has the same name as a JQL keyword, e.g. `\implies` will refer to the entity, attribute etc. called `implies`.
+
+
+=== Operators
+
+==== Unary operators
+ 
+* `not`- logical negation
+* `-` - arithmetical negation
+ 
+==== Logical operators
+* `=` - equals, for Strings case-insensitive comparison
+* `<>` - not equals, for Strings case-insensitive comparison
+* `and`- logical AND operation
+* `xor` - logical XOR operation
+* `or` - logical OR operation
+* `implies` - logical implication operation
+
+==== Comparison operators
+
+* `>`, `<`, `>=`, `\<=`
+
+==== Arithmetic operators
+* `+`- addition
+* `-`- substraction
+* `*` integer or decimal multiplication. If either of the operands is a decimal the result is decimal.
+* `/` division, the result is always a decimal number
+* `mod`: integer remainder operation, both operands must be integers
+* `div`: integer division operation, both operands must be integers, the result is an integer
+
+==== String operators
+* `+` - string concatenation. Note that as JQL does strong type checks, if either of the operands is not a string, the expression will be invalid.
+
+=== Parentheses
+Expressions can be parenthesized, `(1 + 2)`, `(true)`.
+
+=== Operator precedence
+(Highest precedence is 1)
+
+. `()` (parentheses), `.` (selectors) 
+. `-` (unary minus), `not` (logical negation), 
+. `*`, `/`, `div`, `mod`
+. `+`, `-`
+. `<`, `>`, `<=`, `>=`
+. `=`, `<>`
+. `and`
+. `xor`
+. `or`
+. `implies`
+. `?:` ternary conditional (right-associative)
+
+
+=== Qualified names
+
+A qualified name consists of namespaces and identifier, like: `demo::measures::Time`.
+
+=== Selectors
+
+A selector is used to access a feature (attribute, relation etc.) of an element. One can use `.` for all selections or use different syntax depending on relation kind to allow better readibility.
+ 
+** For one-to-many relations, the selector operator is either `\=>`, or dot (`.`), e.g. `self\=>items`, or `self.items`
+** For one-to-one relations, the selector operator is either `\->` or dot (`.`), eg. `items\->product`, or `items.product`
+** For attributes, the selector operator is dot (`.`), eg. `item.price` 
+
+== Measured values
+JQL expressions support measured quantities, eg. `10[kg]`, where the measure is identified by the optionally qualified name of the measure, eg.
+`10[km] + 5[model::Length#m]`
+
+== Functions
+
+You can use some *built-in* functions using the following syntax: `self.description!length()`
+
+=== Functions available for all elements
+* `isDefined()`
+* `isUndefined()`
+
+=== Numeric functions
+* `round()`
+
+=== String functions
+
+* `lowerCase()` eg. `self.name!lowerCase()` 
+* `upperCase()`
+* `length()`
+* `substring(startIndex, length)`
+* `first(n)`
+* `last(n)`
+* `position(str)`
+* `matches(regex)`
+* `replace(regex, replacement)`
+* `trim()`
+
+=== Date functions
+* `difference(date)`
+
+=== Timestamp functions
+* `difference(timestamp)`
+
+=== Time functions
+* `difference(time)`
+
+=== Collection functions
+* `head(n)`
+* `tail(n)`
+* `limit(count, offset)`
+* `join(<variable name> | <selector>, <delimiter>)` - Evaluates to a string, where the given selection is concatenated using delimiter e.g.
+`self\=>products!join(p | p.productName, ', '`
+* `count()`
+* `sort(<variable name> | <selector> [ASC|DESC])` - Evaluates to a sorted collection, e.g. `self\=>products!sort(p | p.unitPrice, p.productName DESC)`
+* `asCollection(type)`
+* `filter(<variable name> | <logical expression>)` eg. `self.orderDetails!filter(od | od.price < 10)`
+* `min(<variable name> | <selector>)`
+* `max(<variable name> | <selector>)`
+* `avg(<variable name> | <selector>)`
+* `sum(<variable name> | <selector>)`
+
+=== Object functions
+* `container(type)` evaluates to the container of the object when it is part of a container, which type is `type`, otherwise `undefined`
+* `kindof(type)`, evaluates to `true` if the given object is or a descendant of type eg. `self.field!kindof(Lib::MyType)`
+* `typeof(type)` evaluates to `true` if the given object is of type
+* `asType(type)` evaluates to the operand if its type is the same as given, otherwise evaluates as `undefined`.
+
+== Type safety
+JQL expressions do strict type checking.
+
+== Example model
+
+[plantuml]
+----
+@startuml
+package demo {
+package entities { }
+package types {
+class  String
+class Double
+class Long
+class Text
+class Phone
+class Binary
+class URL
+class Integer
+class Boolean
+class Timestamp
+class Date
+
+enum Titles {
+MS
+MRS
+MR
+DR
+}
+
+enum Countries {
+HU
+AT
+RO
+}
+
+
+package measured {
+class MassStoredInKilograms
+class TimeStoredInMonths
+class TimeStoredInSeconds
+class AreaStoredInSquareMetre
+class VolumeStoredInLitre
+class VelocityStoredInKmPerHour
+}
+
+}
+@enduml
+----
+
+[plantuml]
+----
+@startuml
+package demo {
+
+package entities {
+
+	class Order {
+		shipName : String
+		freight: Double
+		orderDate: Timestamp
+		requiredDate: Timestamp
+		shippedDate: Timestamp
+	}
+	
+	Order -- "0..1" Customer
+	Order "shipperOrders" -- "0..1" Shipper
+	Order -- "0..1" Employee
+	Order *--> "1" InternationalAddress
+	Order *--> "1..*" OrderDetail
+	
+	class Product {
+		productName: String
+		quantityPerUnit: Integer
+		unitPrice : Double
+		unitsInStock : Integer
+		unitsOnOrder : Integer
+		reorderLevel : Integer
+		weight : MassStoredInKilograms
+		discounted : Boolean
+	}
+	
+	Product "products" -- "0..1" Category
+	Product "suppliedProducts" -- "0..1" Supplier
+	Product "manufacturedProducts" -- "manufacturers" Company
+	Product -- "0..1" Store	
+	
+	class Category {
+		categoryName : String
+		description : Text
+		picture: Binary
+	}
+    Category -- "0..1 owner" Employee
+	
+	class OrderDetail {
+        unitPrice : Double
+        quantity: Integer
+        discount : Double
+	}
+
+    OrderDetail -- "1" Product
+	
+	class Customer {
+	}
+
+    Customer *--> Address
+	
+	class Company extends Customer {
+        companyName : String
+        contactName : String
+        contactTitle : String
+        phone : Phone
+        fax : Phone
+	}
+
+	class Supplier extends Company {
+        homePage : URL
+	}
+	
+	class Shipper extends Company {
+	}
+
+    Shipper -- "0..1" Territory
+	
+	class InternationalOrder extends Order {
+        customsDescription : String
+        exciseTax : Double
+	}
+	
+	class Person {
+        lastName : String
+        firstName : String
+        title : Titles
+	}
+
+	class Employee extends Person {
+        titleOfCourtesy : String
+        homePhone : Phone
+        extension : String
+        notes : Text
+        photoPath : String
+        photo : Binary
+        birthDate : Date
+        hireDate : Date
+	}
+
+    Employee -- "0..1 reportsTo" Employee
+    Employee -- "0..1" Territory
+    Employee *--> Address
+	
+	class Territory {
+        territoryDescription : String
+	}
+
+    Territory -- "0..1" Region
+	
+	class Region {
+        regionDescription : String
+	}
+	
+	class OnlineOrder extends Order {
+        webshopUrl : URL
+	}
+	
+	class OnlineInternationalOrder extends InternationalOrder, OnlineOrder {
+        onlineTrackingNumber : String
+	}
+	
+	class City {
+        name : String
+	}
+	
+	class Address {
+        address : String
+        region : String
+        postalCode : String
+	}
+
+    Address --> City
+	
+	class Individual extends Person, Customer {
+        phone : Phone
+	}
+	
+	class InternationalAddress extends Address {
+        country : Countries
+	}
+	
+	class PaymentList { 
+	}
+
+    PaymentList --> "1..*" Employee
+	
+	class MailingList { 
+	}
+
+    MailingList --> Person
+	
+	class Store {
+	} 
+	
+
+}
+
+}
+
+
+@enduml
+----
+
+== Expression examples
+
+=== Static expressions
+
+==== All products
+`demo::entitites::Product`
+
+==== Total number of orders
+`demo::entitites::Order!count()`
+
+==== Orders assigned to (any) employee
+`demo::entities::Employee\=>orders`
+
+=== Derived attributes
+
+==== Order: name of shipper company
+`self\->shipper.companyName`
+
+==== OrderDetail
+
+===== Product name
+`self\->product.productName`
+
+===== Category name
+`self\->product\->category.categoryName`
+
+===== Price
+`self.quantity * self.unitPrice * (1 - self.discount)`
+
+=== Derived references
+
+==== Order: collection of categories
+`self\=>orderDetails\->product\->category`
+
+==== Get all categories, where the category has more than 10 products
+`demo::entities::Category!filter(c | demo::entities::Product!filter(p | p.category = c)!count() > 10)`
