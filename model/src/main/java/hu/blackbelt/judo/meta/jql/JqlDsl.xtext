@@ -61,7 +61,7 @@ SpawnOperation returns JqlExpression:
 ;
 
 UnaryOperation returns JqlExpression:
-    {UnaryOperation} operator=OpUnary operand=FunctionedExpression
+    {UnaryOperation} operator=OpUnary operand=UnaryOperation
     | FunctionedExpression;
 
 FunctionedExpression returns JqlExpression:
@@ -83,7 +83,7 @@ FunctionCall:
     {FunctionCall} '!' function=Function features+=Feature* call=FunctionCall?;
 
 OpUnary:
-    'not' | "-";
+    'not' | '-' | '+';
 
 Feature:
     {Feature} ('.' | '->' | '=>') name=FeatureName;
