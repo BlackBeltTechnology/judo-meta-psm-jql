@@ -61,7 +61,7 @@
     </developers>
 
     <properties>
-        <revision>1.0.1</revision>
+        <revision>1.0.2</revision>
         <maven>3.8.3</maven>
         <project-shortname>judo-meta-jql</project-shortname>
         <project-repositoryId>BlackBeltTechnology/judo-meta-psm-jql
@@ -102,7 +102,7 @@
         <cxf-version>3.4.4</cxf-version>
 
         <osgi-utils-version>1.1.0</osgi-utils-version>
-        <karaf-features-version>2.0.0</karaf-features-version>
+        <karaf-features-version>2.0.1</karaf-features-version>
         <pax-exam-version>4.13.3</pax-exam-version>
 
         <!-- Define overridable properties for tycho-surefire-plugin -->
@@ -305,7 +305,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.2.0</version>
                 </plugin>
 
                 <plugin>
@@ -331,18 +331,18 @@
 						<dependency>
 							<groupId>org.eclipse.jdt</groupId>
 							<artifactId>org.eclipse.jdt.core</artifactId>
-							<version>3.28.0</version>
+							<version>3.31.0</version>
 						</dependency>
 
 						<dependency>
 							<groupId>org.eclipse.jdt</groupId>
 							<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
-							<version>1.3.1200</version>
+							<version>1.4.200</version>
 						</dependency>
 						<dependency>
 							<groupId>org.eclipse.jdt</groupId>
 							<artifactId>org.eclipse.jdt.compiler.tool</artifactId>
-							<version>1.2.1100</version>
+							<version>1.3.200</version>
 						</dependency>
                     </dependencies>
                 </plugin>
@@ -1118,7 +1118,7 @@
                                         <toc>left</toc>
                                         <icons>font</icons>
                                         <sectanchors>true</sectanchors>
-                                        <idprefix/>
+                                        <idprefix />
                                         <idseparator>-</idseparator>
                                     </attributes>
                                 </configuration>
