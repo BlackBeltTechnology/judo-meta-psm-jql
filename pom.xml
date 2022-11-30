@@ -61,7 +61,7 @@
     </developers>
 
     <properties>
-        <revision>1.0.2</revision>
+        <revision>1.0.3</revision>
         <maven>3.8.3</maven>
         <project-shortname>judo-meta-jql</project-shortname>
         <project-repositoryId>BlackBeltTechnology/judo-meta-psm-jql
@@ -81,9 +81,6 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <tycho-version>2.7.5</tycho-version>
-
-		<epsilon-runtime-version>1.5.0</epsilon-runtime-version>
-		<epsilon-runtime-eclipse-version>1.5.1</epsilon-runtime-eclipse-version>
 
         <emf-genmodel-generator-version>1.1.0</emf-genmodel-generator-version>
         <judo-genmodel-generator-version>1.1.1</judo-genmodel-generator-version>
@@ -508,28 +505,6 @@
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>
-                                            hu.blackbelt.epsilon
-                                        </groupId>
-                                        <artifactId>
-                                            epsilon-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.1.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>execute</goal>
-                                            <goal>
-                                                executeConfiguration
-                                            </goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
                                             org.apache.maven.plugins
                                         </groupId>
                                         <artifactId>
@@ -790,19 +765,6 @@
             </dependency>
 
             <dependency>
-                <groupId>hu.blackbelt.epsilon</groupId>
-                <artifactId>epsilon-runtime-execution</artifactId>
-                <version>${epsilon-runtime-version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>hu.blackbelt.epsilon</groupId>
-                <artifactId>epsilon-runtime-osgi</artifactId>
-                <version>${epsilon-runtime-version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j-version}</version>
@@ -1028,12 +990,6 @@
                                 <replacement>
                                     <token>(repository-reference\ location\=\")(.*?)(judo-epp-common\/)(.*?)(\")</token>
                                     <value>repository-reference location="$2$3${judo-epp-common-version}"</value>
-                                </replacement>
-
-                                <!-- Epsilon Runtime -->
-                                <replacement>
-                                    <token>(repository-reference\ location\=\")(.*?)(epsilon-runtime-eclipse\/)(.*?)(\")</token>
-                                    <value>repository-reference location="$2$3${epsilon-runtime-eclipse-version}"</value>
                                 </replacement>
                             </replacements>
                             <regex>true</regex>
