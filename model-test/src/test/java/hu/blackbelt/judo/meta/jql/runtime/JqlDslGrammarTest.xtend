@@ -246,12 +246,35 @@ class JqlDslGrammarTest {
 		var date = parser.parseString("`2001-09-12` ") as DateLiteral
 		"2001-09-12".assertEquals(date.value)
 
-		val parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00Z`") as TimeStampLiteral
-		"2001-09-12T12:00:00Z".assertEquals(parsedTimeStamp.value)
-
 		val parsedTime = parser.parseString("`12:00:00.123`") as TimeLiteral
 		"12:00:00.123".assertEquals(parsedTime.value)
 
+		var parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00Z`") as TimeStampLiteral
+		"2001-09-12T12:00:00Z".assertEquals(parsedTimeStamp.value)
+
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:11:12Z`") as TimeStampLiteral
+		"2022-12-01T10:11:12Z".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:11:00Z`") as TimeStampLiteral
+		"2022-12-01T10:11:00Z".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:11Z`") as TimeStampLiteral
+		"2022-12-01T10:11Z".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02.8709Z`") as TimeStampLiteral
+		"2022-12-01T10:01:02.8709Z".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02+14:00`") as TimeStampLiteral
+		"2022-12-01T10:01:02+14:00".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-05T10:01:02-12:00`") as TimeStampLiteral
+		"2022-12-05T10:01:02-12:00".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02.432+14:00`") as TimeStampLiteral
+		"2022-12-01T10:01:02.432+14:00".assertEquals(parsedTimeStamp.value)
+		
+		parsedTimeStamp = parser.parseString("`2022-12-05T10:01:02.432-12:00`") as TimeStampLiteral
+		"2022-12-05T10:01:02.432-12:00".assertEquals(parsedTimeStamp.value)
 	}
 	
 	
