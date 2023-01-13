@@ -42,8 +42,4 @@
       <category name="jql_ide_source"/>
    </feature>
 
-	<!--
-    <repository-reference location="https://nexus.judo.technology/repository/p2/epsilon-runtime-eclipse/1.5.1" enabled="true" />
-    <repository-reference location="https://nexus.judo.technology/repository/p2/judo-epp-common/4.23.1" enabled="true" />
-    -->
 </site>
