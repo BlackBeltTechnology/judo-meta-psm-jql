@@ -117,29 +117,21 @@ public class JqlDslModelBundleTracker {
                 if (jqlModelRegistrations.containsKey(key)) {
                     log.error("JqlDsl model already loaded: " + key);
                 } else {
-                    if (params.containsKey(JqlDslModel.META_VERSION_RANGE)) {
-                        VersionRange versionRange = new VersionRange(params.get(JqlDslModel.META_VERSION_RANGE).replaceAll("\"", ""));
-                        if (versionRange.includes(bundleContext.getBundle().getVersion())) {
-                            // Unpack model
-                            try {
-                                JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
-                                        .inputStream(trackedBundle.getEntry(params.get("file")).openStream())
-                                        .name(params.get(JqlDslModel.NAME))
-                                        .version(trackedBundle.getVersion().toString())
-                                        .checksum(Optional.ofNullable(params.get(JqlDslModel.CHECKSUM)).orElse("notset"))
-                                        .tags(Stream.of(ofNullable(params.get(JqlDslModel.TAGS)).orElse(config.tags()).split(",")).collect(Collectors.toSet()))
-                                        .acceptedMetaVersionRange(Optional.of(versionRange.toString()).orElse("[0,99)")));
+                    // Unpack model
+                    try {
+                        JqlDslModel jqlModel = loadJqlDslModel(jqlDslLoadArgumentsBuilder()
+                                .inputStream(trackedBundle.getEntry(params.get("file")).openStream())
+                                .name(params.get(JqlDslModel.NAME))
+                                .version(trackedBundle.getVersion().toString()));
 
-                                log.info("Registering JqlDsl model: " + jqlModel);
+                        log.info("Registering JqlDsl model: " + jqlModel);
 
-                                ServiceRegistration<JqlDslModel> modelServiceRegistration = bundleContext.registerService(JqlDslModel.class, jqlModel, jqlModel.toDictionary());
-                                jqlModels.put(key, jqlModel);
-                                jqlModelRegistrations.put(key, modelServiceRegistration);
+                        ServiceRegistration<JqlDslModel> modelServiceRegistration = bundleContext.registerService(JqlDslModel.class, jqlModel, jqlModel.toDictionary());
+                        jqlModels.put(key, jqlModel);
+                        jqlModelRegistrations.put(key, modelServiceRegistration);
 
-                            } catch (IOException | JqlDslModel.JqlDslValidationException e) {
-                                log.error("Could not load Psm model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
-                            }
-                        }
+                    } catch (IOException | JqlDslModel.JqlDslValidationException e) {
+                        log.error("Could not load Psm model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
                     }
                 }
             }
