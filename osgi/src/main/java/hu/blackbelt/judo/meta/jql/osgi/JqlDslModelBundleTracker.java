@@ -118,7 +118,7 @@ public class JqlDslModelBundleTracker {
                         jqlModelRegistrations.put(key, modelServiceRegistration);
 
                     } catch (IOException | JqlDslModel.JqlDslValidationException e) {
-                        log.error("Could not load Psm model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
+                        log.error("Could not load JqlDsl model: " + params.get(JqlDslModel.NAME) + " from bundle: " + trackedBundle.getBundleId(), e);
                     }
                 }
             }
