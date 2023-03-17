@@ -128,7 +128,7 @@ StringLiteral returns JqlExpression:
 
 TemporalLiteral returns JqlExpression:
     {DateLiteral} value=DATE |
-    {TimeStampLiteral} value=TIMESTAMP |
+    {TimestampLiteral} value=TIMESTAMP |
     {TimeLiteral} value=TIME;
 
 MeasuredLiteral returns JqlExpression:

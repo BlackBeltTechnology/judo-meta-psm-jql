@@ -10,7 +10,7 @@ import hu.blackbelt.judo.meta.jql.jqldsl.JqlExpression
 import hu.blackbelt.judo.meta.jql.jqldsl.MeasuredLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.StringLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.TernaryOperation
-import hu.blackbelt.judo.meta.jql.jqldsl.TimeStampLiteral
+import hu.blackbelt.judo.meta.jql.jqldsl.TimestampLiteral
 import hu.blackbelt.judo.meta.jql.jqldsl.UnaryOperation
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -242,39 +242,78 @@ class JqlDslGrammarTest {
 	}
 
 	@Test
-	def void temporalLiterals() {
-		var date = parser.parseString("`2001-09-12` ") as DateLiteral
+	def void dateLiterals() {
+		var date = parser.parseString("`2001-09-12`") as DateLiteral
 		"2001-09-12".assertEquals(date.value)
+	}
 
-		val parsedTime = parser.parseString("`12:00:00.123`") as TimeLiteral
-		"12:00:00.123".assertEquals(parsedTime.value)
-
-		var parsedTimeStamp = parser.parseString("`2001-09-12T12:00:00Z`") as TimeStampLiteral
-		"2001-09-12T12:00:00Z".assertEquals(parsedTimeStamp.value)
-
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:11:12Z`") as TimeStampLiteral
-		"2022-12-01T10:11:12Z".assertEquals(parsedTimeStamp.value)
+	@Test
+	def void timeLiterals() {
+		var parsedTime = parser.parseString("`11:11`") as TimeLiteral
+		"11:11".assertEquals(parsedTime.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:11:00Z`") as TimeStampLiteral
-		"2022-12-01T10:11:00Z".assertEquals(parsedTimeStamp.value)
+		parsedTime = parser.parseString("`11:11:11`") as TimeLiteral
+		"11:11:11".assertEquals(parsedTime.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:11Z`") as TimeStampLiteral
-		"2022-12-01T10:11Z".assertEquals(parsedTimeStamp.value)
+		parsedTime = parser.parseString("`11:11:11.111`") as TimeLiteral
+		"11:11:11.111".assertEquals(parsedTime.value)
+	}
+	
+	@Test
+	def void timestampLiterals() {
+		var parsedTimestamp = parser.parseString("`2023-03-17T11:11`") as TimestampLiteral
+		"2023-03-17T11:11".assertEquals(parsedTimestamp.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02.8709Z`") as TimeStampLiteral
-		"2022-12-01T10:01:02.8709Z".assertEquals(parsedTimeStamp.value)
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11Z`") as TimestampLiteral
+		"2023-03-17T11:11Z".assertEquals(parsedTimestamp.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02+14:00`") as TimeStampLiteral
-		"2022-12-01T10:01:02+14:00".assertEquals(parsedTimeStamp.value)
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11+01`") as TimestampLiteral
+		"2023-03-17T11:11+01".assertEquals(parsedTimestamp.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-05T10:01:02-12:00`") as TimeStampLiteral
-		"2022-12-05T10:01:02-12:00".assertEquals(parsedTimeStamp.value)
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11-01`") as TimestampLiteral
+		"2023-03-17T11:11-01".assertEquals(parsedTimestamp.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-01T10:01:02.432+14:00`") as TimeStampLiteral
-		"2022-12-01T10:01:02.432+14:00".assertEquals(parsedTimeStamp.value)
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11+01:01`") as TimestampLiteral
+		"2023-03-17T11:11+01:01".assertEquals(parsedTimestamp.value)
 		
-		parsedTimeStamp = parser.parseString("`2022-12-05T10:01:02.432-12:00`") as TimeStampLiteral
-		"2022-12-05T10:01:02.432-12:00".assertEquals(parsedTimeStamp.value)
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11-01:01`") as TimestampLiteral
+		"2023-03-17T11:11-01:01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11`") as TimestampLiteral
+		"2023-03-17T11:11:11".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11Z`") as TimestampLiteral
+		"2023-03-17T11:11:11Z".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11+01`") as TimestampLiteral
+		"2023-03-17T11:11:11+01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11-01`") as TimestampLiteral
+		"2023-03-17T11:11:11-01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11+01:01`") as TimestampLiteral
+		"2023-03-17T11:11:11+01:01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11-01:01`") as TimestampLiteral
+		"2023-03-17T11:11:11-01:01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111`") as TimestampLiteral
+		"2023-03-17T11:11:11.111".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111Z`") as TimestampLiteral
+		"2023-03-17T11:11:11.111Z".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111+01`") as TimestampLiteral
+		"2023-03-17T11:11:11.111+01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111-01`") as TimestampLiteral
+		"2023-03-17T11:11:11.111-01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111+01:01`") as TimestampLiteral
+		"2023-03-17T11:11:11.111+01:01".assertEquals(parsedTimestamp.value)
+		
+		parsedTimestamp = parser.parseString("`2023-03-17T11:11:11.111-01:01`") as TimestampLiteral
+		"2023-03-17T11:11:11.111-01:01".assertEquals(parsedTimestamp.value)
 	}
 	
 	
@@ -288,8 +327,8 @@ class JqlDslGrammarTest {
         var parsedDateDiff = parser.parseString("`2001-09-12`!elapsedTimeFrom(`2019-09-12`, demo::measures::Time)") as FunctionedExpression
 		"elapsedTimeFrom".assertEquals(parsedDateDiff.getFunctionCall.getFunction.getName)
 
-        var parsedTimeStampDiff = parser.parseString("`2001-09-12T12:00:00Z`!elapsedTimeFrom(`2001-09-12T12:00:00+02:00`, demo::measures::Time)") as FunctionedExpression
-		"elapsedTimeFrom".assertEquals(parsedTimeStampDiff.getFunctionCall.getFunction.getName)
+        var parsedTimestampDiff = parser.parseString("`2001-09-12T12:00:00Z`!elapsedTimeFrom(`2001-09-12T12:00:00+02:00`, demo::measures::Time)") as FunctionedExpression
+		"elapsedTimeFrom".assertEquals(parsedTimestampDiff.getFunctionCall.getFunction.getName)
 
         var parsedTimeDiff = parser.parseString("`12:45`!elapsedTimeFrom(`11:28`, demo::measures::Time)") as FunctionedExpression
 		"elapsedTimeFrom".assertEquals(parsedTimeDiff.getFunctionCall.getFunction.getName)
@@ -469,7 +508,7 @@ class JqlDslGrammarTest {
 			IntegerLiteral: exp.value
 			DecimalLiteral: exp.value
 			DateLiteral: exp.value
-			TimeStampLiteral: exp.value
+			TimestampLiteral: exp.value
 			BooleanLiteral: exp.isIsTrue
 			MeasuredLiteral: exp.value.expressionValue
 			default: null
