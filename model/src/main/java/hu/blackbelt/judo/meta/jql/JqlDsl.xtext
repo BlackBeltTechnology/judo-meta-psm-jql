@@ -128,7 +128,7 @@ StringLiteral returns JqlExpression:
 
 TemporalLiteral returns JqlExpression:
     {DateLiteral} value=DATE |
-    {TimeStampLiteral} value=TIMESTAMP |
+    {TimestampLiteral} value=TIMESTAMP |
     {TimeLiteral} value=TIME;
 
 MeasuredLiteral returns JqlExpression:
@@ -149,7 +149,7 @@ terminal MEASURE_NAME:
     '[' ('\\]' | !('\\' | ']'))+ ']';
 
 terminal TIMESTAMP:
-    '`' DIGIT+ '-' DIGIT DIGIT '-' DIGIT DIGIT 'T' DIGIT DIGIT ':' DIGIT DIGIT (':' DIGIT DIGIT ('.' DIGIT+ )? )? ('Z' | ('+' | '-') DIGIT DIGIT ':' DIGIT DIGIT )'`';
+    '`' DIGIT+ '-' DIGIT DIGIT '-' DIGIT DIGIT 'T' DIGIT DIGIT ':' DIGIT DIGIT (':' DIGIT DIGIT ('.' DIGIT+)?)? ('Z' | ('+' | '-') DIGIT DIGIT (':' DIGIT DIGIT)?)?'`';
 
 terminal TIME:
     '`' DIGIT DIGIT ':' DIGIT DIGIT (':' DIGIT DIGIT ('.' DIGIT+ )? )? '`';

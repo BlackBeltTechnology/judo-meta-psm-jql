@@ -105,7 +105,7 @@ public class JqlTerminalConverters extends DefaultTerminalConverters {
 	}
 
 	@ValueConverter(rule = "TIMESTAMP")
-	public IValueConverter<String> getTimeStampTerminalConverter() {
+	public IValueConverter<String> getTimestampTerminalConverter() {
 		return new IValueConverter<String>() {
 
 			@Override
