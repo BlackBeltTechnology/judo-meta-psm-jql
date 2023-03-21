@@ -9,7 +9,7 @@
 	</parent>
     
     <artifactId>hu.blackbelt.judo.meta.jql.docs</artifactId>
-    <name>Judo :: JQl :: Model :: Documentation</name>
+    <name>Judo :: JQL :: Model :: Documentation</name>
 	
     <packaging>jar</packaging>
 
