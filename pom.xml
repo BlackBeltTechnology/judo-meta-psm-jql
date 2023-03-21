@@ -863,6 +863,7 @@
                 </property>
             </activation>
             <modules>
+                <module>docs</module>
                 <module>model</module>
                 <module>model-test</module>
                 <module>osgi</module>
