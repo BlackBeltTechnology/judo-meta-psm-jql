@@ -9,7 +9,7 @@ package hu.blackbelt.judo.meta.jql
  */
 class JqlDslStandaloneSetup extends JqlDslStandaloneSetupGenerated {
 
-	def static void doSetup() {
-		new JqlDslStandaloneSetup().createInjectorAndDoEMFRegistration()
-	}
+    def static void doSetup() {
+        new JqlDslStandaloneSetup().createInjectorAndDoEMFRegistration()
+    }
 }
