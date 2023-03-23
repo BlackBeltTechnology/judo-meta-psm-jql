@@ -39,7 +39,9 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-      - uses: cactuslab/maven-toolchains-xml-action@v1
+
+      - name : 🛠️ Setup maven toolchains.xml
+        uses: cactuslab/maven-toolchains-xml-action@v1
         with:
           toolchains: |
             [
