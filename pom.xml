@@ -283,9 +283,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
                     <toolchains>
                         <jdk>
+                            <id>Hello</id>
                             <version>17</version>
                         </jdk>
                     </toolchains>
