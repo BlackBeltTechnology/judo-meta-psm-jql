@@ -11,21 +11,21 @@ import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
 
 class JqlDslFormatter extends AbstractFormatter2 {
-	
-	@Inject extension JqlDslGrammarAccess
 
-	def dispatch void format(TernaryOperation ternaryOperation, extension IFormattableDocument document) {
-		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		ternaryOperation.thenExpression.format
-		ternaryOperation.elseExpression.format
-		ternaryOperation.condition.format
-	}
+    @Inject extension JqlDslGrammarAccess
 
-	def dispatch void format(BinaryOperation binaryOperation, extension IFormattableDocument document) {
-		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
-		binaryOperation.rightOperand.format
-		binaryOperation.leftOperand.format
-	}
-	
-	// TODO: implement for UnaryOperation, JqlExpression, FunctionCall, FunctionParameter, MeasuredLiteral, EnumLiteral, NavigationExpression, Feature
+    def dispatch void format(TernaryOperation ternaryOperation, extension IFormattableDocument document) {
+        // TODO: format HiddenRegions around keywords, attributes, cross references, etc.
+        ternaryOperation.thenExpression.format
+        ternaryOperation.elseExpression.format
+        ternaryOperation.condition.format
+    }
+
+    def dispatch void format(BinaryOperation binaryOperation, extension IFormattableDocument document) {
+        // TODO: format HiddenRegions around keywords, attributes, cross references, etc.
+        binaryOperation.rightOperand.format
+        binaryOperation.leftOperand.format
+    }
+
+    // TODO: implement for UnaryOperation, JqlExpression, FunctionCall, FunctionParameter, MeasuredLiteral, EnumLiteral, NavigationExpression, Feature
 }
