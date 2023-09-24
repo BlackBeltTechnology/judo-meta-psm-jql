@@ -89,7 +89,7 @@
         <judo-epp-common-version>4.29.0.20230922_122205_4ad6b77f_develop</judo-epp-common-version>
 
         <xtext-version>2.31.0</xtext-version>
-        <emf-mwe2-launch-version>2.15.0</emf-mwe2-launch-version>
+        <emf-mwe2-launch-version>2.14.0</emf-mwe2-launch-version>
         <slf4j-version>2.0.7</slf4j-version>
         <surefire-version>3.0.0</surefire-version>
         <!--suppress UnresolvedMavenProperty -->
