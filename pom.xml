@@ -82,7 +82,7 @@
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <tycho-version>4.0.7</tycho-version>
+        <tycho-version>4.0.9</tycho-version>
 
         <emf-genmodel-generator-version>1.1.1.20241127_145607_0fc2fbf1_develop</emf-genmodel-generator-version>
         <judo-genmodel-generator-version>1.1.2.20241127_155311_6c4ed3a9_develop</judo-genmodel-generator-version>
@@ -90,10 +90,11 @@
 
         <xtext-version>2.31.0</xtext-version>
         <emf-mwe2-launch-version>2.14.0</emf-mwe2-launch-version>
-        <slf4j-version>2.0.7</slf4j-version>
-        <surefire-version>3.0.0</surefire-version>
+        <slf4j-version>2.0.16</slf4j-version>
+        <surefire-version>3.5.1</surefire-version>
         <!--suppress UnresolvedMavenProperty -->
         <logback-test-config>${maven.multiModuleProjectDirectory}/logback-test.xml</logback-test-config>
+        <logback-version>1.5.12</logback-version>
 
 
         <!-- Pax exam dependencies -->
@@ -102,7 +103,7 @@
 
         <osgi-utils-version>1.1.1.20241127_155253_2ba3661d_develop</osgi-utils-version>
         <karaf-features-version>2.0.2.20241127_150036_5c40ade0_develop</karaf-features-version>
-        <pax-exam-version>4.13.3</pax-exam-version>
+        <pax-exam-version>4.13.5</pax-exam-version>
 
         <!-- Define overridable properties for tycho-surefire-plugin -->
         <platformSystemProperties />
@@ -116,7 +117,7 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.language>java</sonar.language>
         <sonar.java.source>${java.version}</sonar.java.source>
-        <jacoco.version>0.8.8</jacoco.version>
+        <jacoco.version>0.8.12</jacoco.version>
 
     </properties>
 
@@ -791,7 +792,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.4.11</version>
+                <version>${logback-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
