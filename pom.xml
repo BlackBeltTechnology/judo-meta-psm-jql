@@ -84,8 +84,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <tycho-version>4.0.7</tycho-version>
 
-        <emf-genmodel-generator-version>1.1.1.20240410_065331_3400dfa6_develop</emf-genmodel-generator-version>
-        <judo-genmodel-generator-version>1.1.2.20240410_075618_a6090f79_develop</judo-genmodel-generator-version>
+        <emf-genmodel-generator-version>1.1.1.20241127_145607_0fc2fbf1_develop</emf-genmodel-generator-version>
+        <judo-genmodel-generator-version>1.1.2.20241127_155311_6c4ed3a9_develop</judo-genmodel-generator-version>
         <judo-epp-common-version>4.29.0.20240410_065423_a90724bb_develop</judo-epp-common-version>
 
         <xtext-version>2.31.0</xtext-version>
@@ -100,8 +100,8 @@
         <karaf-version>4.4.5</karaf-version>
         <cxf-version>3.4.4</cxf-version>
 
-        <osgi-utils-version>1.1.1.20240410_085121_bdac833a_develop</osgi-utils-version>
-        <karaf-features-version>2.0.2.20240410_083849_8b6fbfb2_develop</karaf-features-version>
+        <osgi-utils-version>1.1.1.20241127_155253_2ba3661d_develop</osgi-utils-version>
+        <karaf-features-version>2.0.2.20241127_150036_5c40ade0_develop</karaf-features-version>
         <pax-exam-version>4.13.3</pax-exam-version>
 
         <!-- Define overridable properties for tycho-surefire-plugin -->
